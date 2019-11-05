@@ -1,0 +1,82 @@
+/*@charset "utf-8";*/
+
+@import url("tabela_opcao.css");
+
+html{
+	overflow-y:scroll;
+}
+body{
+	margin:0;
+	padding:0; 
+	font-size:13px; 
+	font-family:Georgia, "Times New Roman", Times, serif; 
+	color:#666666; background-color:#e3dfd2;
+}
+a{
+	outline:none; 
+	text-decoration:none;
+}
+i{
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+} 
+a, i{
+	color: white;
+}
+
+p{
+	color:#161616; 
+	font-size: 16px;
+}
+
+.limpar:after{
+	content:"."; 
+	display:block; 
+	height:0; clear:both; 
+	visibility:hidden; 
+	line-height:0;
+}
+.limpar{
+	display:inline-block;
+}
+.esquerda{
+	float:left;
+}
+.direita{
+	float:right;
+}
+div.escopo h1, div.escopo h2{
+	/*margin:0 0 15px 0; */
+	padding:0; 
+	font-size:20px; 
+	font-weight:normal; 
+	line-height:normal;
+}
+.coluna_1{
+	color:#FFFFFF; 
+	background-color:#e3dfd2; 
+	/*padding-bottom:30px;*/
+}
+
+.coluna_1 #tabela_opcao{
+	color:#FFFFFF; 
+	background-color:#e3dfd2; 
+	padding-bottom:30px;
+}
+
+#cabecalho{
+	display:block; 
+	position:relative; 
+	width:800px; 
+	margin:0 auto;
+}
+#cabecalho{
+	padding:30px 0 0 0;
+}
+#cabecalho h1 a{
+	font-size:46px; 
+	color:#161616; 
+	background-color:#e3dfd2;
+}
+

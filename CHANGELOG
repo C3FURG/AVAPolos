@@ -1,0 +1,314 @@
+Integração da compilação do data
+- Compilador da solução e do data integrados.
+- Correções no processo de compilação do Moodle AVAPolos
+- Correções no processo de compilação do controle.
+- Limpeza do controle.avapolos
+- Limpeza do downloads.avapolos
+- Funções úteis do header.sh do compilador do data agora estão no header.sh da solução.
+- Utilizando exports de forma melhor no header.sh da solução.
+
+Compilação do data.
+- data.tar.gz passa a ser compilado, e não transferido pelo git.
+- Compilação do controle.avapolos
+- Compilação do downloads.avapolos
+- Compilação do inicio.avapolos
+- Compilação do manutencao.avapolos
+- Compilação do moodle.avapolos
+- Compilação do traefik.avapolos
+- Compilação do wiki.avapolos
+- Remoção do data.tar.gz do repositório.
+- Adição de um template para implementação de serviços.
+- Adição de um issue template.
+
+Compilação do data e atualização nas imagens #1
+-Início da implementação do processo de compilação do moodle e wiki.
+-Corrigindo imagens do postgres.
+
+Correções críticas e implementações V0.2.
+- Corrigido um problema na atualização de imagens.
+- Corrigidos problemas no traefik.
+- Correção de problemas com o serviço princiapal.
+- Implementação do processo de backup (avapolos --backup).
+  --service [SERVIÇO] para especificar um serviço.
+  --path [CAMINHO] para especificar o caminho do arquivo de backup.
+- Implementações e correções no painel de controle (controle.avapolos)
+- Configuração do serviço de DNS do POLO para servir qualquer domínio e subdomínio.
+
+Correções 0.2 #4 e implementações
+- Correções gerais
+- Implementação de uma página de manutenção que sobe em vez de um serviço parado ou em manutenção.
+- Implementação de chaves pública e privadas entre IES e POLO.
+- Implementação de funções no painel de controle.
+  - Monitoramento dos logs do serviço e do download do eduCAPES.
+  - Função para iniciar e parar o download do eduCAPES.
+  - Função para parar e iniciar a execução da solução.
+- Correções no processo de compilação
+- Implementação de logs nos scripts da sincronização.
+- Correções e implementações para comportar as funções desejadas no serviço principal.
+
+Correções 0.2 #3 e Implementações
+- Correção na linguagem de alguns logs.
+- Correções e mudanças no processo de instalação da rede.
+- Correção no setup_educapes.sh
+- Correções gerais e implementações no processo de desinstalação.
+- Correção no processo de compilação quando a opção "--template" é utilizada.
+- Atualização do painel de controle.
+
+Correções 0.2 #2
+- Mudança no local dos scripts da sincronização
+- Correções para utilizar o comando "--access"
+- Correções na rede
+
+Correções 0.2 #1
+- Correção nas notas da versão 0.2
+- Mudança do nome do comando de "--access-mode" para "--access"
+- Correção na CLI
+
+AVAPolos 0.2 Completo
+- Lista de features completa!
+- Correção no processo de desinstalação da rede.
+- Correção no processo de instalação dos arquivo do eduCAPES.
+- Correções e implementações no serviço para comportar as seguintes features:
+  - Monitoramento dos downloads
+  - Controle de downloads
+- Limpeza no processo de compilação
+
+Versão quase final
+- Correção de erros no processo de atualização das dependências.
+- Docker-compose é baixado do git para comportar a variável COMPOSE_IGNORE_ORPHANS.
+- Correção de bugs no get_ip.sh
+- Correção no processo de instalação das dependências.
+- Correção no install_networking.sh
+- Correção de erro crítico no stop.sh
+- Switch.sh está funcionando.
+- Correção no processo de compilação.
+
+Correção de Erros alpha0.2
+- Correção de erros no processo de compilação.
+
+AVAPolos alpha0.2
+- Versão instável, porém com a maioria dos serviços iniciando.
+- Organização do repositório.
+- Correção geral de erros.
+- Utilização do ifupdown para gestão da rede.
+- Templates testados e completamente implementados.
+
+Pré atualização
+-Implementação da opção "--template" no build.sh
+-Correção da necessidade do usuário estar no grupo "docker" no build.sh
+-Mudança de nomes nos containers:
+  -"hub*" para "inicio"
+  -"painel" para "controle"
+-Implementação dos seguintes templates:
+  -"minimal"
+  -"padrão"
+  -"moodle_dev"
+  -"test"
+-Início das mudanças na rede para a utilização do ifupdown.
+
+Início da implementação de templates
+- Mudanças de diretório de "/var/avapolos" para "/etc/avapolos"
+- Implementação de logs na instalação do avapolos.service
+- Início da reorganização dos arquivos .yml para o uso de templates no build.sh
+- Instalação do daemon do serviço no diretório "/etc/avapolos/service"
+- Correções no startup.sh
+- Criação dos arquivos de templates, falta preenchê-los.
+
+Correções
+- Workaround para bug do docker no start.sh
+- Correção no setup_educapes.sh
+- Correção no build.sh
+
+COMMIT 25/07/2019
+- Correção de erros no restoreBkp.sh
+- Correção de rros no stop.sh
+- Comando "restart" foi implementado no avapolos.sh
+- Correção de erro no startup.sh
+
+COMMIT 18/07/2019
+- Supressão do aviso de containers órfãos do docker-compose
+- Portainer foi adicionado no stack admin.yml e no endereço portainer.avapolos
+- Correção de erros nos stacks do moodle e da wiki.
+
+COMMITS DE 06/07 ATÉ 17/07
+- Continuação da implementação de logs nos scripts.
+- Organização do install_networking.sh
+- Simplificação dos logs do update.sh das imagens Docker.
+- Uso do algoritmo de compressão "pigz" para usar todos as threads da máquina no build.sh
+- Checagem do dpkg lock no install_dependencies.sh
+- Atualização na robustez do procedimento de instalação de dependências.
+- Serviços agora estão separados em "pacotes", cada um com seu arquivo stack.yml
+
+COMMIT 05/07/2019
+- Testes no lab
+- Correção na implementação da lib de logs.
+- Quase todos scripts utilizam a lib de logs.
+
+COMMIT 03/07/2019
+- Correção de bug no uninstall_networking.sh, agora ele realmente volta a rede ao seu estado anterior.
+COMMIT 2:
+- Correção de erros no update.sh das dependencias.
+- Correção de erros no update.sh das imagens docker.
+- Correção de erros no update_resources.sh
+- Correção no cleanup.sh
+- Implementação da nova lib de logs nos seguintes scripts:
+  - install.sh
+  - install_images.sh
+  - install_networking.sh
+  - install_services.sh
+  - uninstall.sh
+  - uninstall_docker.sh
+  - uninstall_networking.sh
+- Correção da implementação de usuário no startup.sh
+- Correção da importação do header no startup.sh
+COMMIT 3:
+- Implementação do argumento --loglvl no avapolos.sh.
+- Atualização no startup.sh para utilizar a implementação acima.
+- Atualização no texto de ajuda do avapolos.sh.
+- Mudança no feedback do build.sh
+
+COMMIT 02/07/2019
+- Correção de um erro no cleanup.sh
+- Correção de um bug no export_all.sh caso fosse rodado pela cli.
+- Implementado funções de log no avapolos.sh
+- Atualização do texto de ajuda.
+- Correções no build.sh.
+- Correção do createinstalador.sh.
+- Atualizações nos scripts de atualização de dependências.
+- Rollback da atualização do install_dependencies.sh.
+- Export.all.sh agora reincia a solução após sua execução.
+- Pequena correção no avapolos.sh
+- Implementação de criação de usuário no startup.sh
+- Atualização do header.sh para comportar a implementação acima.
+
+COMMIT 01/07/2019
+- Alguns testes no Lab.
+- Correção de um bug no docker-compose.yml, onde o container painel pegava o IP de um dos databases.
+- Desativação temporária do switch.sh, para fins de teste.
+- Implementei umas funções para logs no bash.
+- Implementei os logs novos no checks.sh.
+- Implementei os logs novos no cleanup.sh.
+- Implementei os logs novos no install_dependencies.sh.
+- Implementei os logs novos no install_images.sh.
+- Prototipei uma barra de progresso no install.sh.
+- Clonagem quase funcionando, fiz o port dela para a estrutura nova.
+- Correção de um pequeno bug no functions.sh.
+- Adição de um flag para debug no header.sh.
+- Implementei a criação do diretório para os logs no startup.sh.
+- Implementei o novo sistema de logs no build.sh.
+- Adição de um .gitignore no diretório utils, para ignorar os logs de build.
+
+
+COMMIT 24/06/2019
+- Correção de um bug no build.sh
+- O startup.sh checha se há instalações existentes.
+- Implementação de ícones no header.sh ($ATENCAO)
+- Implementação do enabled_services no switch.sh.
+- Implementação do enabled_services no start e stop.
+- Correção no uninstall_networking.sh
+- Agora o uninstall_docker.sh checa se há outros containers ativos que não pertencem ao docker.
+- Limpeza inicial do install_services.sh
+- Checagem no update.sh das dependências, já que não pode ser executado como root.
+- Implementação do enabled_services, para seleção de quais serviços serão inicializados.
+- Placeholder do painel
+- Mudanças na Dockerfile do webserver, correção de erros e eficiência.
+- Mudança no docker-compose.yml para usar variáveis de ambiente (PUID, PGID).
+- Mudanças no start.sh para comportar o uso do envvars.
+
+COMMIT 19/06/2019
+- Experimentação com o eduCAPES, pretendo utilizar PUID e PGID para correção de erros com permissões.
+- Troca de nome das variáveis globais.
+- Em vez de separar as variáveis globais e as funções em cada arquivo, implementei o header.sh, que contém variáveis e funções globais.
+- Correção de erro de caminhos no install.sh
+- Otimização do install_dependencies.sh
+- Correção de erro de digitação no install_services.sh
+- Correção de erros de GID no install_user.sh
+- Correção de erro no uninstall_docker.sh
+- Correção de erro no start.sh e stop.sh
+- Correção de erro no switch.sh
+- Correção de erro no avapolos.sh
+- Correção de erros de permissões no startup.sh
+- Agora o build.sh gera um número de versão de acordo com o dia e exporta para a instalação corretamente.
+- Adicionado .gitignore para ignorar o arquivo version
+
+COMMIT 13/06/2019
+- Imagem webserver agora com correção de UID funcionando corretamente.
+- Trabalhando na nova imagem para o postgres.
+- Mudança final na estrutura de diretórios do projeto.
+
+COMMIT PARCIAL 12/06/2019
+- Correções gerais no processo de instalação.
+- Pequena mudança na estrutura de diretórios.
+- Adição do diretório /var/avapolos na máquina, feito para guardar as variáveis da instalação.
+- Atualização no processo de desinstalação para comportar essas mudanças.
+- Placeholder para o processo de geração de chave privada.
+- Correção no start.sh
+- Correção no install_dependencies.sh
+- Correções no processo de compilação
+- 2 novos argumentos no processo de build: --no-update --no-update-data
+
+COMMIT 10/06/2019
+- Pequenas correções nos scripts da instalação, na sua maioria foi a troca dos scripts usados no 'source'.
+- Correções no processo de build.
+- Muitos testes individuais dos scripts.
+
+COMMIT 07/06/2019
+- Correção do .gitignore da build
+- Mudança na estrutura de diretórios.
+- Renomeação de alguns scripts.
+- Mudanças no update das dependências.
+- Migração da função de checagem de instalação do Docker do checks.sh para o install_dependencies.sh.
+- Remoção dos scripts download_*.sh para e migração da função para o download_servicePack.sh.
+- Uso da variável global no cleanup.sh.
+- Mudanças no get_ip.sh.
+- Agora as modificações feitas na máquina serão totalmente revertidas no processo de desinstalação
+(Rede, Symlinks, .desktop)
+- Correção do uninstall_networking.sh.
+- Adições no texto de ajuda.
+- Implementadas mais variáveis no install_variables.sh.
+- Correções no startup.sh.
+- Correção de um erro grande no build.sh.
+- Implementação do buildAndRun.sh, para mais facilidade.
+
+COMMIT 06/06/2019
+- Adicionei .gitignore para alguns diretórios.
+- Agora não precisa dar 'source variables.sh' nos scripts de instalação
+- Mudei mais scripts para usarem as variáveis globais da instalação.
+- Seção de detecção de interface do setup_networking.sh está mais eficiente e organizada.
+- Correções gerais e mudanças no uso de argumentos do avapolos.sh.
+- Remoção do run.sh da pasta preinstall, já que não é mais necessário.
+- startup.sh agora põe um link para o script na pasta /usr/local/bin, agora pode
+acessar a cli pelo terminal sem especificar o caminho!
+- Correções no build.sh para comportar as mudanças na infraestrutura.
+
+COMMIT 05/06/2019 2
+-Update no build.sh para usar argumentos de forma mais organizada.
+-Adicionei a licença.
+-install.sh:
+  -Removi a funcionalidade de exit codes diferenciados.
+  -Implementei o uso das variaveis de instalação.
+  -Retirei scripts não utilizados da ordem de execução.
+install_variables.sh:
+  -Implementei para acabar com os erros de caminho.
+avapolos.sh:
+  -Agora utilizado case para detectar os argumentos.
+  -Agora utiliza um arquivo de funções.
+cli_functions.sh:
+  -Implementei para guardar todas as funções utilizadas na CLI.
+build.sh:
+  -Adicionei um esqueleto para ajudar na implementação do uso de argumentos (Obrigado Makeself!).
+
+COMMIT 05/06/2019 1
+-Estrutura de diretórios melhor organizada.
+-Variáveis de instalação. (variables.sh)
+-Headers dos scripts atualizados para #!/usr/bin/env bash.
+-Mais comentários para developers.
+-uninstall_avapolos:
+  -Usando as variáveis globais da instalação.
+-load_images:
+  -Usando as variáveis globais da instalação.
+  -Agora carrega dinamicamente todos .tar no diretório das imagens.
+dependencies/update.sh:
+  -Limpezas, checagens e eficiência.
+/docker_images/update.sh:
+  -Limpezas, checagens e eficiência.

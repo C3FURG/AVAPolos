@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  hub_80:
+    container_name: hub_80
+    image: avapolos/webserver:lite
+    volumes:
+      - ../data/inicio:/app/
+    networks:
+      avapolos:
+      proxy:
+    ports:
+     - "80:80"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=hub_80
+    restart: unless-stopped
+    cap_add:
+      - SYS_TIME
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

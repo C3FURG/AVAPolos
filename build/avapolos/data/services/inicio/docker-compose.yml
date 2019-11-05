@@ -1,0 +1,40 @@
+version: '2.1'
+
+services:
+
+  inicio:
+    container_name: inicio
+    image: avapolos/webserver:lite
+    volumes:
+      - ./data/inicio:/app/
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=hub_name
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=hub"
+      - "traefik.frontend.rule=Host:inicio.avapolos"
+      - "traefik.frontend.rule=HostRegexp:{catchall:.*}"
+      - "traefik.frontend.priority=1"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+    cap_add:
+      - SYS_TIME
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

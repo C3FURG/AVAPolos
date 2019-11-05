@@ -1,0 +1,6 @@
+pack
+cache
+*.log
+avapolos_alpha*
+avapolos_beta*
+remote-ava

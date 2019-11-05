@@ -1,0 +1,13 @@
+--2019-05-25 00:28:37--  http://localhost/data1.bin
+Resolvendo localhost (localhost)... 127.0.0.1
+Conectando-se a localhost (localhost)|127.0.0.1|:80... conectado.
+A requisição HTTP foi enviada, aguardando resposta... 200 OK
+Tamanho: 36690432 (35M) [application/octet-stream]
+Salvando em: “data1.bin”
+
+     0K ........ ........ ........ ........ 91%  100K 31s
+ 32768K ..                                 100% 99,7K=5m58s
+
+utime(data1.bin): Arquivo ou diretório inexistente
+2019-05-25 00:34:35 (100 KB/s) - “data1.bin” salvo [36690432/36690432]
+

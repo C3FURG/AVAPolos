@@ -1,0 +1,57 @@
+#Links para baixar os volumes do educapes:
+
+http://uploads.capes.gov.br/files/volumesEducapes.part01.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part02.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part03.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part04.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part05.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part06.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part07.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part08.rar
+http://uploads.capes.gov.br/files/volumesEducapes.part09.rar
+
+1 - Após baixar e extrair as pastas de volumes.
+
+2 - Executar as imagens definidas no dockerhub com as respectivas pastas de volumes.
+
+3 - O container de banco deve ser inicializado antes da aplicação.
+
+		https://hub.docker.com/r/brendowdf/dspace-educapes
+
+
+4 - Caso tenha problemas com índice de busca no portal, basta executar os comandos dentro da pasta /dspace/bin:
+
+vim /dspace/bin/dspace
+
+:set fileformat=unix
+:wq!
+
+4.1 - Para limpar o índice.
+/dspace/bin	dspace index-discovery -c -f
+
+4.2 - Para criar o índice.
+/dspace/bin	dspace index-discovery -f
+
+	https://wiki.duraspace.org/display/DSDOC5x/Discovery
+
+
+docker run -v /opt/dspace/database/var/lib/postgresql/data/:/var/lib/postgresql/data/ --net=dspace -p 5435 --name dspacedb brendowdf/dspace-postgres-educapes:latest
+
+docker run -v /opt/dspace/assetstore/:/dspace/assetstore/ -v /opt/dspace/data-solr/data/:/dspace/solr/search/data/ --net=dspace -p 8080:8080 --name educapes-dspace brendowdf/dspace-educapes:latest
+
+
+if ! [ -z "$PUID" ] && ! [ -z "$PGID" ] && [ "$UID" = "0" ]; then
+        usermod -u $PUID postgres
+        groupmod -g $PGID postgres
+        echo "UID modificado: $(id -u postgres)"
+        echo "GID modificado: $(id -g postgres)"
+fi
+
+if [ "$UID" = 0 ]; then
+  if ! [ -z "$PUID" ] && ! [ -z "$PGID" ] ; then
+    usermod -u $PUID postgres
+    groupmod -g $PGID postgres
+    echo "UID modificado: $(id -u postgres)"
+    echo "GID modificado: $(id -g postgres)"
+  fi
+fi

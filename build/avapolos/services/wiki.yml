@@ -1,0 +1,53 @@
+version: '2'
+
+services:
+
+  db_wiki:
+    container_name: db_wiki
+    image: avapolos/postgres:bdr
+    environment:
+      - POSTGRES_PASSWORD=@bancoava.C4p35*&
+      - UID=${PUID}
+    volumes:
+     - ../data/db_wiki:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+  wiki:
+    container_name: wiki
+    image: avapolos/webserver:lite
+    ports:
+      - "82:80"
+    volumes:
+      - ../data/wiki:/app/
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=wiki
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=wiki"
+      - "traefik.frontend.rule=Host:wiki.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+    cap_add:
+      - SYS_TIME
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

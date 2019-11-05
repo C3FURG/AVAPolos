@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+
+  db_moodle_ies:
+    container_name: db_moodle_ies
+    image: avapolos/postgres:bdr
+    environment:
+     - POSTGRES_PASSWORD=@bancoava.C4p35*&
+     - UID=${PUID}
+    volumes:
+     - ../data/db_moodle_ies:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+  db_moodle_polo:
+    container_name: db_moodle_polo
+    image: avapolos/postgres:bdr
+    environment:
+      - POSTGRES_PASSWORD=@bancoava.C4p35*&
+      - UID=${PUID}
+    volumes:
+     - ../data/db_moodle_polo:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+  moodle:
+    container_name: moodle
+    image: avapolos/webserver:lite
+    ports:
+      - "81:80"
+    volumes:
+      - ../data/moodle:/app/
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=moodle
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=moodle"
+      - "traefik.frontend.rule=Host:moodle.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.passHostHeader=true"
+    cap_add:
+      - SYS_TIME
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

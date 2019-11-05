@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  educapes:
+    container_name: educapes-dspace
+    image: brendowdf/dspace-educapes:latest
+    environment:
+     #- POSTGRES_PASSWORD=@bancoava.C4p35*&
+     - PUID=1001
+     - PGID=1001
+    volumes:
+     - /opt/dspace/assetstore:/dspace/assetstore 
+     - /opt/dspace/data-solr/data:/dspace/solr/search/data
+    ports:
+     - "8080:8080"
+    networks:
+      dspace_network:
+        ipv4_address: 172.13.0.2
+    stop_signal: SIGINT
+    restart: unless-stopped
+    depends_on:
+      - db_educapes
+    user: 1001:1001
+  
+  db_educapes: 
+    container_name: dspacedb
+    image: dspacedb
+    environment:
+      #- POSTGRES_PASSWORD=@bancoava.C4p35*&
+     - PUID=1001
+     - PGID=1001
+    #volumes:
+     #- /opt/dspace/database/var/lib/postgresql/data:/var/lib/postgresql/data
+    networks:
+      dspace_network:
+        ipv4_address: 172.13.0.3
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+networks:
+  dspace_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.13.0.0/16
+          gateway: 172.13.0.1

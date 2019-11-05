@@ -1,0 +1,67 @@
+version: '2.1'
+
+services:
+  controle:
+    container_name: controle
+    image: avapolos/webserver:lite
+    volumes:
+      - ./data/controle:/app/
+      #- ${EDUCAPES_PATH}:/app/educapes
+      #- ${SERVICE_PATH}:/app/service
+      #- ${LOG_PATH}:/app/log
+      #- ${BACKUPS_PATH}:/app/public/backups
+    networks:
+      avapolos:
+      proxy:
+    ports:
+      - "85:80"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=controle
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=controle"
+      - "traefik.frontend.rule=Host:controle.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+    cap_add:
+      - SYS_TIME
+
+  downloads:
+    container_name: downloads
+    image: avapolos/webserver:lite
+    volumes:
+      - ./data/downloads:/app/
+    networks:
+      avapolos:
+      proxy:
+    ports:
+      - "84:80"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=downloads
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=downloads"
+      - "traefik.frontend.rule=Host:downloads.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+    cap_add:
+      - SYS_TIME
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

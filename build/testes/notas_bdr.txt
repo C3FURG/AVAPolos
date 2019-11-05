@@ -1,0 +1,34 @@
+IES:
+
+psql -U moodle
+CREATE USER bdrsync superuser;
+ALTER USER bdrsync WITH PASSWORD '@bancoava.C4p35*&';
+CREATE USER moodleuser WITH LOGIN PASSWORD '@bancoava.C4p35*&';
+GRANT ALL PRIVILEGES ON DATABASE moodle TO moodleuser;
+\c moodle
+CREATE EXTENSION btree_gist;
+CREATE EXTENSION bdr;
+SELECT bdr.bdr_group_create(
+    local_node_name := 'IES',
+    node_external_dsn := 'host=db_moodle_ies user=bdrsync dbname=moodle password=@bancoava.C4p35*&'
+);
+
+
+POLO:
+
+psql -U moodle
+
+CREATE USER bdrsync superuser;
+
+ALTER USER bdrsync WITH PASSWORD '@bancoava.C4p35*&';
+
+CREATE ROLE moodleuser WITH LOGIN PASSWORD '@bancoava.C4p35*&';
+GRANT ALL PRIVILEGES ON DATABASE moodle TO moodleuser;
+\c moodle
+CREATE EXTENSION btree_gist;
+CREATE EXTENSION bdr;
+SELECT bdr.bdr_group_join(
+    local_node_name := 'POLO',
+    node_external_dsn := 'host=db_moodle_polo user=bdrsync dbname=moodle password=@bancoava.C4p35*&',
+    join_using_dsn := 'host=db_moodle_ies user=bdrsync dbname=moodle password=@bancoava.C4p35*&'
+);

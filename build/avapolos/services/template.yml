@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+
+
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

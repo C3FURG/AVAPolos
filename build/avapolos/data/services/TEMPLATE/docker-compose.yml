@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+
+#Service definitions go here.
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

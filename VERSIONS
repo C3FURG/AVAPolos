@@ -1,0 +1,64 @@
+|AVAPolos 0.2|
+
+Atualizações importantes:
+
+- Estrutura de diretórios melhor organizada
+- header.sh : Cabeçalho que é utilizado em todo script do AVAPolos.
+    - Implementação de variáveis para todo o processo de instalação para acabar com os erros de caminho, tods caminhos devem ser guardados nessas variáveis.
+    - Implementação de funções
+        - Entrada do usuário (input)
+        - Sanitizar variáveis (sanitize)
+        - Funções da cli como:
+            - loglvl
+            - start
+            - stop
+            - clone
+            - backup
+            - restore
+            - install
+            - uninstall
+
+- Command-line Interface (CLI)
+    - --help
+    - --version
+    - --loglvl
+    - --start
+    - --stop
+    - --backup
+    - --restore
+    - --install
+    - --uninstall
+    - --clone
+    - --access (switch.sh)
+
+- Compilação:
+    - --help
+    - --template
+        - completo
+        - minimo
+        - moodle_dev
+        - moodle_test
+    - --no-update
+    - --no-update-data
+    - --no-update-deps
+    - --no-update-images
+
+- Rede:
+    - Melhorias na estabilidade
+
+- Serviços:
+    - moodle_test
+    - controle
+
+- Serviço:
+    - IPC (Inter-process Communication), o serviço cria um pipe como arquivo para que qualquer processo possa enviar dados para ele através desse pipe.
+    O pipe se encontra no arquivo "/etc/avapolos/service/pipe".
+        - "download_stop $SERVICO" Para o download de um determinado serviço.
+        - "download_start $SERVICO" Inicia (resume) o download de um determinado serviço.
+        - "check_services" Checagem manual de download dos dados dos serviços.
+    - O painel de controle (controle.avapolos) já possui uma interface de comunicação com esse pipe.
+    - Checagem automática de downloads de dados dos serviços, como por exemplo o eduCAPES.
+    Essa checagem roda automaticamente quado o serviço é iniciado (restart, start)
+
+
+-

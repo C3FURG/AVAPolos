@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+
+  db_moodle_test:
+    container_name: db_moodle_test
+    image: avapolos/postgres:bdr
+    environment:
+     - POSTGRES_PASSWORD=@bancoava.C4p35*&
+     - UID=${PUID}
+    volumes:
+     - ../data/db_moodle_test:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+  moodle_test:
+    container_name: moodle_test
+    image: avapolos/webserver:lite
+    volumes:
+      - ../data/moodle_test:/app/
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=moodle_test
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=moodle"
+      - "traefik.frontend.rule=Host:moodletest.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.passHostHeader=true"
+    cap_add:
+      - SYS_TIME
+      
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

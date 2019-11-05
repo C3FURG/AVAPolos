@@ -1,0 +1,59 @@
+no arquivo user/editlib.php: OK
+
+  //$mform->addRule('email', $strrequired, 'required', null, 'client');
+
+
+/lib/file_storage.php :
+
+  public function cron($now = false)
+
+  ......
+
+  //ALTERADO O TEMPO
+        if($now)
+     $old = time();
+        else
+     $old = time() - 60*60*24*4;
+
+user/edit_form.php: OK
+
+  linha 208
+  if($usernew->email=="")
+    $usernew->email="email@naoinformado.com";
+
+/message/classes/helper.php: OK
+
+linha 41:
+
+    $sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 WHERE M1.conversationid IN (SELECT conversationid FROM 					mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2;";
+    	$params = ['userid1' => $userid, 'userid2' => $otheruserid];
+    	$convIds = $DB->get_records_sql($sql, $params);
+
+    	if(count($convIds)>1){
+
+    		$sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 left outer join mdl_message_conversations mc on mc.id=m1.conversationid WHERE 				M1.conversationid IN (SELECT conversationid FROM mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2 AND 						mc.id is null;";
+    		$wrongId = $DB->get_records_sql($sql, $params);
+
+    		$sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 right outer join mdl_message_conversations mc on mc.id=m1.conversationid WHERE 					M1.conversationid IN (SELECT conversationid FROM mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2;";
+    		$rightId = $DB->get_records_sql($sql, $params);
+
+    		$sql = "UPDATE mdl_messages SET conversationid=".current($rightId)->conversationid." WHERE conversationid=".current($wrongId)->conversationid;
+    		$retorno = $DB->get_records_sql($sql, $params);
+
+    		$sql = "DELETE FROM mdl_message_conversation_members WHERE conversationid=".current($wrongId)->conversationid;
+    		$retorno = $DB->get_records_sql($sql, $params);
+
+    	}
+
+Banco
+
+Email change confirmation e Mobile
+SELECT * FROM mdl_config WHERE id=243 OR id=484;
+UPDATE mdl_config SET VALUE=0 WHERE id=243;
+UPDATE mdl_config SET VALUE=1 WHERE id=484;
+
+SELECT * FROM mdl_external_services WHERE shortname LIKE '%mobile%';
+
+
+
+//Site administration Plugins Repositories Manage repositories Filesystem -> enable and visible

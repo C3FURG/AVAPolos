@@ -1,0 +1,55 @@
+version: '2'
+
+services:
+
+  educapes:
+    container_name: educapes
+    image: avapolos/dspace:latest
+    volumes:
+     - /opt/educapes/assetstore:/dspace/assetstore
+     - /opt/educapes/data-solr:/dspace/solr/search/data
+    # environment:
+    #   - UID=${PUID}
+    #   - PGID=${PGID}
+    networks:
+      avapolos:
+      proxy:
+    stop_signal: SIGINT
+    restart: unless-stopped
+    #user: "${PUID}:${PGID}"
+    ports:
+      - "83:8080"
+    depends_on:
+      - dspacedb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=educapes"
+      - "traefik.frontend.rule=Host:educapes.avapolos"
+      - "traefik.port=8080"
+      - "traefik.docker.networavapok=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+
+  dspacedb:
+    container_name: dspacedb
+    image: avapolos/dspacedb:latest
+    volumes:
+     - /opt/educapes/database/var/lib/postgresql/data:/var/lib/postgresql/data
+    environment:
+      - UID=${PUID}
+      - PGID=${PGID}
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

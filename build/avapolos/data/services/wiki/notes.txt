@@ -1,0 +1,13 @@
+instalar a wiki:
+
+php install.php --dbtype="postgres" \
+  --dbserver="db_wiki" \
+  --dbuser='wiki' \
+  --dbname='wiki' \
+  --dbpass='@bancoava.C4p35*&' \
+  --server='http://wiki.avapolos/' \
+  --scriptpath=/ \
+  --lang=pt-br \
+  --pass=password \
+  "Wiki Name" \
+  "Admin"

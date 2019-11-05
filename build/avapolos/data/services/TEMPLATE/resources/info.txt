@@ -1,0 +1,3 @@
+This dir contains resources
+
+Like some config file or image to be copied into the service's volume.

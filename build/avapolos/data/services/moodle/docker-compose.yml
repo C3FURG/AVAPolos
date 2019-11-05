@@ -1,0 +1,75 @@
+version: '2.1'
+
+services:
+
+  db_moodle_ies:
+    container_name: db_moodle_ies
+    image: avapolos/postgres:bdr
+    environment:
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - UID=${PUID}
+    volumes:
+     - ${MOODLE_DATA_DIR}/db_moodle_ies:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moodle"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db_moodle_polo:
+    container_name: db_moodle_polo
+    image: avapolos/postgres:bdr
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - UID=${PUID}
+    volumes:
+     - ${MOODLE_DATA_DIR}/db_moodle_polo:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moodle"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  moodle:
+    container_name: moodle
+    image: avapolos/webserver:lite
+    ports:
+      - "81:80"
+    volumes:
+      - ${MOODLE_DATA_DIR}/moodle:/app/
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APACHE_SERVER_NAME=moodle
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=moodle"
+      - "traefik.frontend.rule=Host:moodle.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.passHostHeader=true"
+    cap_add:
+      - SYS_TIME
+    depends_on:
+      db_moodle_ies:
+        condition: service_healthy
+      db_moodle_polo:
+        condition: service_healthy
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true
