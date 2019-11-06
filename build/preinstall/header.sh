@@ -62,10 +62,10 @@ log() { #$1-> mode[debug,info,error,warn] #$2-> source[examples: console,service
   {
     case $mode in
       #                                                                                                BOLD COLOR        RESET
-      debug) if [[ $LOGGER_LVL =~ debug ]]; then                 while read data; do echo -e "$string\e[1m\e[37m DEBUG \e[0m- $data"; done; else true; fi; 1>&2 ;;
-      info)  if [[ $LOGGER_LVL =~ debug|info ]]; then            while read data; do echo -e "$string\e[1m\e[32m INFO \e[0m- $data";  done; else true; fi; 1>&2 ;;
-      warn)  if [[ $LOGGER_LVL =~ debug|info|warn ]]; then       while read data; do echo -e "$string\e[1m\e[93m WARN \e[0m- $data";  done; else true; fi; 1>&2 ;;
-      error) if [[ $LOGGER_LVL =~ debug|info|warn|error ]]; then while read data; do echo -e "$string\e[1m\e[91m ERROR \e[0m- $data"; done; else true; fi; 1>&2 ;;
+      debug) if [[ $LOGGER_LVL =~ debug ]]; then                 while read data; do if ! [ -z "$data" ]; then echo -e "$string\e[1m\e[37m DEBUG \e[0m- $data"; fi; done; else true; fi; 1>&2 ;;
+      info)  if [[ $LOGGER_LVL =~ debug|info ]]; then            while read data; do if ! [ -z "$data" ]; then echo -e "$string\e[1m\e[32m INFO \e[0m- $data";  fi; done; else true; fi; 1>&2 ;;
+      warn)  if [[ $LOGGER_LVL =~ debug|info|warn ]]; then       while read data; do if ! [ -z "$data" ]; then echo -e "$string\e[1m\e[93m WARN \e[0m- $data";  fi; done; else true; fi; 1>&2 ;;
+      error) if [[ $LOGGER_LVL =~ debug|info|warn|error ]]; then while read data; do if ! [ -z "$data" ]; then echo -e "$string\e[1m\e[91m ERROR \e[0m- $data"; fi; done; else true; fi; 1>&2 ;;
     esac
   } 2>&1 | tee -a $LOGFILE_PATH
 }

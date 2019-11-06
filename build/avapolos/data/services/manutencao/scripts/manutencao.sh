@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
-cd $MANUTENCAO_DIR
+echo "Compilando placeholder para manutencoes" | log info data_compiler
 
+echo "Assegurando permissões corretas e limpando diretórios de dados." | log debug data_compiler
+cd $MANUTECAO_DIR
 sudo chown -R $USER:$USER .
+sudo rm -rf $MANUTECAO_DATA_DIR/manutencao/*
+mkdir -p $MANUTECAO_DATA_DIR/manutencao/public
 
+echo "Copiando recursos do serviço." | log debug data_compiler
 cp -rf $MANUTENCAO_RESOURCES_DIR/public $MANUTENCAO_DATA_DIR/manutencao
 
-echo "Iniciando manutencao"
+echo "Iniciando webserver" | log debug data_compiler
 docker-compose up -d
 
-sleep 3
-
-echo "Manutencao configurado com sucesso!"
+testURL "http://manutencao.avapolos" | log debug data_compiler
+echo "Manutencao configurado com sucesso!" | log debug data_compiler

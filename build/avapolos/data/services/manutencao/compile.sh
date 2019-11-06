@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-show_var PUID
-show_var PGID
-
-rm -rf $MANUTENCAO_DATA_DIR/*
+echo "Limpando diretório de dados." | log debug data_compiler
+rm -rf $MANUTECAO_DATA_DIR/*
 mkdir -p $MANUTENCAO_DATA_DIR/manutencao
+echo "Parando serviços caso já estejam rodando." | log debug data_compiler
 docker-compose down
 
 cd scripts
 
 run manutencao.sh
 
-echo "Serviço configurado com sucesso!"
+echo "Serviço configurado com sucesso!" | log info data_compiler

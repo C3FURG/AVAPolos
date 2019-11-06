@@ -1,3 +1,14 @@
+Correções e otimizações na compilação dos serviços
+- Os seguintes serviços foram otimizados e tiveram logs implementados:
+  controle.avapolos
+  downloads.avapolos
+  inicio.avapolos
+  manutencao.avapolos
+  traefik.avapolos
+- Correção de erro na função de log.
+- Correção no .gitignore da pasta build/utilities
+- Correções no compilador dos serviços.
+
 Integração da compilação do data
 - Compilador da solução e do data integrados.
 - Correções no processo de compilação do Moodle AVAPolos

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd $MOODLE_DIR
+sudo chown -R $USER:$USER .
 
 tmp=$(mktemp -d -t moodle_download.XXXXXXX)
 wget -O $tmp/moodle.tgz https://download.moodle.org/stable37/moodle-latest-37.tgz
@@ -11,15 +12,14 @@ tar xfz $tmp/moodle.tgz
 mv moodle public
 mkdir moodledata
 
-cp -rf $MOODLE_RESOURCES_DIR/moodle/* $MOODLE_DATA_DIR/moodle/public/
-sudo chown -R $USER:$USER .
-
 echo "Iniciando webserver"
 docker-compose up -d moodle
 
 echo "Instalando moodle na IES."
 echo "Senha: $MOODLE_PASSWORD"
+cp -rf $MOODLE_RESOURCES_DIR/moodle/config.php $MOODLE_DATA_DIR/moodle/public/
 execute moodle php /app/public/admin/cli/install_database.php --lang=pt-br --adminuser=admin --adminpass=$MOODLE_PASSWORD --adminemail=admin@avapolos.com --fullname="Moodle AVAPolos" --shortname="Mdl AVA" --agree-license
+cp -rf $MOODLE_RESOURCES_DIR/moodle/* $MOODLE_DATA_DIR/moodle/public/
 
 execute_sql db_moodle_ies "
   ALTER DATABASE moodle SET bdr.skip_ddl_locking = true;

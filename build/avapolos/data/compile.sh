@@ -60,23 +60,33 @@ echo "Compilando traefik" | log info data_compiler
 run compile.sh
 cp -rf $TRAEFIK_DATA_DIR/* "$PACK_DIR/data/"
 
+cd $INICIO_DIR
+echo "Compilando inicio.avapolos" | log info data_compiler
+run compile.sh
+cp -rf $INICIO_DATA_DIR/* "$PACK_DIR/data/"
+
+cd $MANUTENCAO_DIR
+echo "Compilando manutencao" | log info data_compiler
+run compile.sh
+cp -rf $MANUTENCAO_DATA_DIR/* "$PACK_DIR/data/"
+
 #SERVICES=${SERVICES:-$(ls | grep -v TEMPLATE | grep -v traefik)}
-SERVICES=${SERVICES:-$(for svc in $(cat $ROOT_DIR/../services/enabled_services); do echo $(echo $svc | cut -d . -f1); done)}
-echo "Compiando serviços: $SERVICES" | log info data_compiler
+SERVICES=${SERVICES:-$(for svc in $(cat $ROOT_DIR/../services/enabled_services | grep -v educapes); do echo $(echo $svc | cut -d . -f1); done)}
+echo "Compilando serviços: $SERVICES" | log info data_compiler
 for service in $SERVICES; do
-  echo "Compilando serviço $service"
+  echo "Compilando serviço $service" | log info data_compiler
   cd "$SERVICES_DIR/$service"
   run compile.sh
   cp -rf $SERVICES_DIR/$service/data/* "$PACK_DIR/data/"
 done
 
 if ! [[ "$KEEPALIVE" = "true" ]]; then
-  unsetHosts
+  unsetHosts | log debug data_compiler
   cd $TRAEFIK_DIR
   docker-compose down
   for service in $SERVICES; do
     cd "$SERVICES_DIR/$service"
-    echo "Parando serviço $service"
+    echo "Parando serviço $service" | log debug data_compiler
     docker-compose down
   done
 fi

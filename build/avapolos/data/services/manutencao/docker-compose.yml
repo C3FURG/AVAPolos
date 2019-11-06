@@ -19,6 +19,7 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=manutencao"
       - "traefik.frontend.rule=Host:${MANUTENCAO}"
+      - "traefik.frontend.rule=Host:manutencao.avapolos"
       - "traefik.port=80"
       - "traefik.docker.network=proxy"
       - "traefik.frontend.headers.STSSeconds=315360000"

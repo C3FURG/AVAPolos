@@ -21,6 +21,7 @@ setHosts() {
     echo '127.0.0.1 downloads.avapolos'
     echo '127.0.0.1 wiki.avapolos'
     echo '127.0.0.1 naoexisto.avapolos'
+    echo '127.0.0.1 manutencao.avapolos'
     echo '#--AVAPOLOS BUILD END--'
   } >> /etc/hosts "
 }
