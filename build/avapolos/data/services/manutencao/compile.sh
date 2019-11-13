@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Limpando diretório de dados." | log debug data_compiler
-rm -rf $MANUTECAO_DATA_DIR/*
+rm -rf $MANUTENCAO_DATA_DIR/*
 mkdir -p $MANUTENCAO_DATA_DIR/manutencao
 echo "Parando serviços caso já estejam rodando." | log debug data_compiler
 docker-compose down

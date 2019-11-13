@@ -48,8 +48,10 @@ sudo chown $USER:$USER -R .
 mkdir -p $PACK_DIR/data && rm -rf $PACK_DIR/data/*
 
 echo "Criando rede Docker avapolos_build e proxy" | log debug data_compiler
-add_docker_network avapolos
-add_docker_network proxy
+# add_docker_network avapolos
+# add_docker_network proxy
+docker network create avapolos || true
+docker network create proxy || true
 
 if [[ -z "$(cat /etc/hosts | grep -o 'AVAPOLOS BUILD START')" ]]; then
   setHosts | log debug data_compiler
@@ -83,6 +85,10 @@ done
 if ! [[ "$KEEPALIVE" = "true" ]]; then
   unsetHosts | log debug data_compiler
   cd $TRAEFIK_DIR
+  docker-compose down
+  cd $INICIO_DIR
+  docker-compose down
+  cd $MANUTENCAO_DIR
   docker-compose down
   for service in $SERVICES; do
     cd "$SERVICES_DIR/$service"

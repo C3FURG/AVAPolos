@@ -62,7 +62,8 @@ if ! [ -f .dependencies_installed ]; then
 		  nano \
 		  iputils-ping \
 		  rsync \
-		  dpkg-dev
+		  dpkg-dev \
+			makeself
 			touch .dependencies_installed
 	else
 		echo "Cancelando compilação"
