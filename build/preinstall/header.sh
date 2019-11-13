@@ -444,11 +444,9 @@ testURL() { #$1-> URL
 
 #Checks if a docker network exists, if not, adds it.
 add_docker_network() { #$1-> Network name}
-  set +e
-  if ! [[ "$(docker network inspect "$1" > /dev/null 2>&1)" ]]; then
+  if [[ "$(docker network inspect "$1" > /dev/null 2>&1 || true)" ]]; then
     docker network create "$1"
   fi
-  set -e
 }
 
 #Export all functions
