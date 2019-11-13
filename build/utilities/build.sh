@@ -25,6 +25,8 @@ if ! [[ -f "/etc/init.d/docker" ]]; then
 		sudo apt-get update
 		sudo apt-get install -y docker-ce docker-compose
 		sudo usermod -aG docker $USER
+		echo "Reinicie o computador para continuar o processo de compilação."
+		exit 1
 	else
 		echo "Cancelando compilação."
 		exit 1
