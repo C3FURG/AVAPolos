@@ -86,6 +86,10 @@ if ! [[ "$KEEPALIVE" = "true" ]]; then
   unsetHosts | log debug data_compiler
   cd $TRAEFIK_DIR
   docker-compose down
+  cd $INICIO_DIR
+  docker-compose down
+  cd $MANUTENCAO_DIR
+  docker-compose down
   for service in $SERVICES; do
     cd "$SERVICES_DIR/$service"
     echo "Parando serviço $service" | log debug data_compiler
