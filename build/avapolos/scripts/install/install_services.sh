@@ -72,6 +72,7 @@ if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
 	bash $INSTALL_SCRIPTS_PATH/install_privateKey.sh
 else
   echo "Esta instalação é uma IES, ajustando parâmetros" | log info
+  sed -i 's/INSTANCENAME/'"IES"'/g' $SYNC_PATH/variables.sh
   if [ "implementado" = "n" ]; then
     echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php

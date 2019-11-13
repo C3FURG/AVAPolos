@@ -2179,7 +2179,9 @@ class file_storage {
     /**
      * Cron cleanup job.
      */
-    public function cron() {
+    //MODIFICAÇÕES AVAPOLOS
+    public function cron($now=false) {
+    //FIM MODIFICAÇÕES AVAPOLOS
         global $CFG, $DB;
         require_once($CFG->libdir.'/cronlib.php');
 

@@ -27,7 +27,7 @@ if [ "$option" = "1" ] || [ "$option" = "3" ]; then
    echo " ================= INICIANDO PROCESSO DE EXPORTAÇÃO =================\n"
 
    ###limpa arquivos tar anteriores
-   rm $dirViewPath/dadosV*.tar.gz
+   rm -f $dirViewPath/dadosV*.tar.gz
 
    nextExport=$(( $(getLastExportMaster) + 1))
    exportDirName="dadosV_${nextExport}_$instance"

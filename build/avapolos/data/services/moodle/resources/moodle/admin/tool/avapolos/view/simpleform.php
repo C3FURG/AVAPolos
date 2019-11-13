@@ -55,7 +55,7 @@
           $this->add_action_buttons($cancel=false,"Importar");
       }
       //Custom validation should be added here
-      function validation($data) {
+      function validation($data, $files) {
           return array();
       }
   }
