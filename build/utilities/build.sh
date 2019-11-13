@@ -61,7 +61,8 @@ if ! [ -f .dependencies_installed ]; then
 		  sshpass \
 		  nano \
 		  iputils-ping \
-		  rsync
+		  rsync \
+		  dpkg-dev
 			touch .dependencies_installed
 	else
 		echo "Cancelando compilação"
