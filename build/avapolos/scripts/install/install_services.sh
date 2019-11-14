@@ -64,7 +64,7 @@ if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
     echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
     sed -i 's/db_moodle_ies/'"db_moodle_polo"'/g' $DATA_PATH/moodle/public/config.php
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
-    sed -i 's/INSTANCENAME/'"POLO"'/g' $SYNC_PATH/variables.sh
+    sed -i 's/IES/'"POLO"'/g' $SYNC_PATH/variables.sh
   else
     echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
   fi

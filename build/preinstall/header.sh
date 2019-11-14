@@ -273,10 +273,10 @@ fi
 }
 
 #Clone existing installation.
-export_all() {
+export-all() {
   if [ -d "$ROOT_PATH" ]; then
     cd $SYNC_PATH
-    bash export_all.sh
+    bash export-all.sh
   else
     echo "AVAPolos não está instalado." | log error
     exit 1
@@ -461,7 +461,7 @@ export -f uninstall
 export -f start
 export -f stop
 export -f restart
-export -f export_all
+export -f export-all
 export -f run
 export -f add_service
 export -f remove_service
