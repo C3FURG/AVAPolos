@@ -105,16 +105,16 @@ readFromPipe() {
       case $line in
         download_stop* )
           if ! [ -z "${args[1]}" ]; then
-            download_stop "${args[1]}"
             touch $SERVICE_PATH/done
+            download_stop "${args[1]}"
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
         download_start* )
           if ! [ -z "${args[1]}" ]; then
-            download_start "${args[1]}"
             touch $SERVICE_PATH/done
+            download_start "${args[1]}"
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
@@ -127,8 +127,9 @@ readFromPipe() {
           touch $SERVICE_PATH/done
         ;;
         stop )
-          stop
           touch $SERVICE_PATH/done
+          sleep 6
+          stop
         ;;
         access_mode* )
           if ! [ -z "${args[1]}" ]; then
