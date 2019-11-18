@@ -4,19 +4,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if (isset($_GET['get_progress'])) {
-	if (file_exists('../../service/done')) {
-		echo "true";
-		unlink('../../service/done');
-	} else {
-		echo "false";
-	}
-	die;
-}
-
 if (isset($_GET['delete'])) {
 	if (file_exists($_GET['delete'])) {
 		unlink($_GET['delete']);
+		touch('../../service/done');
 	} else {
 		echo "false";
 	}

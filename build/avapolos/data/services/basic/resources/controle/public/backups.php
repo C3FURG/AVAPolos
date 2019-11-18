@@ -69,15 +69,19 @@ $dirArray=(scandir("backups/"));
       } else {
         dataObj.specific_service = "off"
       }
-      $.get("php/backup.php", dataObj).done(function( data ) { $('#log').html(data); });
+      //$.get("php/backup.php", dataObj).done(function( data ) { $('#log').html(data); });
+      alert('auau');
+      sweet_alert('php/check.php?get')
     });
 
     $(".backups_btn_restore").click(function(){
       $.get("php/backup.php", { restore: $(this).attr('id') }).done(function( data ) { $('#log').html(data); });
+      sweet_alert('php/check.php?get')
     });
 
     $(".backups_btn_delete").click(function(){
       $.get("php/backup.php", { delete: $(this).attr('id') }).done(function( data ) {  $('#log').html(data); });
+      sweet_alert('php/check.php?get')
     });
 
   });
