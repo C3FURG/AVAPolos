@@ -75,9 +75,9 @@ elif [ "$option" = "2" ]; then
      tarImport=$3
   fi
 
-  tar -xpzf $tarImport -C "$dirPath/Import/" #descompacta arquivo de importação para dentro de Import
+  tar -xpzf $tarImport -C "$dirPath/scripts/sync/Import/" #descompacta arquivo de importação para dentro de Import
 
-  nameImportTarList=$(ls $dirPath/Import/ | grep .tar.gz) #vai ter apenas um diretório pois a fila foi eliminada
+  nameImportTarList=$(ls $dirPath/scripts/sync/Import/ | grep .tar.gz) #vai ter apenas um diretório pois a fila foi eliminada
 
   for nameTar in $nameImportTarList; do
      importNumber=$(cut -d'_' -f2 <<< "$nameTar")
@@ -89,7 +89,7 @@ elif [ "$option" = "2" ]; then
      else
 
         if [ $errorStatus -eq 0 ]; then
-           tar -xpzf $dirPath/Import/$nameTar -C "$dirImportPath/"
+           tar -xpzf $dirPath/scripts/sync/Import/$nameTar -C "$dirImportPath/"
 
            ### SUBSTITUIR DB_SYNC DIRECTORY
            changeDBSync $nameImportDir
@@ -116,7 +116,7 @@ elif [ "$option" = "2" ]; then
            fi
         fi
         clearImportDir $nameImportDir
-	execdockerCommand $containerMoodleName "php /app/public/admin/cli/purge_caches.php"
+	      execdockerCommand $containerMoodleName "php /app/public/admin/cli/purge_caches.php"
         restartMoodle #reinicia o moodle
      fi
   done
