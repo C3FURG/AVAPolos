@@ -14,8 +14,13 @@
     <!-- Custom styles for this template-->
   <link href="css/controle.min.css" rel="stylesheet">
 
-  <!-- Bootstrap core JavaScript-->
+  <!-- jQuery -->
   <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- SweetAlert -->
+  <script src='sweetalert2.all.min.js'></script>
+
+  <!-- Controle -->
+  <script src='controle.js'></script>
 
 </head>
