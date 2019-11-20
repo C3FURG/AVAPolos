@@ -155,6 +155,7 @@ Operações básicas: (necessita instalar)
 #Shows the license.
 showLicense() {
   echo "
+
   <AVAPolos - Uma solução tecnológica que possibilita o oferecimento de cursos na modalidade EaD (Educação a Distância) em locais sem conectividade com a Internet, ou onde a conectividade seja limitada.>
   Copyright (C) <2019>  <TI C3 - Centro de Ciências Computacionais / Universidade Federal do Rio Grande - FURG - Brazil>
 
@@ -276,7 +277,7 @@ fi
 export-all() {
   if [ -d "$ROOT_PATH" ]; then
     cd $SYNC_PATH
-    bash export-all.sh
+    bash export_all.sh
   else
     echo "AVAPolos não está instalado." | log error
     exit 1
