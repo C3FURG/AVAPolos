@@ -26,9 +26,9 @@ $CFG->enablemobilewebservice = 1;
 
 $CFG->emailchangeconfirmation = 0;
 
-$CFG->wwwroot   = 'http://moodle.avapolos';
-$CFG->dataroot  = '/app/moodledata';
-$CFG->admin     = 'admin';
+// $CFG->wwwroot   = 'http://moodle.avapolos';
+// $CFG->dataroot  = '/app/moodledata';
+// $CFG->admin     = 'admin';
 
 $CFG->directorypermissions = 0777;
 
