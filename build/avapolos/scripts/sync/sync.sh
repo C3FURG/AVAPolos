@@ -97,11 +97,11 @@ elif [ "$option" = "2" ]; then
            ### Fazer a sincronização de arquivos usando rsync entre a pasta de dentro do import e a pasta de arquivos do moodle
            echo " ---> SINCRONIZANDO ARQUIVOS..."
            while [ ! -e $dirImportPath/$nameImportDir/arquivos/filedir ]; do
-  	      echo " ---------> ...aguardando a cópia do filedir...";
+  	          echo " ---------> ...aguardando a cópia do filedir...";
               sleep 3;
            done
-	   cp -r  $dirImportPath/$nameImportDir/arquivos/filedir/* $fileDirPath/
-           createFileDirList $dirImportPath/$nameImportDir/arquivos/filedir $syncFileDirListPath #create the 'fake' files coming from the importDir into the syncFileDirListPath
+	         cp -r  "$dirImportPath"/"$nameImportDir"/arquivos/filedir/* $fileDirPath/
+           createFileDirList "$dirImportPath"/"$nameImportDir"/arquivos/filedir $syncFileDirListPath #create the 'fake' files coming from the importDir into the syncFileDirListPath
            echo " ---> ...ARQUIVOS SINCRONIZADOS."
 
            startSync #inicia a sincronização do banco de dados e espera que ela acabe
