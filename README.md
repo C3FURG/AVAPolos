@@ -8,6 +8,12 @@ Para instalar a solução, basta executar os seguintes comandos:
 
 `cd avapolos/build && bash compilar.sh`
 
+Se a reinicialização da máquina for requisitada, reinicie e execute os seguintes comandos num terminal.
+
+`cd avapolos/build && bash compilar.sh`
+
+Após o término da compilação, instale a solução com o seguinte comando.
+
 `sudo ·/NOMEDOINSTALADOR`
 
 ##Clonagem
