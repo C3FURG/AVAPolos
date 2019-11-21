@@ -26,16 +26,16 @@ $CFG->enablemobilewebservice = 1;
 
 $CFG->emailchangeconfirmation = 0;
 
-// $CFG->wwwroot   = 'http://moodle.avapolos';
-// $CFG->dataroot  = '/app/moodledata';
-// $CFG->admin     = 'admin';
+$CFG->wwwroot   = 'http://moodle.avapolos';
+$CFG->dataroot  = '/app/moodledata';
+$CFG->admin     = 'admin';
 
 $CFG->directorypermissions = 0777;
 
-@error_reporting(E_ALL | E_STRICT);
-@ini_set('display_errors', '1');
-$CFG->debug = (E_ALL | E_STRICT);
-$CFG->debugdisplay = 1;
+// @error_reporting(E_ALL | E_STRICT);
+// @ini_set('display_errors', '1');
+// $CFG->debug = (E_ALL | E_STRICT);
+// $CFG->debugdisplay = 1;
 
 require_once(__DIR__ . '/lib/setup.php');
 
