@@ -48,3 +48,24 @@ Digitar "avapolos/dspace:latest" sem aspas, após, inserir
 
   Note que o último comando pode demorar 40 minutos!
 
+## OBS:
+
+Para baixar as imagens em outro computador:
+
+    docker pull avapolos/dspacedb:latest
+
+    docker pull avapolos/dspace:latest
+    
+Para salvá-las em formato .tar.gz:
+
+    docker save avapolos/dspacedb:latest > dspacedb.tar.gz
+    
+    docker save avapolos/dspace:latest > dspace.tar.gz
+    
+Para importá-las em outra máquina:
+
+    docker load -i dspacedb.tar.gz
+    
+    docker load -i dspace.tar.gz
+
+
