@@ -64,7 +64,7 @@ if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
     echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
     sed -i 's/db_moodle_ies/'"db_moodle_polo"'/g' $DATA_PATH/moodle/public/config.php
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
-    sed -i 's/IES/'"POLO"'/g' $SYNC_PATH/variables.sh
+    sed -i 's/instance\=\"IES\"/'instance=\"POLO\"'/g' $SYNC_PATH/variables.sh
   # else
     echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
   # fi
@@ -72,7 +72,7 @@ if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
 	bash $INSTALL_SCRIPTS_PATH/install_privateKey.sh
 else
   echo "Esta instalação é uma IES, ajustando parâmetros" | log info
-  sed -i 's/INSTANCENAME/'"IES"'/g' $SYNC_PATH/variables.sh
+  sed -i 's/instance\=\"INSTANCENAME\"/'instance=\"IES\"'/g' $SYNC_PATH/variables.sh
   # if [ "implementado" = "n" ]; then
     echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
