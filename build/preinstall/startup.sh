@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #Check if it's already installed.
 #If yes, ask to rewrite it.

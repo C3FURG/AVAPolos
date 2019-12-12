@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #If root, exit.
 if [ "$EUID" = "0" ]; then
