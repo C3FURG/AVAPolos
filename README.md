@@ -11,6 +11,12 @@ A compilação pode ser agilizada utilizando a opção `--template` como último
 
 O template "moodle-dev" é mais leve para testes somente com o Moodle.
 
+### Comandos úteis
+
+Para enviar arquivos pela rede:
+
+`scp [ARQUIVO] [USUÁRIO DA MAQUINA REMOTA]@[IP DA MAQUINA REMOTA]:~/`
+
 ### Após a primeira compilação.
 
 Se não foram feitas mudanças na solução, as opções `--no-update` e `--no-build-data` podem ajudar muito na velocidade de compilação:
