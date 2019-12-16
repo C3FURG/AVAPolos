@@ -27,7 +27,8 @@ stopMoodle(){
 startDBMaster(){
     echo "Iniciando db_master" | log debug
     startContainer $containerDBMasterName
-    waitForHealthy $containerDBMasterName
+    sleep 3
+    #waitForHealthy $containerDBMasterName
     echo "db_master inicializado" | log debug
 }
 
@@ -40,7 +41,8 @@ stopDBMaster(){
 startDBSync(){
     echo "-> Starting container DB_SYNC..."
     startContainer $containerDBSyncName
-    waitForHealthy $containerDBSyncName
+    sleep 3
+    #waitForHealthy $containerDBSyncName
     echo "----> DOCKER DB_SYNC | STATUS = [ON]"
 }
 
