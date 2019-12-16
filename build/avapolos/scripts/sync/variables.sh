@@ -37,13 +37,13 @@ if [ "$instance" = "POLO" ]; then
    dataDirSync="db_moodle_ies";
    containerDBMasterName=$containerPoloName
    containerDBSyncName=$containerIESName
-   complement="POLO"
+   complement="IES"
 elif [ "$instance" = "IES" ]; then
    dataDirMaster="db_moodle_ies";
    dataDirSync="db_moodle_polo";
    containerDBMasterName=$containerIESName
    containerDBSyncName=$containerPoloName
-   complement="IES"
+   complement="POLO"
 fi
 
 ### END
