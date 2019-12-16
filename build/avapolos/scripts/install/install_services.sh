@@ -31,7 +31,7 @@ echo "Extraindo pacote de dados." | log debug
 tar xfz data.tar.gz
 
 cd $SYNC_PATH
-sed -i 's/INSTANCENAME/'"IES"'/g' variables.sh
+#sed -i 's/INSTANCENAME/'"IES"'/g' variables.sh
 mkdir -p Export/Fila
 mkdir -p Import
 mkdir -p dadosExportados
@@ -66,7 +66,7 @@ if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
     sed -i 's/instance\=\"IES\"/'instance=\"POLO\"'/g' $SYNC_PATH/variables.sh
   # else
-    echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
+  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error
   # fi
   echo "Rodando script para instalação de chaves privadas." | log debug
 	bash $INSTALL_SCRIPTS_PATH/install_privateKey.sh
@@ -77,7 +77,7 @@ else
     echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
   # else
-    echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
+  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error
   # fi
 	echo "Rodando script para geração de chave privada" | log debug
 	bash $INSTALL_SCRIPTS_PATH/generate_privateKey.sh
