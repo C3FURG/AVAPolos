@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 #Paths
 export ROOT_PATH="/opt/avapolos"
@@ -383,34 +383,6 @@ undoConfig() {
   sudo sed -i "$str" "$1"
 }
 
-#Execute a command in a container.
-execute() {
-  docker exec -it "$@"
-  wait
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
-#Execute a SQL query in a moodle database.
-execute_moodlesql() { #$1-> [db_moodle_ies,db_moodle_polo] #$2-> SQL Query
-  eval "docker exec $1 psql -U moodle -d moodle -c \"$2\""
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
-#Execute sql in a avapolos database.
-execute_sql() { #$1-> container #$2-> SQL Query
-  eval "docker exec $1 psql -U moodle -c \"$2\""
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
 #Shows a env var
 show_var() { #$1-> Variable name
   echo "$1: ${!1}"
@@ -469,9 +441,6 @@ export -f remove_service
 export -f enable_service
 export -f disable_service
 export -f undoConfig
-export -f execute
-export -f execute_moodlesql
-export -f execute_sql
 export -f show_var
 export -f waitForHealthy
 export -f testURL

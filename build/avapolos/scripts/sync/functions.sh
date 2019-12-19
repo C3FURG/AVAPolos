@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source /etc/avapolos/header.sh
+## FIXME
+if [ -f "/etc/avapolos/header.sh" ]; then
+  source /etc/avapolos/header.sh
+fi
 
-#-------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------
 
 restartMoodle(){
    stopMoodle
@@ -13,6 +16,7 @@ startMoodle(){
     echo "Iniciando Moodle" | log debug
     startContainer $containerMoodleName
     ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+    echo "Atualizando hosts do Moodle com o IP: $ip" | log debug
     docker exec $containerMoodleName sh -c "echo \"$ip avapolos\" >> /etc/hosts"
     echo "Moodle inicializado" | log debug
 }
@@ -26,7 +30,8 @@ stopMoodle(){
 startDBMaster(){
     echo "Iniciando db_master" | log debug
     startContainer $containerDBMasterName
-    sleep 3;  ###### FIND A WAY TO CHECK IF POSTGRESQL SERVICE IS ALREADY UP
+    sleep 3
+    #waitForHealthy $containerDBMasterName
     echo "db_master inicializado" | log debug
 }
 
@@ -39,7 +44,8 @@ stopDBMaster(){
 startDBSync(){
     echo "-> Starting container DB_SYNC..."
     startContainer $containerDBSyncName
-    sleep 3;  ###### FIND A WAY TO CHECK IF POSTGRESQL SERVICE IS ALREADY UP
+    sleep 3
+    #waitForHealthy $containerDBSyncName
     echo "----> DOCKER DB_SYNC | STATUS = [ON]"
 }
 
@@ -64,7 +70,7 @@ startContainer(){ #container
     echo "Iniciando container $1" | log debug
     docker start $1
     while [ "$(docker inspect -f '{{.State.Running}}' $1)" == false ]; do
-      sleep 5 #10 seconds
+      sleep 5
     done
     echo "Container $1 inicializado" | log debug
 }
@@ -183,7 +189,7 @@ createControlRecord(){ #$1 = versao da sincronização sendo exportado ou import
 	if [ -z "$res" ]; then
 		echo "ERRO AO CRIAR REGISTRO DE CONTROLE"
 		echo " -----> INSERT INTO avapolos_sync (instancia,versao,tipo,moodle_user) VALUES ('$instance',$1,'$2','$3');"
-   		echo "ERROR: $ret"
+   	echo "ERROR: $ret"
 		exit
 	else
 		echo "REGISTRO DE CONTROLE CRIADO COM SUCESSO"
@@ -297,6 +303,10 @@ execSQL(){ # $1 = containerName $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
+execSQLMoodle(){ # $1 = containerName $2 SQL statement
+   execDockerCommand $1 "psql -U moodleuser -d moodle -c \"$2\""
+}
+
 execSQLMaster(){ # $1 SQL statement
    execSQL $containerDBMasterName "$1"
 }
@@ -362,3 +372,7 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
    scp $1 avapolos@$remoteServerAddress:$repoDirPath
    echo $?
 }
+
+export -f execSQL
+export -f execSQLMoodle
+export -f execDockerCommand

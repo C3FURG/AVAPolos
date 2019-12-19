@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #$1 = ip or domain name
 ret=$(ping -4 -c 1 $1)
 if [ $? -ne 0 ]; then

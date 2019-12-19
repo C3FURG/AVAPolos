@@ -4,12 +4,6 @@
 #get_ip.sh
 #This utility script returns the host machine's ip.
 
-#This script needs to run as root.
-if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
-  exit
-fi
-
 #If the header file is present on the system.
 if [ -f "/etc/avapolos/header.sh" ]; then
   #Source it.

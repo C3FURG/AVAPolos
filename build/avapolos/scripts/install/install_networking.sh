@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #-------------------------------------------#
 # AVAPolos - Script de configuração de rede #
@@ -141,7 +141,8 @@ getNameservers(){ #$1-> interface
     unset newDnsArr
 
     echo ${dnsArr[@]}
-
+  else
+    echo ""
   fi
 
 }
@@ -213,11 +214,7 @@ generateNetworkConfig() { # $1-> interface $2-> ip/mask $3-> gateway $4-> networ
   echo -e "dns-nameservers $6 $7"
   echo -e "#AVAPolos config end"
 }
-generateResolvConfig() { #$1 DNS
-  if [ -z "$1" ]; then
-    echo "Nenhum ip foi passado para o generateResolvConfig" | log error
-    exit 1
-  fi
+generateResolvConfig() { #$1 DNS1 $2 DNS2
   for arg in $@; do
     echo -e "nameserver $arg"
   done
@@ -316,7 +313,7 @@ main() {
 
   echo "Aplicando configurações no resolv.conf"
   rm -rf /etc/resolv.conf
-  generateResolvConfig ${DNS[@]} > /etc/resolv.conf
+  generateResolvConfig "$NS1" "$NS2" > /etc/resolv.conf
   chmod 777 /etc/resolv.conf
 
   cd $NETWORKING_PATH

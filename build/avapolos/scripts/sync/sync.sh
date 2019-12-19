@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # PROJETO
 #     _                      ____            _
 #    / \    __   __   __ _  |  _ \    ___   | |   ___    ___

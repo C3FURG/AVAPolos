@@ -3,6 +3,8 @@
 dir=$(pwd)
 cd ../../preinstall
 source header.sh
+cd ../avapolos/scripts/sync/
+source functions.sh
 cd $dir
 unset dir
 source header.sh

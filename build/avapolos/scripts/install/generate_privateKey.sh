@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #AVA-Polos
 #generate_privateKey.sh
