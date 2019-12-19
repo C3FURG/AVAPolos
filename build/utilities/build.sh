@@ -275,6 +275,7 @@ if [ "$pull" = "y" ]; then
   sudo chown $USER:$USER -R "$installRoot"
 	sudo avapolos --start
 elif [ "$build_data" = "y" ]; then
+	echo "Compilando os dados dos serviços" | log info
 	cd data
 	bash compile.sh
 	cd ../
