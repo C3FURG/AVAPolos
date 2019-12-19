@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-source /etc/avapolos/header.sh
+## FIXME
+if [ -f "/etc/avapolos/header.sh" ]; then
+  source /etc/avapolos/header.sh
+fi
 
-#-------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------
 
 restartMoodle(){
    stopMoodle
@@ -300,6 +303,10 @@ execSQL(){ # $1 = containerName $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
+execSQLMoodle(){ # $1 = containerName $2 SQL statement
+   execDockerCommand $1 "psql -U moodleuser -d moodle -c \"$2\""
+}
+
 execSQLMaster(){ # $1 SQL statement
    execSQL $containerDBMasterName "$1"
 }
@@ -365,3 +372,7 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
    scp $1 avapolos@$remoteServerAddress:$repoDirPath
    echo $?
 }
+
+export -f execSQL
+export -f execSQLMoodle
+export -f execDockerCommand
