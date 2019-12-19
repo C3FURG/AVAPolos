@@ -71,7 +71,7 @@ else if ($fromform = $exportform->get_data()) {
                              type: 'success',
                              title: 'Exportação realizada com sucesso!',
                    allowOutsideClick: false,
-                              html: '<b><a href=\"'+response+'\">Clique aqui para baixar arquivo de exportação.</a> <br /><br /><a href=\"javascript:history.back()\">Clique aqui para voltar.</a></b>',
+                              html: '<b><a href=\"'+response+'\">Clique aqui para baixar o arquivo de exportação.</a> <br /><br /><a href=\"javascript:history.back()\">Clique aqui para voltar.</a></b>',
                               showConfirmButton: false,
                            })
 
