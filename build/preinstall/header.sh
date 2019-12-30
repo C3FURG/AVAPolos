@@ -390,8 +390,10 @@ show_var() { #$1-> Variable name
 
 #Waits for a container to be healthy
 waitForHealthy() { #$1-> container
+  time=0
   while [ -z "$(docker container inspect --format='{{json .State.Health.Status}}' $1 | grep -o "healthy")" ]; do
-    echo "Esperando a inicialização do $1"
+    echo "Aguardando a inicialização do container: $1, "$time"s"
+    time=$(($time + 1))
     sleep 1
   done
 }
