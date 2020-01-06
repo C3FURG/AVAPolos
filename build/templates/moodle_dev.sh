@@ -14,7 +14,9 @@ images="avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
 portainer/portainer
-avapolos/postgres:bdr"
+romeupalos/noip
+avapolos/postgres:bdr
+"
 
 stacks="basic.yml
 moodle.yml"

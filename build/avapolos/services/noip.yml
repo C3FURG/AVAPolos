@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  noip:
+    hostname: noip
+    image: romeupalos/noip
+    container_name: noip
+    restart: always
+    networks:
+      avapolos:
+    volumes:
+      - ${RESOURCES_PATH}/no-ip2.conf:/usr/local/etc/no-ip2.conf
+
+networks:
+  avapolos:
+    external: true

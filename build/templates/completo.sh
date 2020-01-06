@@ -16,10 +16,12 @@ images="avapolos/postgres:bdr
 avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
+romeupalos/noip
 avapolos/backup:stable
 portainer/portainer
 avapolos/dspace:latest
-avapolos/dspacedb:latest"
+avapolos/dspacedb:latest
+"
 
 stacks="basic.yml
 moodle.yml
