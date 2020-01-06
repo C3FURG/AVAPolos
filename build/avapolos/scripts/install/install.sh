@@ -7,7 +7,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root" | log error installer
   exit
 fi
 
@@ -18,7 +18,7 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh" | log error installer
   exit 1
 fi
 
@@ -44,15 +44,15 @@ for s in "${scripts[@]}"; do
 	#If the last script's return code wasn't 0
 	if [ $? -ne 0 ]; then
 		#Tell the user that's an error and exit the script.
-		echo "Erro no script $s" | log error
+		echo "Erro no script $s" | log error installer
 		exit 1
 	#If it was 0
 	else
 		#Print the progress.
 		counter=$(($counter + 1))
-		echo "-------------------------------"                 | log info
-		echo "Progresso da instalação: ($counter/$scriptsLen)" | log info
-		echo "-------------------------------"                 | log info
+		echo "-------------------------------"                 | log info installer
+		echo "Progresso da instalação: ($counter/$scriptsLen)" | log info installer
+		echo "-------------------------------"                 | log info installer
 	fi
 
 done
@@ -61,5 +61,5 @@ done
 start
 
 #Start the solution's main service
-echo "Iniciando serviço principal." | log debug
-systemctl start avapolos.service | log debug
+echo "Iniciando serviço principal." | log debug installer
+systemctl start avapolos.service | log debug installer

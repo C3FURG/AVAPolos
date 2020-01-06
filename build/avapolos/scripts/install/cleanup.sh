@@ -6,7 +6,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root" | log error installer
   exit
 fi
 
@@ -17,25 +17,25 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh" | log error installer
   exit 1
 fi
 
 #Log what script is being run.
-echo "cleanup.sh" | log debug
-echo "Executando limpezas finais." | log info
+echo "cleanup.sh" | log debug installer
+echo "Executando limpezas finais." | log info installer
 
 #Add the avapolos' user to the system.
-echo "Adicionando usuário $AVAPOLOS_USER ao grupo Docker." | log debug
+echo "Adicionando usuário $AVAPOLOS_USER ao grupo Docker." | log debug installer
 #Add him to the docker group.
 usermod -aG docker $AVAPOLOS_USER
 
 #Remove the installation's files.
-echo "Removendo arquivos de instalação." | log debug
+echo "Removendo arquivos de instalação." | log debug installer
 sudo rm -rf $ROOT_PATH/AVAPolos.tar.gz
 
 #Set up the required permissions.
-echo "Assegurando permissões corretas sobre os diretórios necessários." | log debug
+echo "Assegurando permissões corretas sobre os diretórios necessários." | log debug installer
 chown $(id -u $AVAPOLOS_USER):$(id -g $AVAPOLOS_GROUP) -R $ROOT_PATH
 chown $(id -u $AVAPOLOS_USER):$(id -g $AVAPOLOS_GROUP) -R $ETC_PATH
 chmod 740 $ROOT_PATH -R

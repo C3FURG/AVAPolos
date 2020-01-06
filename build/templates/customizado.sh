@@ -4,19 +4,22 @@ unset description
 unset images
 unset stacks
 
-description="Pacote para testes com o Moodle atualizado e limpo.
+description="Pacote para testes com serviços customizados.
 Página inicial (inicio.avapolos)
 Painel de controle (controle.avapolos)
 Portainer (portainer.avapolos)
-Moodle Teste (moodletest.avapolos)"
+Wordpress (teste.avapolos)
+"
 
 images="avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
 portainer/portainer
 romeupalos/noip
-avapolos/postgres:bdr
+mysql:5.7
+wordpress:latest
 "
 
 stacks="basic.yml
-moodle_test.yml"
+moodle_test.yml
+"

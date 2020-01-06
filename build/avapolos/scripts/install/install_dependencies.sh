@@ -6,7 +6,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root" | log error installer
   exit
 fi
 
@@ -17,16 +17,16 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh" | log error installer
   exit 1
 fi
 
 #Log what script is being run.
-echo "install_dependencies.sh" | log debug
-echo "Instalando dependências." | log info
+echo "install_dependencies.sh" | log debug installer
+echo "Instalando dependências." | log info installer
 
 #Log what path is being used to search for dependencies.
-echo "Buscando dependências no diretório: $DEPENDENCIES_PATH" | log debug
+echo "Buscando dependências no diretório: $DEPENDENCIES_PATH" | log debug installer
 cd $DEPENDENCIES_PATH
 
 #string="deb [trusted=yes] file://$DEPENDENCIES_PATH ./"
@@ -46,24 +46,24 @@ packages=$(echo $(cat $DEPENDENCIES_PATH/packages | sed -E -e 's/[[:blank:]]+/\n
 echo "Instalando pacotes: $packages"
 
 while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do
-    echo "Aguardando outras instalações terminarem.," | log info
+    echo "Aguardando outras instalações terminarem.," | log info installer
     sleep 3
 done
 
 apt-get install -y --fix-missing $packages 
 
-echo "Instalando docker-compose" | log debug
+echo "Instalando docker-compose" | log debug installer
 sudo cp docker-compose /usr/local/bin/
 sudo chmod +x /usr/local/bin/docker-compose
 
-#dpkg -i *.deb 2>&1 | log debug
+#dpkg -i *.deb 2>&1 | log debug installer
 
-#   echo "Docker já está instalado" | log debug
+#   echo "Docker já está instalado" | log debug installer
 #   if [ "$INTERACTIVE" = "y" ]; then
 #     input "Deseja instalar a versão compatível com AVAPolos?" "sim" "nao" 0 "Selecione uma opção."
 #     if [ -x "$(command -v docker)" ]; then
 #       if [ "$option" = "sim" ]; then
-#         echo "Usuário selecionou a reinstalação do Docker." | log info
+#         echo "Usuário selecionou a reinstalação do Docker." | log info installer
 #         bash $INSTALL_SCRIPTS_PATH/uninstall_docker.sh
 #         cd docker
 #         dpkg_install *.deb
@@ -82,9 +82,9 @@ checks=("docker" "docker-compose")
 
 for item in ${checks[@]}; do
   if [ -x "$(command -v "$item")" ]; then
-    echo "$item instalado com sucesso." | log info
+    echo "$item instalado com sucesso." | log info installer
   else
-  	echo "Houve um erro na instalação do $item, tente novamente." | log error
+  	echo "Houve um erro na instalação do $item, tente novamente." | log error installer
     exit 1
   fi
 done

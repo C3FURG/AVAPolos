@@ -2,7 +2,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root" | log error installer
   exit
 fi
 
@@ -13,34 +13,34 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh" | log error installer
   exit 1
 fi
 
-echo "uninstall_docker.sh" | log debug
-echo "Desinstalando Docker." | log info
+echo "uninstall_docker.sh" | log debug installer
+echo "Desinstalando Docker." | log info installer
 
 docker ps > /dev/null 2>&1
 
 if [ "$?" = "0" ]; then
   containers=$(docker ps -aq --no-trunc)
   if ! [ -z "$containers" ]; then
-    echo "Existem containers ativos que não pertencem ao avapolos!" | log warn
+    echo "Existem containers ativos que não pertencem ao avapolos!" | log warn installer
     input "Deseja cancelar a instalação para encerrá-los manualmente? (Serão terminados automaticamente caso digite 'nao')" "sim" "nao" 0 "Você precisa selecionar uma opção!"
     if [ "$option" = "sim" ]; then
-      echo "Cancelando desinstalação do Docker." | log error
+      echo "Cancelando desinstalação do Docker." | log error installer
       exit 1;
     else
       for container in $containers; do
-        echo "parando: $(docker container stop $container)" | log debug
-        echo "removendo: $(docker container rm $container)" | log debug
+        echo "parando: $(docker container stop $container)" | log debug installer
+        echo "removendo: $(docker container rm $container)" | log debug installer
       done
     fi
   fi
 fi
 
 if [ -x "$(command -v docker)" ]; then
-  echo "Desinstalando Docker." | log info
+  echo "Desinstalando Docker." | log info installer
 
   #Stop the services.
   sudo systemctl stop docker.service
@@ -48,7 +48,7 @@ if [ -x "$(command -v docker)" ]; then
 
   #Wait for dpkg/lock.
   while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do
-      echo "O dpkg está ocupado, esperando..." | log info
+      echo "O dpkg está ocupado, esperando..." | log info installer
       sleep 3
   done
 
@@ -63,25 +63,25 @@ if [ -x "$(command -v docker)" ]; then
     input "Deseja remover os arquivos do Docker? (Recomendado)" "sim" "nao" 0 "Selecione uma opção."
 
     if [ "$option" = "sim" ]; then
-      echo "Removendo arquivos do Docker." | log debug
+      echo "Removendo arquivos do Docker." | log debug installer
       sudo rm -rf /var/lib/docker
   	  sudo rm -f /etc/apparmor.d/docker
     fi
   else
-    echo "Removendo arquivos do Docker." | log debug
+    echo "Removendo arquivos do Docker." | log debug installer
     sudo rm -rf /var/lib/docker
     sudo rm -f /etc/apparmor.d/docker
   fi
 
   if [ -x "$(command -v docker)" ]; then
-    echo "Ocorreu um erro na desinstalação do Docker, tente novamente." | log error
+    echo "Ocorreu um erro na desinstalação do Docker, tente novamente." | log error installer
     exit 1
   else
     echo "Docker desinstalado com sucesso."
   fi
 else
-  echo "Docker já está desinstalado!" | log warn
+  echo "Docker já está desinstalado!" | log warn installer
 fi
 
-echo "Removendo docker-compose" | log debug
+echo "Removendo docker-compose" | log debug installer
 sudo rm -rf /usr/local/bin/docker-compose

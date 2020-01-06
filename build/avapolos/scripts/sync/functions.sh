@@ -13,26 +13,26 @@ restartMoodle(){
 }
 
 startMoodle(){
-    echo "Iniciando Moodle" | log debug
+    echo "Iniciando Moodle" | log debug sync
     startContainer $containerMoodleName
     ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
-    echo "Atualizando hosts do Moodle com o IP: $ip" | log debug
+    echo "Atualizando hosts do Moodle com o IP: $ip" | log debug sync
     docker exec $containerMoodleName sh -c "echo \"$ip avapolos\" >> /etc/hosts"
-    echo "Moodle inicializado" | log debug
+    echo "Moodle inicializado" | log debug sync
 }
 
 stopMoodle(){
-    echo "Parando Moodle" | log debug
+    echo "Parando Moodle" | log debug sync
     stopContainer $containerMoodleName
-    echo "Moodle Parado" | log debug
+    echo "Moodle Parado" | log debug sync
 }
 
 startDBMaster(){
-    echo "Iniciando db_master" | log debug
+    echo "Iniciando db_master" | log debug sync
     startContainer $containerDBMasterName
     sleep 3
     #waitForHealthy $containerDBMasterName
-    echo "db_master inicializado" | log debug
+    echo "db_master inicializado" | log debug sync
 }
 
 stopDBMaster(){
@@ -55,24 +55,28 @@ stopDBSync(){
     echo "----> DOCKER DB_SYNC | STATUS = [OFF]"
 }
 
+connectDB() {#$1-> [db_moodle_ies/db_moodle_polo]
+  docker exec -it "$1" psql -U moodle -d moodle
+}
+
 #-------------------------------------------------------------------------------------------------
 
 stopContainer(){ #container
-    echo "Parando container $1" | log debug
+    echo "Parando container $1" | log debug sync
     docker stop $1
     while [ "$(docker inspect -f '{{.State.Running}}' $1)" == true ]; do
       sleep 5 #10 seconds
     done
-    echo "Container $1 parado" | log debug
+    echo "Container $1 parado" | log debug sync
 }
 
 startContainer(){ #container
-    echo "Iniciando container $1" | log debug
+    echo "Iniciando container $1" | log debug sync
     docker start $1
     while [ "$(docker inspect -f '{{.State.Running}}' $1)" == false ]; do
       sleep 5
     done
-    echo "Container $1 inicializado" | log debug
+    echo "Container $1 inicializado" | log debug sync
 }
 
 clearQueue(){ # aguarda o master enviar as alterações
@@ -376,3 +380,4 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
 export -f execSQL
 export -f execSQLMoodle
 export -f execDockerCommand
+export -f connectDB

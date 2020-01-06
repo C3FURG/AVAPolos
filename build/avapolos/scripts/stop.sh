@@ -3,7 +3,7 @@
 source /etc/avapolos/header.sh
 
 if [ -f $SCRIPTS_PATH/startstop.lock ]; then
-  echo "Já existe um processo utilizando esse script!" | log error
+  echo "Já existe um processo utilizando esse script!" | log error stop
 else
 
   touch $SCRIPTS_PATH/startstop.lock
@@ -11,7 +11,7 @@ else
   cd $SERVICES_PATH
 
   if ! [ -f "enabled_services" ]; then
-    echo "Arquivo enabled_services não encontrado!" | log error
+    echo "Arquivo enabled_services não encontrado!" | log error stop
     exit 1
   fi
 
@@ -41,17 +41,17 @@ else
 
   for service in $services; do
     if [ -z "$(cat stopped_services | grep -o $service)" ]; then
-      echo "Parando serviço: $service" | log info
-      docker-compose -p avapolos -f $service down | log debug
+      echo "Parando serviço: $service" | log info stop
+      docker-compose -p avapolos -f $service down | log debug stop
       echo $service >> stopped_services
       sed -i '/'"$(sanitize $service)"'/d' started_services
     else
-      echo "O serviço $service já está parado, ignorando..." | log info
+      echo "O serviço $service já está parado, ignorando..." | log info stop
     fi
   done
 
   if ! [ -z "$(cat started_services)" ]; then
-    echo "Atualizando a página de manutenção" | log debug
+    echo "Atualizando a página de manutenção" | log debug stop
     unset MANUTENCAO
     for service in $(cat stopped_services); do
       rule="$(cat $service | grep traefik.frontend.rule=Host: | cut -d: -f2 | cut -d\" -f1)"
@@ -60,16 +60,16 @@ else
     MANUTENCAO=$(echo $MANUTENCAO | sed 's/\ /\,/g')
     export MANUTENCAO
     if ! [ "$specified" = "false" ]; then
-      docker-compose -p avapolos -f manutencao.yml down  | log debug
-      docker-compose -p avapolos -f manutencao.yml up -d  | log debug
+      docker-compose -p avapolos -f manutencao.yml down  | log debug stop
+      docker-compose -p avapolos -f manutencao.yml up -d  | log debug stop
     fi
-    echo "Página de manutenção atualizada." | log debug
+    echo "Página de manutenção atualizada." | log debug stop
   fi
 
   if [ "$specified" = "false" ]; then
-    echo "Removendo rede docker 'avapolos'." | log debug
-    docker-compose -p avapolos -f manutencao.yml down  | log debug
-    docker network rm avapolos || true | log debug
+    echo "Removendo rede docker 'avapolos'." | log debug stop
+    docker-compose -p avapolos -f manutencao.yml down  | log debug stop
+    docker network rm avapolos || true | log debug stop
   fi
 
   rm $SCRIPTS_PATH/startstop.lock
