@@ -30,25 +30,16 @@ define('CLI_SCRIPT', true);
 
 require(__DIR__.'/../../config.php');
 require_once($CFG->libdir.'/clilib.php');
+require_once($CFG->dirroot . '/repository/lib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
-$usage2 = "Installs a language pack.
+$usage2 = "Adds a filesystem repo for AVAPolos' online sync.
 
 Usage:
-    # php cfg.php --lang=<packname>
-    # php cfg.php [--help|-h]
-
-Options:
-    -h --help                   Print this help.
-    --pack
-
-Examples:
-    # php language.php --lang=pt_br
-        Installs portuguese on the server.
+    # php repo.php
 ";
 
 list($options, $unrecognised) = cli_get_params([
-    'lang' => null,
-], [
     'h' => 'help'
 ]);
 
@@ -62,11 +53,33 @@ if ($options['help']) {
     exit(2);
 }
 
-if ($options['lang'] !== null) {
-  cli_writeln('Installing language.');
-  $controller = new tool_langimport\controller();
-  $controller->install_languagepacks('pt_br');
-  cli_writeln('Done.');
-} else {
-  cli_writeln('Current language: ' . get_config['lang']);
-}
+$arr = [
+    "action" => "newon",
+    "repos" => "filesystem",
+#    "enablecourseinstances" => 0,
+#    "enableuserinstances" => 0,
+    "submitbutton" => "Salvar"
+];
+
+#var_dump((array)$arr);
+#var_dump($plugin);
+#var_dump($visible);
+
+#$type = new repository_type("filesystem", $arr, true);
+
+$success = true;
+#if (!$repoid = $type->create()) {
+#    $success = false;
+#}
+
+$plugin = "filesystem";
+$context = context_system::instance();
+$fromform = [
+    "test" => "a"
+];
+
+$success = repository::static_function($plugin, 'create', $plugin, 0, $context, $fromform);
+
+
+
+core_plugin_manager::reset_caches();
