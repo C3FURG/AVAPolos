@@ -55,7 +55,7 @@ stopDBSync(){
     echo "----> DOCKER DB_SYNC | STATUS = [OFF]"
 }
 
-connectDB() {#$1-> [db_moodle_ies/db_moodle_polo]
+connectDB() { #$1-> [db_moodle_ies/db_moodle_polo]
   docker exec -it "$1" psql -U moodle -d moodle
 }
 
