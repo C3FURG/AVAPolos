@@ -20,6 +20,8 @@ export EDUCAPES_PATH="/opt/educapes"
 export SERVICES_PATH="$ROOT_PATH/services"
 export SERVICE_PATH="$ETC_PATH/service"
 export BACKUPS_PATH="$ROOT_PATH/backups"
+export CONFIG_PATH="$ROOT_PATH/config"
+export NOIP_ENV_PATH="$CONFIG_PATH/noip.env"
 
 #User Variables
 export AVAPOLOS_USER="avapolos"

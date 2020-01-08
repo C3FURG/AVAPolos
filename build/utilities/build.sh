@@ -46,7 +46,7 @@ if ! [[ $(systemctl is-active docker) = "active" ]]; then
 fi
 
 if ! [ -f .dependencies_installed ]; then
-	echo "As dependências não foram atualizadas"
+	echo "As dependências não foram atualizadas" | log error compiler
 	if [[ "$(input 'Deseja instalá-las?' 'sim' 'nao' 0 'Selecione uma opção.')" = "sim" ]]; then
 		echo "Instalando dependências"
 		sudo apt-get install -y --no-install-recommends --no-install-suggests \

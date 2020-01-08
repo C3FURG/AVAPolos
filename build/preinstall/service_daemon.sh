@@ -151,6 +151,14 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
+        setup_noip* )
+          if ! [ -z "${args[1]}" ]; then
+            run "$SCRIPTS_PATH/setup_noip.sh" "${args[@]}"
+            touch $SERVICE_PATH/done
+          else
+            echo "Comando inválido, argumentos insuficientes." | log error
+          fi
+        ;;
         *)
           echo "O serviço recebeu um comando não suportado: $line" | log error
         ;;

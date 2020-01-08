@@ -24,4 +24,10 @@
       <i class="fas fa-fw fa-table"></i>
       <span>Funções</span></a>
   </li>
+
+  <li class="nav-item <?php if ($page == "dyndns.php") { echo "active"; } ?>">
+    <a class="nav-link" href="?page=dyndns.php">
+      <i class="fas fa-fw fa-gear"></i>
+      <span>DNS Dinâmico</span></a>
+  </li>
 </ul>

@@ -45,6 +45,12 @@ if (isset($_GET['action'])) {
 			echo "Sinal enviado para o serviço.";
 			break;
 
+		case 'setup_noip':
+			echo "Configurando noip.";
+			system("echo 'setup_noip " . $_POST['USERNAME'] . " " . $_POST['PASSWORD'] . " " . $_POST['DOMAIN'] . " ' > ../../service/pipe");
+			echo "Sinal enviado para o serviço.";
+			break;
+
 		case 'get_progress':
 			if (isset($_GET['subject'])) {
 				switch ($_GET['subject']) {

@@ -3,13 +3,17 @@ version: '2'
 services:
   noip:
     hostname: noip
-    image: romeupalos/noip
+    image: coppit/noip
     container_name: noip
     restart: always
     networks:
       avapolos:
     volumes:
-      - ${RESOURCES_PATH}/no-ip2.conf:/usr/local/etc/no-ip2.conf
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_PATH}:/config
+    env_file:
+      - ${NOIP_ENV_PATH}
+
 
 networks:
   avapolos:
