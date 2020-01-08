@@ -27,7 +27,7 @@
 
   <li class="nav-item <?php if ($page == "dyndns.php") { echo "active"; } ?>">
     <a class="nav-link" href="?page=dyndns.php">
-      <i class="fas fa-fw fa-gear"></i>
+      <i class="fas fa-fw fa-cog"></i>
       <span>DNS Dinâmico</span></a>
   </li>
 </ul>

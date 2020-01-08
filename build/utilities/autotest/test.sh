@@ -26,8 +26,8 @@ test() {
   #python3 fog.py deploy $HOST_IES $HOST_POLO --wait
   wait_for_host $IP_IES
   wait_for_host $IP_POLO
-  scp ~/Workspace/AVAPolos/build/avapolos_beta* admin@$IP_IES:~/
-  ssh admin@$IP_IES "sudo ./avapolos_beta* -y"
+  scp ../../avapolos_beta* admin@$IP_IES:~/
+  ssh admin@$IP_IES "sudo ./avapolos_beta* -- -y"
 }
 
 while true; do

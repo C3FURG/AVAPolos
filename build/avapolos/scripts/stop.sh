@@ -40,7 +40,7 @@ else
   fi
 
   for service in $services; do
-    if [ -z "$(cat stopped_services | grep -o $service)" ]; then
+    if [ -z "$(cat stopped_services | grep -o $service)" ] && ! [ $service = "basic.yml" ]; then
       echo "Parando serviço: $service" | log info stop
       docker-compose -p avapolos -f $service down | log debug stop
       echo $service >> stopped_services
