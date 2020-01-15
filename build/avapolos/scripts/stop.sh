@@ -28,8 +28,6 @@ else
   export MANUTENCAO=""
   export BACKUPS_PATH
 
-  #echo "stop" > $SCRIPTS_PATH/.lastRan
-
   if ! [ -z "$1" ]; then
     #arg=$(sanitize $1)
     arg=$1
@@ -46,7 +44,7 @@ else
       echo $service >> stopped_services
       sed -i '/'"$(sanitize $service)"'/d' started_services
     else
-      echo "O serviço $service já está parado, ignorando..." | log info stop
+      echo "Ignorando serviço $service..." | log info stop
     fi
   done
 

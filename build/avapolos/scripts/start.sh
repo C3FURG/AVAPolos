@@ -26,13 +26,13 @@ else
   apply_fixes() {
     echo "Aplicando correções para bugs do Docker" | log debug start
     #We have to start all, and apply workarounds.
-    service docker stop
-    sudo rm -r /var/lib/docker/network/files/
-    service docker start
+    # service docker stop
+    # sudo rm -r /var/lib/docker/network/files/
+    # service docker start
 
-    for iface in $(ip -o -4 addr show | grep 172.12 | awk '{print $2}'); do
-      sudo ip link delete $iface
-    done
+    # for iface in $(ip -o -4 addr show | grep 172.12 | awk '{print $2}'); do
+    #   sudo ip link delete $iface
+    # done
 
     echo "ID da rede avapolos:" | log debug start
     docker network create -d bridge --gateway 172.12.0.1 --subnet 172.12.0.0/16 avapolos | log debug start

@@ -317,7 +317,7 @@ fi
 cd $SERVICES_PATH
 echo "Adicinando serviço $1" | log debug
 str=$(sanitize $1)
-echo "$str" >> enabled_services
+echo "$1" >> enabled_services
 }
 
 #Removes services from the startup stack.
