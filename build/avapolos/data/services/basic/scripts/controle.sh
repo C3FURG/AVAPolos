@@ -22,7 +22,7 @@ unzip fontawesome-free.zip | log debug data_compiler
 cd $BASIC_DIR
 cp -rf $tmp/fontawesome-free-5.11.2-web/* $BASIC_DATA_DIR/controle/public/vendor/fontawesome-free/
 wget -O $BASIC_DATA_DIR/controle/public/vendor/popper.min.js "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-wget -O $BASIC_DATA_DIR/controle/public/vendor/jquery-3.2.1.slim.min.js "https://code.jquery.com/jquery-3.2.1.slim.min.js"
+wget -O $BASIC_DATA_DIR/controle/public/vendor/jquery-3.3.1.min.js "https://code.jquery.com/jquery-3.3.1.min.js"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/bootstrap.min.css "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/bootstrap.min.js "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
 echo "vendors instalados com sucesso no serviço." | log debug data_compiler

@@ -18,7 +18,7 @@ avapolos/dnsmasq:latest
 library/traefik:v1.7
 avapolos/backup:stable
 portainer/portainer
-coppit/noip
+coppit/no-ip
 "
 
 stacks="basic.yml

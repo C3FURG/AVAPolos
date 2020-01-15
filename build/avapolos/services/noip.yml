@@ -3,7 +3,7 @@ version: '2'
 services:
   noip:
     hostname: noip
-    image: coppit/noip
+    image: coppit/no-ip
     container_name: noip
     restart: always
     networks:

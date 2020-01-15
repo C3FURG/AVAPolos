@@ -15,7 +15,7 @@
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
   <!-- jQuery -->
-  <script src="vendor/jquery-3.2.1.slim.min.js"></script>
+  <script src="vendor/jquery-3.3.1.min.js"></script>
 
   <!-- Popper -->
   <script src="vendor/popper.min.js"></script>

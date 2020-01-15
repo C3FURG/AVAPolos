@@ -2,20 +2,16 @@
 - Testar o funcionamento da sync online
 
 - Backups:
-    - Upload
-    - Radio para especifico vs all
-
-- CLI:
-    - Recursos para dev:
-        -Conectar db_master, db_polo
+    - Upload                       #GUI
+    - Radio para especifico vs all #OK
 
 - Monitoramento de serviços no controle.
 
 Controle:
-	Funções pra configuraçoes.
-	prover ou não dhcp.
-	ip manual.
-	Definir endereço da instalação remota.
+	Funções pra configuraçoes.       #OK
+	prover ou não dhcp.              #GUI
+	ip manual.                       #GUI
+	Definir endereço da instalação remota. #GUI
 	Pacote sync moodle
 	Gerar instalação
 	CLonagem

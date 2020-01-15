@@ -27,6 +27,7 @@
     <small id="domainHelp" class="form-text text-muted">Domínio que você criou para seu POLO EAD.</small>
   </div>
   <button type="button" name="btn" id="submitBtn" class="btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
+  <br><br>
 </form>
 
 
@@ -57,8 +58,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a href="#" id="submit" class="btn btn-success success">Submit</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" id="submit">Enviar</button>
             </div>
         </div>
     </div>
@@ -76,16 +77,15 @@ function togglePasswordVisibility() {
 }
 
 $('#submitBtn').click(function() {
-     /* when the button in the form, display the entered values in the modal */
-     $('#modalEmail').text($('#emailInput').val());
-     $('#modalPass').text($('#passwordInput').val());
-     $('#modalDomain').text($('#domainInput').val());
+  $('#modalEmail').text($('#emailInput').val());
+  $('#modalPass').text($('#passwordInput').val());
+  $('#modalDomain').text($('#domainInput').val());
 });
 
 $('#submit').click(function(){
-     /* when the submit button in the modal is clicked, submit the form */
-    alert('submitting');
-    $('#formfield').submit();
+  sweet_alert('php/check.php?get')
+  $.post("php/action.php?action=setup_noip", { email: $('#emailInput').val(), pass: $('#passwordInput').val(), domain: $('#domainInput').val() }).done(function( data )  { alert(data); });
+  $('#confirm-submit').modal('toggle');
 });
 
 </script>
