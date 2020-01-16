@@ -105,7 +105,7 @@ def wait_if_needed(args):
                     sys.stdout.write('\b')
             sys.stdout.flush()
             sys.stdout.write('\b')
-            print(Fore.GREEN + "Done!" + Style.RESET_ALL)
+            print(Fore.GREEN + " Done!" + Style.RESET_ALL)
 
 def cmd_deploy(args):
     print("Total Machines to Deploy: " + str(len(args.hosts)))

@@ -3,14 +3,13 @@ version: '2'
 services:
   noip:
     hostname: noip
-    image: coppit/no-ip
+    image: avapolos/dyndns
     container_name: noip
     restart: always
     networks:
       avapolos:
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_PATH}:/config
     env_file:
       - ${NOIP_ENV_PATH}
 

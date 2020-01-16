@@ -25,10 +25,9 @@ else
 fi
 
 echo "
-USERNAME=\"$1\"
-PASSWORD=\"$2\"
-DOMAINS=\"$3\"
-INTERVAL=\"10\"
+USER=\"$1\"
+PASS=\"$2\"
+HOST=\"$3\"
 " > $NOIP_ENV_PATH
 
 add_service noip.yml

@@ -12,7 +12,7 @@ Portainer (portainer.avapolos)"
 images="avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
-coppit/no-ip
+avapolos/dyndns
 portainer/portainer
 "
 

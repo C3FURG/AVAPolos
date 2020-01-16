@@ -14,7 +14,7 @@ images="avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
 portainer/portainer
-coppit/no-ip
+avapolos/dyndns
 avapolos/postgres:bdr
 "
 
