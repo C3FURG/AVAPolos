@@ -8,6 +8,10 @@
 
   <title>AVAPolos - Controle</title>
 
+  <!-- Xterm.js -->
+  <link href="vendor/xterm.min.css" rel="stylesheet">
+  <script src="vendor/xterm.min.js"></script>
+
   <!-- Template stuff -->
   <link href="css/controle.min.css" rel="stylesheet">
 

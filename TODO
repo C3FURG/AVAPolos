@@ -1,29 +1,31 @@
-- Testes sincronização
-- Testar o funcionamento da sync online
+Organizar tarefas
+
+- Testes sincronização                    #FAZENDO
+- Testar o funcionamento da sync online   #FAZENDO
 
 - Backups:
-    - Upload                       #GUI
-    - Radio para especifico vs all #OK
+    - Upload                              #FAZENDO
+    - Radio para especifico vs all        #OK
 
 - Monitoramento de serviços no controle.
 
 Controle:
-	Funções pra configuraçoes.       #OK
-	prover ou não dhcp.              #GUI
-	ip manual.                       #GUI
-	Definir endereço da instalação remota. #GUI
-	Pacote sync moodle
-	Gerar instalação
-	CLonagem
+	Funções pra configuraçoes.              #OK
+	prover ou não dhcp.                     #GUI
+	ip manual.                              #GUI
+	Definir endereço da instalação remota.  #GUI
+	Pacote sync moodle                      #
+	Gerar instalação                        #
+	CLonagem                                #
 
-Informações
+Informações                               #
 
-FUnções de logs mais implementadas para o desenvolvedor.
+FUnções de logs para o desenvolvedor.     #
 
-Moodle teste para wordpress.
+Moodle teste para wordpress.              #
 
-Automatização dos templates.
+Automatização dos templates.              #
 
-Monitoramento de serviços caídos.
+Monitoramento de serviços caídos.         #
 
-Templates sem a opção de ler a descrição.
+Templates sem a opção de ler a descrição. #

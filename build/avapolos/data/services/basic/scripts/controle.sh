@@ -25,6 +25,8 @@ wget -O $BASIC_DATA_DIR/controle/public/vendor/popper.min.js "https://cdnjs.clou
 wget -O $BASIC_DATA_DIR/controle/public/vendor/jquery-3.3.1.min.js "https://code.jquery.com/jquery-3.3.1.min.js"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/bootstrap.min.css "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/bootstrap.min.js "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+wget -O $BASIC_DATA_DIR/controle/public/vendor/xterm.min.js "https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"
+wget -O $BASIC_DATA_DIR/controle/public/vendor/xterm.min.css "https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"
 echo "vendors instalados com sucesso no serviço." | log debug data_compiler
 
 
