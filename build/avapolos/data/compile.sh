@@ -30,6 +30,7 @@ do
         cd "$SERVICES_DIR/$service"
         echo "Limpando dados do serviço: $service"
         rm -rf data
+        docker-compose down
       done
       exit 0
 		;;
