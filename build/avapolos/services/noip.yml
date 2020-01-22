@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  noip:
+    hostname: noip
+    image: avapolos/dyndns
+    container_name: noip
+    restart: always
+    networks:
+      avapolos:
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ${NOIP_ENV_PATH}
+
+
+networks:
+  avapolos:
+    external: true

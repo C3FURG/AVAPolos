@@ -4,7 +4,7 @@ source /etc/avapolos/header.sh
 source $SYNC_PATH/variables.sh
 source $SYNC_PATH/functions.sh
 
-echo "backup.sh" | log debug
+echo "backup.sh" | log debug backup
 
 #Backup filename generation.
 timestamp="$(date +%D | sed 's/\//\./g')"
@@ -55,20 +55,20 @@ start=$(date +%s)
 
 case "$service" in
   moodle )
-    echo "Parando serviço." | log debug
+    echo "Parando serviço." | log debug backup
     stop moodle.yml
-    echo "Compactando backup." | log debug
+    echo "Compactando backup." | log debug backup
     tar --use-compress-program="pigz -9" -cf "$path/$label.tar.gz" $DATA_PATH/$dataDirMaster $DATA_PATH/$dataDirSync $DATA_PATH/moodle/moodledata/filedir $SYNC_PATH/Export/ $SYNC_PATH/Import/ $SYNC_PATH/dadosExportados/
-    echo "Iniciando serviço." | log debug
+    echo "Iniciando serviço." | log debug backup
     start moodle.yml
   ;;
 
   *)
-  echo "Parando serviços." | log debug
+  echo "Parando serviços." | log debug backup
   stop
-  echo "Compactando backup." | log debug
+  echo "Compactando backup." | log debug backup
   tar --use-compress-program="pigz -9" -cf "$path/$label.tar.gz" $DATA_PATH
-  echo "Iniciando serviços." | log debug
+  echo "Iniciando serviços." | log debug backup
   start
   ;;
 esac
@@ -78,9 +78,9 @@ end=$(date +%s)
 runtime=$((end-start))
 
 echo "Backup concluído."
-echo "Arquivo de backup disponível em: $path/$label'.tar.gz'" | log info
-echo "Tamanho: $(du -h $path/$label'.tar.gz' | awk {'print $1'})" | log info
-echo "Em "$runtime"s." | log info
+echo "Arquivo de backup disponível em: $path/$label'.tar.gz'" | log info backup
+echo "Tamanho: $(du -h $path/$label'.tar.gz' | awk {'print $1'})" | log info backup
+echo "Em "$runtime"s." | log info backup
 
 # source $SYNC_PATH/variables.sh
 # source $SYNC_PATH/functions.sh
@@ -88,7 +88,7 @@ echo "Em "$runtime"s." | log info
 # stopDBMaster
 # stopDBSync
 #
-# echo "Creating Backup: $1" | log debug
+# echo "Creating Backup: $1" | log debug backup
 #
 # tar cfz "$1" $DATA_PATH/$dataDirMaster $DATA_PATH/$dataDirSync $DATA_PATH/moodle/moodledata/filedir $SYNC_PATH/Export/ $SYNC_PATH/Import/ $SYNC_PATH/dadosExportados/
 #

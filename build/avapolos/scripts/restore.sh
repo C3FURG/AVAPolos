@@ -4,7 +4,7 @@ source /etc/avapolos/header.sh
 source $SYNC_PATH/variables.sh
 source $SYNC_PATH/functions.sh
 
-echo "restore.sh" | log debug
+echo "restore.sh" | log debug restore
 
 if ! [ -z "$1" ]; then
 

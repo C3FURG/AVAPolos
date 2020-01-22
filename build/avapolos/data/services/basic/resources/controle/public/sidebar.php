@@ -22,6 +22,18 @@
   <li class="nav-item <?php if ($page == "functions.php") { echo "active"; } ?>">
     <a class="nav-link" href="?page=functions.php">
       <i class="fas fa-fw fa-table"></i>
-      <span>Funções</span></a>
+      <span>Configurações</span></a>
+  </li>
+
+  <li class="nav-item <?php if ($page == "network.php") { echo "active"; } ?>">
+    <a class="nav-link" href="?page=network.php">
+      <i class="fas fa-fw fa-network-wired"></i>
+      <span>Rede</span></a>
+  </li>
+
+  <li class="nav-item <?php if ($page == "dyndns.php") { echo "active"; } ?>">
+    <a class="nav-link" href="?page=dyndns.php">
+      <i class="fas fa-fw fa-cog"></i>
+      <span>DNS Dinâmico</span></a>
   </li>
 </ul>

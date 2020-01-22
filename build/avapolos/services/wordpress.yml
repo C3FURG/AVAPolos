@@ -1,0 +1,46 @@
+
+
+
+
+version: '2'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ../data/db_wordpress:/var/lib/mysql
+    restart: always
+    networks:
+      avapolos:
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    restart: always
+    networks:
+      avapolos:
+      proxy:
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=teste"
+      - "traefik.frontend.rule=Host:teste.avapolos"
+      - "traefik.port=80"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.passHostHeader=true"
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

@@ -51,8 +51,8 @@ if [ "$option" = "1" ] || [ "$option" = "3" ]; then
 
    if [ "$option" = "3" ]; then
       echo "====> ENVIANDO ARQUIVO PARA SERVIDOR REMOTO $remoteServerAddress...."
-      ret=$(copyFileToRemoteRepo $dirViewPath/$exportDirName.tar.gz)
-      if [ $ret -eq 0 ]; then
+      ret=$(copyFileToRemoteRepo "$dirViewPath/$exportDirName.tar.gz")
+      if [ "$ret" -eq 0 ]; then
          echo "........... ARQUIVO ENVIADO."
       else
          errorStatus=1

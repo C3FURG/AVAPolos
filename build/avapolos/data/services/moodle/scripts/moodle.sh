@@ -19,9 +19,13 @@ echo "Instalando moodle na IES."
 echo "Senha: $MOODLE_PASSWORD"
 #cp -rf $MOODLE_RESOURCES_DIR/moodle/config.php $MOODLE_DATA_DIR/moodle/public/
 cp -rf $MOODLE_RESOURCES_DIR/moodle/* $MOODLE_DATA_DIR/moodle/public/
-execDockerCommand "moodle" "php /app/public/admin/cli/install_database.php --lang=pt-br --adminuser=admin --adminpass=$MOODLE_PASSWORD --adminemail=admin@avapolos.com --fullname='Moodle AVAPolos' --shortname='Mdl AVA' --agree-license"
+execDockerCommand "moodle" "php /app/public/admin/cli/install_database.php --lang=pt_br --adminuser=admin --adminpass=$MOODLE_PASSWORD --adminemail=admin@avapolos.com --fullname='Moodle AVAPolos' --shortname='Mdl AVA' --agree-license"
 
 execDockerCommand moodle "php /app/public/admin/cli/upgrade.php --non-interactive"
+
+mkdir -p $MOODLE_DATA_DIR/moodle/moodledata/repository/avapolos
+execDockerCommand moodle "php /app/public/avapolos_dev/repo.php"
+
 execDockerCommand moodle "php /app/public/avapolos_dev/impar.php"
 execDockerCommand moodle "php /app/public/avapolos_dev/par.php"
 

@@ -12,6 +12,8 @@ Portainer (portainer.avapolos)"
 images="avapolos/webserver:lite
 avapolos/dnsmasq:latest
 library/traefik:v1.7
-portainer/portainer"
+avapolos/dyndns
+portainer/portainer
+"
 
 stacks="basic.yml"

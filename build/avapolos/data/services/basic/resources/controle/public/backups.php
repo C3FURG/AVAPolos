@@ -1,18 +1,51 @@
 <?php
 require_once("php/config.php");
-$dirArray=(scandir("backups/"));
+
+if ($debug) {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+}
+
+$dirArray=(@scandir("backups/"));
+if ($dirArray == FALSE) {
+  echo "
+  <div class='alert alert-danger' role='alert'>
+    O diretório de backups não foi encontrado!
+  </div>";
+  die();
+}
 ?>
 
-<form role="form" >
-  <label><input type="checkbox" id="checkbox" name="specific_service">Serviço específico</label>
-  <select class="form-control" name="service" id="select1">
-    <option>moodle</option>
-  </select>
-</form>
-<br>
-<button class='backups_btn_run'>Executar Backup</button>
-<br>
-<br>
+<div class="container">
+	<div class="row">
+		<div class="col-sm">
+			<form>
+				<div class="form-group">
+					<p>Serviços específicos:</p>
+					<input class="form-control-input" type="radio" name="moodleRadio" id="moodleRadio" value="moodle">
+					<label class="form-control-label" for="moodle">
+						Moodle
+					</label>
+				</div>
+				<button id="backupConfirmBtn" class='btn btn-success'>Executar Backup</button>
+				<br> <br>
+			</form>
+		</div>
+
+		<div class="col-sm">
+			<form>
+			  <div class="form-group">
+			    <input type="file" class="form-control-file" id="fileInput">
+					<label for="fileInput">Upload do arquivo de backup.</label>
+					<br>
+					<button id="confirmUpload" type="button" class="btn btn-success" data-toggle="popover" title="Em desenvolvimento" data-content="Funcionalidade em desenvolvimento. Volte um pouco mais tarde.">Upload</button>
+
+			  </div>
+			</form>
+		</div>
+	</div>
+</div>
 
 <table class="table">
   <thead>
@@ -27,7 +60,6 @@ $dirArray=(scandir("backups/"));
     <?php
     foreach ($dirArray as $dir) {
       if (($dir != ".") && ($dir != "..") && ($dir != "notas.txt")) {
-
 
         $path="backups/$dir";
         $realPath=realpath($path);
@@ -44,12 +76,11 @@ $dirArray=(scandir("backups/"));
 
         echo "<tr>";
         echo "  <th scope='row'>$dir</th>";
-        #echo "  <td></td>";
         echo "  <td>$size</td>";
         echo "  <td>$date</td>";
         echo "  <td><a href=" . $download_link . ">Baixar</button></td>";
-        echo "  <td><button class='backups_btn_restore' id='$name'>Restaurar</button></td>";
-        echo "  <td><button class='backups_btn_delete' id='$realPath'>Excluir</button></td>";
+        echo "  <td><button class='backups_btn_restore' id='backupRestoreBtn' value='$name'>Restaurar</button></td>";
+        echo "  <td><button class='backups_btn_delete' id='backupDeleteBtn' value='$realPath'>Excluir</button></td>";
         echo "</tr>";
       }
     }
@@ -60,32 +91,33 @@ $dirArray=(scandir("backups/"));
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $(".backups_btn_run").click(function(){
+  	$('[data-toggle="popover"]').popover()
+    $("#backupConfirmBtn").click(function(){
       dataObj = {}
-      service=$("#select1").val();
-      dataObj.service = service
-      if ($('#checkbox').is(':checked')) {
-        dataObj.specific_service = "on"
-      } else {
-        dataObj.specific_service = "off"
-      }
-      //$.get("php/backup.php", dataObj).done(function( data ) { $('#log').html(data); });
-      alert('auau');
-      sweet_alert('php/check.php?get')
+			if ($('#moodleRadio').is(':checked')) {
+				dataObj.specific_service = "on"
+				dataObj.service = $("#moodleRadio").val();
+			} else {
+				dataObj.specific_service = "off"
+			}
+
+			sweet_alert('php/check.php?get')
+      $.get("php/backup.php", dataObj).done(function( data ) { alert(data); });
     });
 
-    $(".backups_btn_restore").click(function(){
+    $("#backupDeleteBtn").click(function(){
+			sweet_alert('php/check.php?get')
       $.get("php/backup.php", { restore: $(this).attr('id') }).done(function( data ) { $('#log').html(data); });
-      sweet_alert('php/check.php?get')
     });
 
-    $(".backups_btn_delete").click(function(){
+    $("#backupRestoreBtn").click(function(){
+			sweet_alert('php/check.php?get')
       $.get("php/backup.php", { delete: $(this).attr('id') }).done(function( data ) {  $('#log').html(data); });
-      sweet_alert('php/check.php?get')
     });
 
   });
 </script>
+
 
 <div class="modal"><!-- Place at bottom of page --></div>
 
