@@ -46,7 +46,7 @@
         try{
            $extraCmd="";
           if($online) {
-            $stream = ssh2_exec($this->connection, "cd ".$this->dirPath."/scripts/sync; bash setRemoteAddr.sh $ip;");
+            $stream = ssh2_exec($this->connection, "cd ".$this->dirPath."/scripts/sync; bash setRemoteAddr.sh".$ip.;");
             stream_set_blocking($stream,true);
             $out=stream_get_contents($stream);
             if(trim($out)=="-1"){

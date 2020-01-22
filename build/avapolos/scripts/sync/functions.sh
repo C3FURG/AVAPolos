@@ -373,7 +373,7 @@ findControlRecord(){ #$1 = instancia $2= versao da operação $3 = tipo da opera
 }
 
 copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pairs of keys exchanged
-   scp "$1" "avapolos@$remoteServerAddress:$repoDirPath"
+   scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" "$1" "avapolos@$remoteServerAddress:$repoDirPath"
    echo $?
 }
 
