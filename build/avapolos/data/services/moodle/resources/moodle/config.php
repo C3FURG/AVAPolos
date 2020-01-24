@@ -24,6 +24,10 @@ $CFG->enablemobilewebservice = 1;
 #$mobileappdownloadpage = 'htt://mobileappdownloadpage';
 #set_config('setuplink', $mobileappdownloadpage, 'tool_mobile');
 
+#Force language
+$CFG->autolang = 0;
+$CFG->lang = 'pt_br';
+
 $CFG->emailchangeconfirmation = 0;
 
 $CFG->wwwroot   = 'http://moodle.avapolos';

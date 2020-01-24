@@ -10,9 +10,9 @@ source header.sh
 cd ../utilities
 
 if ! [[ -f "/etc/init.d/docker" ]]; then
-	echo "O Docker precisa estar instalado para compilar a solução."
+	echo "O Docker precisa estar instalado para compilar a solução." | log error compiler
 	if [[ "$(input 'Deseja instalá-lo?' 'sim' 'nao' 0 'Selecione uma opção.')" = "sim" ]]; then
-		echo "Instalando dependências."
+		echo "Instalando dependências." | log info compiler
 		sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 		if [ -z "$(find /etc/apt/ -name *.list | xargs cat | grep '^[[:space:]]*deb' | grep docker)" ]; then
       echo "Adicionando repositório do Docker" | log debug
@@ -25,10 +25,12 @@ if ! [[ -f "/etc/init.d/docker" ]]; then
 		sudo apt-get update
 		sudo apt-get install -y docker-ce docker-compose
 		sudo usermod -aG docker $USER
-		echo "Reinicie o computador para continuar o processo de compilação."
+		clear
+		echo "Reinicie o computador para continuar o processo de compilação." | log info compiler
+
 		exit 1
 	else
-		echo "Cancelando compilação."
+		echo "Cancelando compilação." | log error compiler
 		exit 1
 	fi
 fi
@@ -44,7 +46,7 @@ if ! [[ $(systemctl is-active docker) = "active" ]]; then
 fi
 
 if ! [ -f .dependencies_installed ]; then
-	echo "As dependências não foram atualizadas"
+	echo "As dependências não foram atualizadas" | log error compiler
 	if [[ "$(input 'Deseja instalá-las?' 'sim' 'nao' 0 'Selecione uma opção.')" = "sim" ]]; then
 		echo "Instalando dependências"
 		sudo apt-get install -y --no-install-recommends --no-install-suggests \
@@ -273,6 +275,7 @@ if [ "$pull" = "y" ]; then
   sudo chown $USER:$USER -R "$installRoot"
 	sudo avapolos --start
 elif [ "$build_data" = "y" ]; then
+	echo "Compilando os dados dos serviços" | log info
 	cd data
 	bash compile.sh
 	cd ../

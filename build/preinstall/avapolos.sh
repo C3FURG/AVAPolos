@@ -9,10 +9,12 @@ fi
 if [ -f "/etc/avapolos/header.sh" ]; then
   #Source it.
   source /etc/avapolos/header.sh
+  source $SYNC_PATH/variables.sh
+  source $SYNC_PATH/functions.sh
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh" | log error cli
   exit 1
 fi
 
@@ -33,7 +35,7 @@ while true; do
 	  ;;
     --loglvl)
       shift
-      echo "alterando nível de log para: $1" | log info
+      echo "alterando nível de log para: $1" | log info cli
       export $LOGGER_LVL="$1"
       echo "$1" > "$ETC_PATH/logger.conf"
       shift
@@ -50,9 +52,9 @@ while true; do
 	  ;;
     --restart)
       shift
-      echo "Reiniciando avapolos" | log info
-      stop $@
-      start $@
+      echo "Reiniciando avapolos" | log info cli
+      stop
+      start
       exit 0
     ;;
     --install)
@@ -82,7 +84,17 @@ while true; do
     ;;
     --export-all)
       shift
-      export-all $@
+      export_all $@
+      exit 0
+    ;;
+    --connect-db-master)
+      shift
+      connectDB $containerDBMasterName
+      exit 0
+    ;;
+    --connect-db-sync)
+      shift
+      connectDB $containerDBSyncName
       exit 0
     ;;
     *)

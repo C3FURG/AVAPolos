@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source /etc/avapolos/header.sh
 
@@ -27,7 +27,7 @@ dirImportPath="$dirPath/scripts/sync/Import"
 dirViewPath="$dirPath/data/moodle/public/admin/tool/avapolos/view"
 moodleDataDirPath="$dirPath/data/moodle/moodledata"
 fileDirPath="$moodleDataDirPath/filedir"
-repoDirPath="$moodleDataDirPath/repository/AVA-Polos"
+repoDirPath="$moodleDataDirPath/repository/avapolos"
 syncFileDirListPath="$dirExportRoot/syncFileDirList"
 masterFileDirListPath="$dirExportRoot/masterFileDirList"
 

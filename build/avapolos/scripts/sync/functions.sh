@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source /etc/avapolos/header.sh
+## FIXME
+if [ -f "/etc/avapolos/header.sh" ]; then
+  source /etc/avapolos/header.sh
+fi
 
-#-------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------
 
 restartMoodle(){
    stopMoodle
@@ -10,24 +13,26 @@ restartMoodle(){
 }
 
 startMoodle(){
-    echo "Iniciando Moodle" | log debug
+    echo "Iniciando Moodle" | log debug sync
     startContainer $containerMoodleName
     ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+    echo "Atualizando hosts do Moodle com o IP: $ip" | log debug sync
     docker exec $containerMoodleName sh -c "echo \"$ip avapolos\" >> /etc/hosts"
-    echo "Moodle inicializado" | log debug
+    echo "Moodle inicializado" | log debug sync
 }
 
 stopMoodle(){
-    echo "Parando Moodle" | log debug
+    echo "Parando Moodle" | log debug sync
     stopContainer $containerMoodleName
-    echo "Moodle Parado" | log debug
+    echo "Moodle Parado" | log debug sync
 }
 
 startDBMaster(){
-    echo "Iniciando db_master" | log debug
+    echo "Iniciando db_master" | log debug sync
     startContainer $containerDBMasterName
-    sleep 3;  ###### FIND A WAY TO CHECK IF POSTGRESQL SERVICE IS ALREADY UP
-    echo "db_master inicializado" | log debug
+    sleep 3
+    #waitForHealthy $containerDBMasterName
+    echo "db_master inicializado" | log debug sync
 }
 
 stopDBMaster(){
@@ -39,7 +44,8 @@ stopDBMaster(){
 startDBSync(){
     echo "-> Starting container DB_SYNC..."
     startContainer $containerDBSyncName
-    sleep 3;  ###### FIND A WAY TO CHECK IF POSTGRESQL SERVICE IS ALREADY UP
+    sleep 3
+    #waitForHealthy $containerDBSyncName
     echo "----> DOCKER DB_SYNC | STATUS = [ON]"
 }
 
@@ -49,24 +55,28 @@ stopDBSync(){
     echo "----> DOCKER DB_SYNC | STATUS = [OFF]"
 }
 
+connectDB() { #$1-> [db_moodle_ies/db_moodle_polo]
+  docker exec -it "$1" psql -U moodle -d moodle
+}
+
 #-------------------------------------------------------------------------------------------------
 
 stopContainer(){ #container
-    echo "Parando container $1" | log debug
+    echo "Parando container $1" | log debug sync
     docker stop $1
     while [ "$(docker inspect -f '{{.State.Running}}' $1)" == true ]; do
       sleep 5 #10 seconds
     done
-    echo "Container $1 parado" | log debug
+    echo "Container $1 parado" | log debug sync
 }
 
 startContainer(){ #container
-    echo "Iniciando container $1" | log debug
+    echo "Iniciando container $1" | log debug sync
     docker start $1
     while [ "$(docker inspect -f '{{.State.Running}}' $1)" == false ]; do
-      sleep 5 #10 seconds
+      sleep 5
     done
-    echo "Container $1 inicializado" | log debug
+    echo "Container $1 inicializado" | log debug sync
 }
 
 clearQueue(){ # aguarda o master enviar as alterações
@@ -183,7 +193,7 @@ createControlRecord(){ #$1 = versao da sincronização sendo exportado ou import
 	if [ -z "$res" ]; then
 		echo "ERRO AO CRIAR REGISTRO DE CONTROLE"
 		echo " -----> INSERT INTO avapolos_sync (instancia,versao,tipo,moodle_user) VALUES ('$instance',$1,'$2','$3');"
-   		echo "ERROR: $ret"
+   	echo "ERROR: $ret"
 		exit
 	else
 		echo "REGISTRO DE CONTROLE CRIADO COM SUCESSO"
@@ -297,6 +307,10 @@ execSQL(){ # $1 = containerName $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
+execSQLMoodle(){ # $1 = containerName $2 SQL statement
+   execDockerCommand $1 "psql -U moodleuser -d moodle -c \"$2\""
+}
+
 execSQLMaster(){ # $1 SQL statement
    execSQL $containerDBMasterName "$1"
 }
@@ -359,6 +373,11 @@ findControlRecord(){ #$1 = instancia $2= versao da operação $3 = tipo da opera
 }
 
 copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pairs of keys exchanged
-   scp $1 avapolos@$remoteServerAddress:$repoDirPath
+   scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" "$1" "avapolos@$remoteServerAddress:$repoDirPath"
    echo $?
 }
+
+export -f execSQL
+export -f execSQLMoodle
+export -f execDockerCommand
+export -f connectDB

@@ -6,7 +6,7 @@ ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
 if [ $1 = "name" ]; then
   stop
-  echo "Configurando o servidor para utilizar nomes." | log info
+  echo "Configurando o servidor para utilizar nomes." | log info access_mode
 
   str="$ip:81"
   sed -i "s/"$str"/moodle.avapolos/g" $DATA_PATH/moodle/public/config.php
@@ -31,13 +31,13 @@ if [ $1 = "name" ]; then
   echo "hub_name.yml" >> $SERVICES_PATH/enabled_services
   echo "router.yml" >> $SERVICES_PATH/enabled_services
 
-  echo "Configuração executada com sucesso, iniciando serviços." | log info
+  echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
 
   start
 elif [ $1 = "ip" ]; then
   stop
 
-  echo "Configurando o servidor para utilizar IPs e portas." | log info
+  echo "Configurando o servidor para utilizar IPs e portas." | log info access_mode
   sed -i "s/moodle.avapolos/"$ip":81""/g" $DATA_PATH/moodle/public/config.php
   sed -i "s/moodle.avapolos/"$ip":81/g" $DATA_PATH/hub/public/index.html
 
@@ -56,7 +56,7 @@ elif [ $1 = "ip" ]; then
   sudo sed -i '/router\.yml/d' $SERVICES_PATH/enabled_services
   echo "hub_80.yml" >> $SERVICES_PATH/enabled_services
 
-  echo "Configuração executada com sucesso, iniciando serviços." | log info
+  echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
 
   start
 else

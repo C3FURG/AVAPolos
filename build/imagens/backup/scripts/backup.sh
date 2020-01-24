@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #https://unix.stackexchange.com/questions/86722/how-do-i-loop-through-only-directories-in-bash
 {
 

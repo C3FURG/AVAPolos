@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 #Paths
 export ROOT_PATH="/opt/avapolos"
@@ -20,6 +20,8 @@ export EDUCAPES_PATH="/opt/educapes"
 export SERVICES_PATH="$ROOT_PATH/services"
 export SERVICE_PATH="$ETC_PATH/service"
 export BACKUPS_PATH="$ROOT_PATH/backups"
+export CONFIG_PATH="$ROOT_PATH/config"
+export NOIP_ENV_PATH="$CONFIG_PATH/noip.env"
 
 #User Variables
 export AVAPOLOS_USER="avapolos"
@@ -80,7 +82,7 @@ greet() {
   echo "Universidade Federal do Rio Grande - FURG"
   echo "Centro de Ciências Computacionais - C3"
   echo "Coordenação de Aperfeiçoamento de Pessoal de Nível Superior - CAPES"
-  echo "BUILD EXPERIMENTAL INFRA."
+#  echo "BUILD EXPERIMENTAL INFRA."
   echo ""
 }
 
@@ -149,6 +151,10 @@ Operações básicas: (necessita instalar)
   -r,  --restore (ARQUIVO)     Restaura um backup feito anteriormente.
        --export-all            Executa a clonagem da instalação.
        --access [ip/name]      Configura o acesso aos serviços.
+
+Operações para desenvolvedores:
+       --connect-db-master     Conecta ao banco de dados master.
+       --connect-db-sync     Conecta ao banco de dados sync.
 "
 }
 
@@ -157,7 +163,7 @@ showLicense() {
   echo "
 
   <AVAPolos - Uma solução tecnológica que possibilita o oferecimento de cursos na modalidade EaD (Educação a Distância) em locais sem conectividade com a Internet, ou onde a conectividade seja limitada.>
-  Copyright (C) <2019>  <TI C3 - Centro de Ciências Computacionais / Universidade Federal do Rio Grande - FURG - Brazil>
+  Copyright (C) <2020>  <TI C3 - Centro de Ciências Computacionais / Universidade Federal do Rio Grande - FURG - Brazil>
 
   Este programa é um software livre: você pode redistribuí-lo e/ou
   modificá-lo sob os termos da Licença Pública Geral GNU, conforme
@@ -274,7 +280,7 @@ fi
 }
 
 #Clone existing installation.
-export-all() {
+export_all() {
   if [ -d "$ROOT_PATH" ]; then
     cd $SYNC_PATH
     bash export_all.sh
@@ -311,7 +317,7 @@ fi
 cd $SERVICES_PATH
 echo "Adicinando serviço $1" | log debug
 str=$(sanitize $1)
-echo "$str" >> enabled_services
+echo "$1" >> enabled_services
 }
 
 #Removes services from the startup stack.
@@ -383,34 +389,6 @@ undoConfig() {
   sudo sed -i "$str" "$1"
 }
 
-#Execute a command in a container.
-execute() {
-  docker exec -it "$@"
-  wait
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
-#Execute a SQL query in a moodle database.
-execute_moodlesql() { #$1-> [db_moodle_ies,db_moodle_polo] #$2-> SQL Query
-  eval "docker exec $1 psql -U moodle -d moodle -c \"$2\""
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
-#Execute sql in a avapolos database.
-execute_sql() { #$1-> container #$2-> SQL Query
-  eval "docker exec $1 psql -U moodle -c \"$2\""
-  if [[ $? -ne 0 ]]; then
-    echo "Ocorreu um erro no comando anterior, parando execução."
-    exit 1
-  fi
-}
-
 #Shows a env var
 show_var() { #$1-> Variable name
   echo "$1: ${!1}"
@@ -418,8 +396,10 @@ show_var() { #$1-> Variable name
 
 #Waits for a container to be healthy
 waitForHealthy() { #$1-> container
+  time=0
   while [ -z "$(docker container inspect --format='{{json .State.Health.Status}}' $1 | grep -o "healthy")" ]; do
-    echo "Esperando a inicialização do $1"
+    echo "Aguardando a inicialização do container: $1, "$time"s"
+    time=$(($time + 1))
     sleep 1
   done
 }
@@ -462,16 +442,13 @@ export -f uninstall
 export -f start
 export -f stop
 export -f restart
-export -f export-all
+export -f export_all
 export -f run
 export -f add_service
 export -f remove_service
 export -f enable_service
 export -f disable_service
 export -f undoConfig
-export -f execute
-export -f execute_moodlesql
-export -f execute_sql
 export -f show_var
 export -f waitForHealthy
 export -f testURL

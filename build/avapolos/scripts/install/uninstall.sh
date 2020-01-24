@@ -2,7 +2,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root"
   exit
 fi
 
@@ -13,12 +13,12 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh"
   exit 1
 fi
 
-echo "uninstall.sh" | log debug
-echo "Desinstalando AVAPolos." | log info
+echo "uninstall.sh" | log debug installer
+echo "Desinstalando AVAPolos." | log info installer
 
 cd $SCRIPTS_PATH
 
@@ -26,9 +26,9 @@ if ! [ -z "$(cat $SERVICES_PATH/started_services)"  ]; then
   bash stop.sh
 fi
 
-echo "Parando e removendo serviço" | log debug
-systemctl stop avapolos.service | log debug
-systemctl disable avapolos.service | log debug
+echo "Parando e removendo serviço" | log debug installer
+systemctl stop avapolos.service | log debug installer
+systemctl disable avapolos.service | log debug installer
 rm -rf /etc/systemd/system/avapolos.service
 
 cd $INSTALL_SCRIPTS_PATH

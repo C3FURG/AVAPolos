@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #-------------------------------------------#
 # AVAPolos - Script de configuração de rede #
@@ -7,7 +7,7 @@
 source /etc/avapolos/header.sh
 
 if [ "$EUID" -ne 0 ]; then
-    echo "Este script precisa ser rodado como root." | log error
+    echo "Este script precisa ser rodado como root."
     exit
 fi
 

@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error
+  echo "Este script precisa ser rodado como root"
   exit
 fi
 
@@ -13,25 +13,25 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error
+  echo "Não foi encontrado o arquivo header.sh"
   exit 1
 fi
 
-echo "install_services.sh" | log debug
-echo "Instalando serviço principal e microsserviços." | log info
+echo "install_services.sh" | log debug installer
+echo "Instalando serviço principal e microsserviços." | log info installer
 
 uid=$(id -u avapolos)
 ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
-echo "IP detectado: $ip" | log debug
+echo "IP detectado: $ip" | log debug installer
 
 cd $ROOT_PATH
 
-echo "Extraindo pacote de dados." | log debug
+echo "Extraindo pacote de dados." | log debug installer
 tar xfz data.tar.gz
 
 cd $SYNC_PATH
-sed -i 's/INSTANCENAME/'"IES"'/g' variables.sh
+#sed -i 's/INSTANCENAME/'"IES"'/g' variables.sh
 mkdir -p Export/Fila
 mkdir -p Import
 mkdir -p dadosExportados
@@ -42,7 +42,7 @@ echo "IdentityFile $SSH_PATH/id_rsa " >> /etc/ssh/ssh_config
 
 touch $SERVICES_PATH/disabled_services
 
-echo "Instalando serviço principal." | log debug
+echo "Instalando serviço principal." | log debug installer
 
 echo -e "
 [Unit]
@@ -56,33 +56,33 @@ ExecStart=/bin/bash $SERVICE_PATH/service_daemon.sh
 WantedBy=multi-user.target
 " > /etc/systemd/system/avapolos.service
 chmod 640 /etc/systemd/system/avapolos.service
-systemctl enable avapolos.service | log debug
+systemctl enable avapolos.service | log debug installer
 
 if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
-	echo "Esta instalação é um polo, ajustando parâmetros." | log info
+	echo "Esta instalação é um polo, ajustando parâmetros." | log info installer
   # if [ "implementado" = "n" ]; then
-    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
+    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug installer
     sed -i 's/db_moodle_ies/'"db_moodle_polo"'/g' $DATA_PATH/moodle/public/config.php
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
     sed -i 's/instance\=\"IES\"/'instance=\"POLO\"'/g' $SYNC_PATH/variables.sh
   # else
-    echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
+  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error installer
   # fi
-  echo "Rodando script para instalação de chaves privadas." | log debug
+  echo "Rodando script para instalação de chaves privadas." | log debug installer
 	bash $INSTALL_SCRIPTS_PATH/install_privateKey.sh
 else
-  echo "Esta instalação é uma IES, ajustando parâmetros" | log info
+  echo "Esta instalação é uma IES, ajustando parâmetros" | log info installer
   sed -i 's/instance\=\"INSTANCENAME\"/'instance=\"IES\"'/g' $SYNC_PATH/variables.sh
   # if [ "implementado" = "n" ]; then
-    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug
+    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug installer
     sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
   # else
-    echo "Moodle AVAPolos não foi detectado, ignorando." | log debug
+  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error installer
   # fi
-	echo "Rodando script para geração de chave privada" | log debug
+	echo "Rodando script para geração de chave privada" | log debug installer
 	bash $INSTALL_SCRIPTS_PATH/generate_privateKey.sh
 fi
 
 cat $SERVICES_PATH/enabled_services > $SERVICES_PATH/stopped_services
 
-echo "Serviços instalados com sucesso." | log info
+echo "Serviços instalados com sucesso." | log info installer

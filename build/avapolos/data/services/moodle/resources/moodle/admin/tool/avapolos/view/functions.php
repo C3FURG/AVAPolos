@@ -46,15 +46,15 @@
         try{
            $extraCmd="";
           if($online) {
-            $stream = ssh2_exec($this->connection, "cd ".$this->dirPath."/scripts/sync; bash setRemoteAddr.sh $ip;");
+            $stream = ssh2_exec($this->connection, "cd ".$this->dirPath."/scripts/sync; bash setRemoteAddr.sh ".$ip.";");
             stream_set_blocking($stream,true);
             $out=stream_get_contents($stream);
             if(trim($out)=="-1"){
                exit("Impossível conectar ao servidor $ip Certifique-se de que existe conectivitade entre os servidores. <br />
                <a href=\"#\" onclick=\"location.href=document.referrer; return false;\"> Voltar </a>");
+            } else {
+              $stream = ssh2_exec($this->connection, 'cd '.$this->dirPath.'/scripts/sync/; '.$extraCmd.' bash '.$this->sh_file.' '.($online?3:1).' '.$_SESSION["USER"]->username.' > '.$this->output_file);
             }
-          } else {
-            $stream = ssh2_exec($this->connection, 'cd '.$this->dirPath.'/scripts/sync/; '.$extraCmd.' bash '.$this->sh_file.' '.($online?3:1).' '.$_SESSION["USER"]->username.' > '.$this->output_file);
           }
         }catch(Exception $e){
           echo "Erro";

@@ -21,7 +21,7 @@ cd $BASIC_DIR
 cp -rf $tmp/fontawesome-free-5.11.2-web/* $BASIC_DATA_DIR/downloads/public/fontawesome
 echo "fontawesome instalado com sucesso no serviço." | log debug data_compiler
 
-echo "Executando o download dos instaladores do Moodle Mobile e Desktop."
+echo "Executando o download dos instaladores do Moodle Mobile e Desktop." | log debug data_compiler
 wget -O $BASIC_DATA_DIR/downloads/public/instaladores/moodledesktoplinux32.tgz https://download.moodle.org/desktop/download.php?platform=linux'&'arch=32 | log debug data_compiler
 wget -O $BASIC_DATA_DIR/downloads/public/instaladores/moodledesktoplinux64.tgz https://download.moodle.org/desktop/download.php?platform=linux'&'arch=64 | log debug data_compiler
 wget -O $BASIC_DATA_DIR/downloads/public/instaladores/moodledesktopwindows.zip https://download.moodle.org/desktop/download.php?platform=windows         | log debug data_compiler
