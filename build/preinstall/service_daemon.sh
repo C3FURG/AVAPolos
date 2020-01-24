@@ -112,7 +112,7 @@ readFromPipe() {
         ;;
         setup_noip* )
           if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/setup_noip.sh" "${args[@]}"
+            run "$INSTALL_SCRIPTS_PATH/setup_noip.sh" "${args[1]}" "${args[2]}" "${args[3]}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
@@ -131,6 +131,7 @@ main() {
 
 if [[ ! -p $PIPE ]]; then
     mkfifo $PIPE
+    chown avapolos:avapolos $PIPE
 fi
 
 echo "Daemon AVAPolos iniciado." | log info

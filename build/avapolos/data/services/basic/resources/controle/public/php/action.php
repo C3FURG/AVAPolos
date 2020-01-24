@@ -13,13 +13,13 @@ require_once("functions.php");
 if (isset($_GET['action'])) {
 	#echo $_GET['action'];
 	switch ($_GET['action']) {
-		case 'download_stop_educapes':
-			system("echo 'download_stop educapes' > ../../service/pipe", $retVal);
+		case 'educapes_download_stop':
+			system("echo 'educapes_download_stop' > ../../service/pipe", $retVal);
 			echo $retVal;
 			break;
 
-		case 'download_start_educapes':
-			system("echo 'download_start educapes' > ../../service/pipe", $retVal);
+		case 'educapes_download_start':
+			system("echo 'educapes_download_start' > ../../service/pipe", $retVal);
 			echo $retVal;
 			break;
 
@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
 
 		case 'setup_noip':
 			if (!empty($_POST['email']) && (!empty($_POST['pass'])) && (!empty($_POST['domain'])) ) {
-				system("echo 'setup_noip " . $_POST['email'] . " " . $_POST['pass'] . " " . $_POST['domain'] . " ' > ../../service/pipe", $retVal);
+				system("echo 'setup_noip " . $_POST['email'] . " " . $_POST['pass'] . " " . $_POST['domain'] . "' > ../../service/pipe;", $retVal);
 				echo $retVal;
 			} else {
 				echo 666;

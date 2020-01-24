@@ -2,11 +2,25 @@
 
 source /etc/avapolos/header.sh
 
+$MOODLE_URL="moodle.avapolos"
+$MOODLE_PORT="81"
+
+$WIKI_URL="wiki.avapolos"
+$WIKI_PORT="82"
+
+$EDUCAPES_URL="educapes.avapolos/jspui"
+$EDUCAPES_PORT="83"
+
+$DOWNLOADS_URL="downloads.avapolos"
+$DOWNLOADS_PORT="84"
+
 ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
 if [ $1 = "name" ]; then
   stop
   echo "Configurando o servidor para utilizar nomes." | log info access_mode
+
+
 
   str="$ip:81"
   sed -i "s/"$str"/moodle.avapolos/g" $DATA_PATH/moodle/public/config.php
@@ -23,10 +37,6 @@ if [ $1 = "name" ]; then
   sed -i "s/"$str"/downloads.avapolos/g" $DATA_PATH/downloads/public/index.html
   sed -i "s/"$str"/downloads.avapolos/g" $DATA_PATH/hub/public/index.html
 
-  str="$ip:85"
-  sed -i "s/"$str"/controle.avapolos/g" $DATA_PATH/hub/public/index.html
-  sed -i "s/"$str"/controle.avapolos/g" $DATA_PATH/controle/public/php/config.php
-
   sudo sed -i '/hub_80\.yml/d' $SERVICES_PATH/enabled_services
   echo "hub_name.yml" >> $SERVICES_PATH/enabled_services
   echo "router.yml" >> $SERVICES_PATH/enabled_services
@@ -37,7 +47,9 @@ if [ $1 = "name" ]; then
 elif [ $1 = "ip" ]; then
   stop
 
+
   echo "Configurando o servidor para utilizar IPs e portas." | log info access_mode
+
   sed -i "s/moodle.avapolos/"$ip":81""/g" $DATA_PATH/moodle/public/config.php
   sed -i "s/moodle.avapolos/"$ip":81/g" $DATA_PATH/hub/public/index.html
 
@@ -48,9 +60,6 @@ elif [ $1 = "ip" ]; then
 
   sed -i "s/downloads.avapolos/"$ip":84/g" $DATA_PATH/downloads/public/index.html
   sed -i "s/downloads.avapolos/"$ip":84/g" $DATA_PATH/hub/public/index.html
-
-  sed -i "s/controle.avapolos\/jspui/"$ip":85\/jspui/g" $DATA_PATH/hub/public/index.html
-  sed -i "s/controle.avapolos/"$ip":84/g" $DATA_PATH/controle/public/php/config.php
 
   sudo sed -i '/hub_name\.yml/d' $SERVICES_PATH/enabled_services
   sudo sed -i '/router\.yml/d' $SERVICES_PATH/enabled_services
