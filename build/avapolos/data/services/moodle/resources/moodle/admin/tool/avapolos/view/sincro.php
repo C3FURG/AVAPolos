@@ -44,10 +44,16 @@ else if ($fromform = $exportform->get_data()) {
       echo "<script src='sweetalert2.all.min.js'></script>
       <script>
         let timerInterval = Swal.fire({
-          title: 'Aguarde exportação em andamento!',
+          title: '<h4>Aguarde exportação em andamento!</h4>',
+          html:
+			'<img style=\"height: 80px;\" src=\"logoAVA2.png\" />'+
+			'<br><img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 65px; margin-top: 30px;\">',
           allowOutsideClick: false,
+          showCloseButton: false,
+		  showCancelButton: false,
+		  showConfirmButton: false,
           onBeforeOpen: () => {
-            Swal.showLoading()
+           
             let temporizadorAjax = setInterval(()=>{
               var request = new XMLHttpRequest();
                 request.onreadystatechange = function() {
@@ -110,9 +116,12 @@ else if ($fromform = $exportform->get_data()) {
 <script>
 let timerInterval = Swal.fire({
                         title: 'Aguarde, exportação e envio em andamento!',
+                        html:
+							'<img style=\"height: 80px;\" src=\"logoAVA2.png\" />'+
+							'<br><img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 65px; margin-top: 30px;\">',
                         allowOutsideClick: false,
                         onBeforeOpen: () => {
-                              Swal.showLoading()
+                              
                               let temporizadorAjax = setInterval(()=>{
                                  var request = new XMLHttpRequest();
                                  request.onreadystatechange = function() {
@@ -187,9 +196,12 @@ else if($fromform = $importform->get_data()){
 <script>
    let timerInterval = Swal.fire({
       title: 'Aguarde, sincronização em andamento.',
+      html:
+		'<img style=\"height: 80px;\" src=\"logoAVA2.png\" />'+
+		'<br><img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 65px; margin-top: 30px;\">',
       allowOutsideClick: false,
       onBeforeOpen: () => {
-         Swal.showLoading()
+         
          let temporizadorAjax = setInterval(()=>{
             var request = new XMLHttpRequest();
             request.onreadystatechange = function() {
