@@ -14,7 +14,6 @@ PIPE="$SERVICE_PATH/pipe"
 
 export LOGGER_LVL="debug"
 export LOGFILE_PATH="$LOG_PATH/service.log"
-#export LOGFILE_PATH="service.log"
 
 #Para desenvolvimento
 #set +e
@@ -24,6 +23,14 @@ end() {
   kill -s SIGTERM $educapes_pid
   rm -f $PIPE
   exit 0
+}
+
+update_moodle_hosts() {
+  docker stop moodle > /dev/null
+  docker start moodle > /dev/null
+  ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+  echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
+  docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
 }
 
 trap end EXIT
@@ -138,6 +145,7 @@ echo "Daemon AVAPolos iniciado." | log info
 echo "Rodando check incial automático." | log debug
 
 check_services
+update_moodle_hosts
 
 while true; do
   main
