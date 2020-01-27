@@ -99,13 +99,16 @@ $('#submitBtn').click(function() {
 });
 
 $('#submit').click(function(){
-  sweet_alert('php/check.php?get')
 
   data = {
     email: "",
     pass: "",
     domain: $('#domainInput').val()
   }
+
+  console.log('http://controle.' + data.domain + '/php/check.php?get')
+  console.log('http://controle.' + data.domain)
+  sweet_alert('http://controle.' + data.domain + '/php/check.php?get', 'http://controle.' + data.domain, 30000)
 
   console.log(data);
 

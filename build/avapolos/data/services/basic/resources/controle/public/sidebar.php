@@ -32,7 +32,7 @@
   </li>
 
   <li class="nav-item <?php if ($page == "dns.php") { echo "active"; } ?>">
-    <a class="nav-link" href="?page=dyndns.php">
+    <a class="nav-link" href="?page=dns.php">
       <i class="fas fa-fw fa-cog"></i>
       <span>DNS</span></a>
   </li>

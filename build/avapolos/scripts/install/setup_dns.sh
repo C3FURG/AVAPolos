@@ -56,9 +56,13 @@ change_domains() {
   #Change the address in Wiki's LocalSettings.php
   if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
     for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
-      if [[ $line =~ wgServer ]] || [[ $line =~ wgScriptPath ]]; then
+      if { [[ $line =~ \$wgServer ]] || [[ $line =~ \$wgScriptPath ]]; } && ! [[ $line =~ \;$ ]]; then
         lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
-        newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
+        if [[ $line =~ wgServer ]]; then
+          newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
+        else
+          newLine='$wgScriptPath = "http:\/\/wiki.'$DOMAIN'";'
+        fi
         sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
       fi
     done
