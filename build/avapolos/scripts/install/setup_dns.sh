@@ -10,7 +10,7 @@
 change_domains() {
   #Change the domain in the traefik.toml
   lineNumber=$(grep -n "domain =" $DATA_PATH/traefik/traefik.toml | cut -d: -f1)
-  sed -i "$line"'s/.*/domain\ \=\ '"$DOMAIN"'/' $DATA_PATH/traefik/traefik.toml
+  sed -i "$lineNumber"'s/.*/domain\ \=\ \"'$DOMAIN'\"/' $DATA_PATH/traefik/traefik.toml
 
   #Change the domain in every service.
   for stack in $(ls $SERVICES_PATH/*.yml); do
@@ -37,20 +37,6 @@ change_domains() {
       newLine='		\$'$svc'_url="http:\/\/'$svc'.'$DOMAIN'\/'$suffix'";'
       sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/inicio/public/index.php
     fi
-  done
-
-  #Change the domains in access_mode.sh
-  services=("MOODLE" "WIKI" "EDUCAPES" "DOWNLOADS")
-  for service in ${svcs[@]}; do
-    lineNumber=$(cat $SCRIPTS_PATH/access_mode.sh | grep -n "\$$service\_URL=" | cut -d: -f1)
-    svc=$(echo $service | tr '[:upper:]' '[:lower:]')
-    if ! [[ -z $(echo $str1 | grep -o '/') ]]; then
-      suffix=$(echo $str1 | cut -d/ -f2 | sed "s/\r//g")
-    else
-      suffix=""
-    fi
-    newLine='$'$service'_URL="'$svc'.'$DOMAIN'"'
-    sed -i "$lineNumber"'s/.*/'"$newLine"'/' $SCRIPTS_PATH/access_mode.sh
   done
 
   #Change the address in Moodle's config.php
@@ -121,12 +107,14 @@ PASS=\"$2\"
 DOMAIN=\"$3\"
 " > $NOIP_ENV_PATH
 
-source $NOIP_ENV_PATH/noip.env
-
-add_service noip.yml
-enable_service noip.yml
+source $NOIP_ENV_PATH
 
 stop
+
+if [[ "$1" != "null" ]] && [[ "$2" != "null" ]]; then
+  add_service noip.yml
+  enable_service noip.yml
+fi
 
 change_domains
 

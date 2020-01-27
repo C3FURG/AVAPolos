@@ -1,6 +1,7 @@
 <div class="jumbotron">
   <p>Passos para a configuração do DNS Dinâmico:</p>
   <ol>
+    <li>Marque a caixa "Quero utilizar NO-IP."</li>
     <li>Contate a equipe de TI do seu POLO para liberar o acesso externo ao servidor do POLO na porta 80.</li>
     <li>Acesse o site <a href="https://noip.com/pt-BR">aqui</a>, em seguida, crie uma conta.</li>
     <li>Crie um domínio para seu polo EAD.</li>
@@ -10,21 +11,23 @@
 </div>
 
 <form role="form" id="formfield" action="#" method="post">
-  <div class="form-group">
+  <input type="checkbox" id="hideForm"> Quero utilizar NO-IP.
+  <br> <br>
+  <div class="form-group" id="emailInputDiv" hidden>
     <label for="emailInput">Endereço de email noip.com</label>
     <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Insira o E-mail" required>
     <small id="emailHelp" class="form-text text-muted">E-mail que você utilizou para criar sua conta no site.</small>
   </div>
-  <div class="form-group">
+  <div class="form-group" id="passwordInputDiv" hidden>
     <label for="password">Senha</label>
     <input type="password" class="form-control" aria-describedby="domainHelp" id="passwordInput" placeholder="Insira a Senha" required>
     <small id="passwordHelp" class="form-text text-muted">Senha que você utilizou para criar sua conta no site.</small>
     <input type="checkbox" onclick="togglePasswordVisibility()"> Mostrar Senha
   </div>
   <div class="form-group">
-    <label for="domainInput">Domínio cadastrado</label>
+    <label for="domainInput">Domínio base</label>
     <input type="text" class="form-control" id="domainInput" aria-describedby="domainHelp" placeholder="Insira o domínio" required>
-    <small id="domainHelp" class="form-text text-muted">Domínio que você criou para seu POLO EAD.</small>
+    <small id="domainHelp" class="form-text text-muted">Domínio para o seu POLO EAD.</small>
   </div>
   <button type="button" name="btn" id="submitBtn" class="btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
   <br><br>
@@ -41,11 +44,11 @@
                 Você tem certeza que os dados estão corretos?
 
                 <table class="table">
-                    <tr>
+                    <tr id="modalEmailTr" hidden>
                         <th>E-Mail</th>
                         <td id="modalEmail"></td>
                     </tr>
-                    <tr>
+                    <tr id="modalPassTr" hidden>
                         <th>Senha</th>
                         <td id="modalPass"></td>
                     </tr>
@@ -76,6 +79,19 @@ function togglePasswordVisibility() {
   }
 }
 
+function toggleVisibility(elementId) {
+  if ($(elementId).attr("hidden")) {
+    $(elementId).attr("hidden", false)
+  } else $(elementId).attr("hidden", true)
+}
+
+$('#hideForm').on('click', function() {
+    toggleVisibility("#emailInputDiv")
+    toggleVisibility("#passwordInputDiv")
+    toggleVisibility("#modalEmailTr")
+    toggleVisibility("#modalPassTr")
+});
+
 $('#submitBtn').click(function() {
   $('#modalEmail').text($('#emailInput').val());
   $('#modalPass').text($('#passwordInput').val());
@@ -84,7 +100,24 @@ $('#submitBtn').click(function() {
 
 $('#submit').click(function(){
   sweet_alert('php/check.php?get')
-  $.post("php/action.php?action=setup_noip", { email: $('#emailInput').val(), pass: $('#passwordInput').val(), domain: $('#domainInput').val() }).done(function( data )  { alert(data); });
+
+  data = {
+    email: "",
+    pass: "",
+    domain: $('#domainInput').val()
+  }
+
+  console.log(data);
+
+  if ($("#emailInputDiv").attr("hidden")) {
+    data.email = "null"
+    data.pass = "null"
+  } else {
+    data.email = $('#emailInput').val()
+    data.pass = $('#passwordInput').val()
+  }
+  console.log(data);
+  $.post("php/action.php?action=setup_dns", data);//.done(function( data )  { alert(data); });
   $('#confirm-submit').modal('toggle');
 });
 

@@ -87,7 +87,7 @@ readFromPipe() {
         ;;
         stop )
           touch $SERVICE_PATH/done
-          sleep 6
+          sleep 4
           stop
         ;;
         access_mode* )
@@ -110,9 +110,9 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
-        setup_noip* )
+        setup_dns* )
           if ! [ -z "${args[1]}" ]; then
-            run "$INSTALL_SCRIPTS_PATH/setup_noip.sh" "${args[1]}" "${args[2]}" "${args[3]}"
+            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[1]}" "${args[2]}" "${args[3]}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error

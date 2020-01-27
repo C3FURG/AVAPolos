@@ -43,9 +43,9 @@ if (isset($_GET['action'])) {
 			echo $retVal;
 			break;
 
-		case 'setup_noip':
+		case 'setup_dns':
 			if (!empty($_POST['email']) && (!empty($_POST['pass'])) && (!empty($_POST['domain'])) ) {
-				system("echo 'setup_noip " . $_POST['email'] . " " . $_POST['pass'] . " " . $_POST['domain'] . "' > ../../service/pipe;", $retVal);
+				system("echo 'setup_dns " . $_POST['email'] . " " . $_POST['pass'] . " " . $_POST['domain'] . "' > ../../service/pipe;", $retVal);
 				echo $retVal;
 			} else {
 				echo 666;

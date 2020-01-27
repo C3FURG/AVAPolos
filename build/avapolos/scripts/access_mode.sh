@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 source /etc/avapolos/header.sh
-if [[ -f $NOIP_ENV_PATH/noip.env ]]; then
-  source $NOIP_ENV_PATH/noip.env
+if [[ -f $NOIP_ENV_PATH ]]; then
+  source $NOIP_ENV_PATH
 fi
 
 DOMAIN=${DOMAIN:=avapolos}

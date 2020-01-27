@@ -2,7 +2,7 @@
 
 <?php
 
-if (file_exists('name')) {
+if ((!file_exists('name')) && (!file_exists('ip'))) || (file_exists('name')){
 	$access_mode="name";
 } else {
 	$access_mode="ip";
