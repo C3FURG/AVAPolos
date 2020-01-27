@@ -7,6 +7,6 @@ if($line==1){
   unlink(getcwd()."/syncFinalizada");
   echo $filename; //Arquivo já chegou!
 }else{
-  echo false;//Ainda não chegou
+  echo true;//Ainda não chegou
 }
 ?>
