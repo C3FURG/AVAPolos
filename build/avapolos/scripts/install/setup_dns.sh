@@ -12,15 +12,18 @@ change_domains() {
   lineNumber=$(grep -n "domain =" $DATA_PATH/traefik/traefik.toml | cut -d: -f1)
   sed -i "$lineNumber"'s/.*/domain\ \=\ \"'$DOMAIN'\"/' $DATA_PATH/traefik/traefik.toml
 
-  #Change the domain in every service.
+  #Change the domain in every service, except the maintenance page.
   for stack in $(ls $SERVICES_PATH/*.yml); do
       for line in $(cat $stack); do
-      if [[ $line =~ frontend.rule=Host: ]]; then
-        lineNumber=$(cat $stack | grep -n "$line" | cut -d: -f1)
-        svc=$(echo $line | cut -d: -f2 | cut -d. -f1)
-        newLine='      - "traefik.frontend.rule=Host:'$svc'.'$DOMAIN'"'
-        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $stack
-      fi
+        if [[ $line =~ frontend.rule=Host: ]]; then
+          lineNumber=$(cat $stack | grep -n "$line" | cut -d: -f1)
+          svc=$(echo $line | cut -d: -f2 | cut -d. -f1)
+          if [[ $line =~ \$\{ ]]; then
+            break
+          fi
+          newLine='      - "traefik.frontend.rule=Host:'$svc'.'$DOMAIN'"'
+          sed -i "$lineNumber"'s/.*/'"$newLine"'/' $stack
+        fi
     done
   done
 
@@ -53,7 +56,7 @@ change_domains() {
   #Change the address in Wiki's LocalSettings.php
   if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
     for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
-      if [[ $line =~ wgServer ]]; then
+      if [[ $line =~ wgServer ]] || [[ $line =~ wgScriptPath ]]; then
         lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
         newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
         sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
