@@ -25,23 +25,21 @@ change_domains() {
   done
 
   #Change the links in the menu
-  for line in $(cat $DATA_PATH/inicio/public/index.html); do
-    if [[ $line =~ href=\"htt ]]; then
-      lineNumber=$(cat $DATA_PATH/inicio/public/index.html | grep -n "$line" | cut -d: -f1)
-      str1=$(echo $line | sed -e 's/href\=\"http:\/\///g' | sed -e 's/\"><div><\/div><\/a>//g')
-      svc=$(echo $str1 | cut -d. -f1)
-      if ! [[ -z $(echo $str1 | grep -o '/') ]]; then
-        suffix=$(echo $str1 | cut -d/ -f2 | sed "s/\r//g")
+  for line in $(cat $DATA_PATH/inicio/public/index.php); do
+    if [[ $line =~ _url=\"http\:\/\/[a-z] ]]; then
+      lineNumber=$(cat $DATA_PATH/inicio/public/index.php | grep -n "$line" | cut -d: -f1)
+      svc=$(echo $line | cut -d_ -f1 | sed -e 's/\$//g')
+      if ! [[ -z $(echo $line | cut -d= -f2 | sed 's/[\";]//g' | sed 's/http:\/\///g' | grep -o /) ]]; then
+        suffix=$(echo $line | cut -d= -f2 | sed 's/[\";]//g' | sed 's/http:\/\///g' | cut -d/ -f2)
       else
-        suffix=""
+        unset suffix
       fi
-      newLine='			<a href=\"http:\/\/'$svc'.'$DOMAIN'\/'$suffix'\"><div><\/div><\/a>'
-      sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/inicio/public/index.html
+      newLine='		\$'$svc'_url="http:\/\/'$svc'.'$DOMAIN'\/'$suffix'";'
+      sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/inicio/public/index.php
     fi
   done
 
   #Change the domains in access_mode.sh
-  #FIXME
   services=("MOODLE" "WIKI" "EDUCAPES" "DOWNLOADS")
   for service in ${svcs[@]}; do
     lineNumber=$(cat $SCRIPTS_PATH/access_mode.sh | grep -n "\$$service\_URL=" | cut -d: -f1)
@@ -54,6 +52,28 @@ change_domains() {
     newLine='$'$service'_URL="'$svc'.'$DOMAIN'"'
     sed -i "$lineNumber"'s/.*/'"$newLine"'/' $SCRIPTS_PATH/access_mode.sh
   done
+
+  #Change the address in Moodle's config.php
+  if [[ -f $DATA_PATH/moodle/public/config.php ]]; then
+    for line in $(cat $DATA_PATH/moodle/public/config.php); do
+      if [[ $line =~ wwwroot ]]; then
+        lineNumber=$(cat $DATA_PATH/moodle/public/config.php | grep -n "$line" | cut -d: -f1)
+        newLine='$CFG->wwwroot   = "http:\/\/moodle.'$DOMAIN'";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/moodle/public/config.php
+      fi
+    done
+  fi
+
+  #Change the address in Wiki's LocalSettings.php
+  if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
+    for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
+      if [[ $line =~ wgServer ]]; then
+        lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
+        newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
+      fi
+    done
+  fi
 
   #Change the domain in hosts file
   ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
