@@ -84,9 +84,9 @@ else
 fi
 
 echo "ID da rede avapolos:" | log debug start
-docker network create -d bridge --gateway 172.12.0.1 --subnet 172.12.0.0/16 avapolos | log debug start
+docker network create -d bridge --gateway 172.12.0.1 --subnet 172.12.0.0/16 avapolos
 echo "ID da rede proxy:" | log debug start
-docker network create --driver bridge proxy | log debug start
+docker network create --driver bridge proxy
 
 cat $SERVICES_PATH/enabled_services > $SERVICES_PATH/stopped_services
 
