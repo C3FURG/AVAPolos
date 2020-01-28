@@ -1,4 +1,3 @@
-
 <?php
     set_time_limit(0);
 
@@ -52,10 +51,9 @@
             if(trim($out)=="-1"){
                exit("Impossível conectar ao servidor $ip Certifique-se de que existe conectivitade entre os servidores. <br />
                <a href=\"#\" onclick=\"location.href=document.referrer; return false;\"> Voltar </a>");
-            } else {
-              $stream = ssh2_exec($this->connection, 'cd '.$this->dirPath.'/scripts/sync/; '.$extraCmd.' bash '.$this->sh_file.' '.($online?3:1).' '.$_SESSION["USER"]->username.' > '.$this->output_file);
             }
           }
+          $stream = ssh2_exec($this->connection, 'cd '.$this->dirPath.'/scripts/sync/; '.$extraCmd.' bash '.$this->sh_file.' '.($online?3:1).' '.$_SESSION["USER"]->username.' > '.$this->output_file);
         }catch(Exception $e){
           echo "Erro";
         }

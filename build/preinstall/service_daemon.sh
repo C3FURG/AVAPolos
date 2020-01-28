@@ -14,7 +14,6 @@ PIPE="$SERVICE_PATH/pipe"
 
 export LOGGER_LVL="debug"
 export LOGFILE_PATH="$LOG_PATH/service.log"
-#export LOGFILE_PATH="service.log"
 
 #Para desenvolvimento
 #set +e
@@ -24,6 +23,14 @@ end() {
   kill -s SIGTERM $educapes_pid
   rm -f $PIPE
   exit 0
+}
+
+update_moodle_hosts() {
+  docker stop moodle > /dev/null
+  docker start moodle > /dev/null
+  ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+  echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
+  docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
 }
 
 trap end EXIT
@@ -87,7 +94,7 @@ readFromPipe() {
         ;;
         stop )
           touch $SERVICE_PATH/done
-          sleep 6
+          sleep 4
           stop
         ;;
         access_mode* )
@@ -110,9 +117,9 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
-        setup_noip* )
+        setup_dns* )
           if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/setup_noip.sh" "${args[@]}"
+            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[1]}" "${args[2]}" "${args[3]}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
@@ -131,12 +138,14 @@ main() {
 
 if [[ ! -p $PIPE ]]; then
     mkfifo $PIPE
+    chown avapolos:avapolos $PIPE
 fi
 
 echo "Daemon AVAPolos iniciado." | log info
 echo "Rodando check incial automático." | log debug
 
 check_services
+update_moodle_hosts
 
 while true; do
   main

@@ -11,6 +11,7 @@ RUN pip3 install noipy
 COPY root /
 RUN chmod +x /start.sh
 RUN chmod +x /cmd.sh
+RUN chmod +x /run.sh
 
 ENTRYPOINT ["/start.sh"]
 CMD ["/cmd.sh"]

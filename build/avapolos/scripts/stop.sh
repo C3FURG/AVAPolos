@@ -29,7 +29,6 @@ else
   export BACKUPS_PATH
 
   if ! [ -z "$1" ]; then
-    #arg=$(sanitize $1)
     arg=$1
     services="$arg"
     specified="true"
@@ -38,7 +37,7 @@ else
   fi
 
   for service in $services; do
-    if [ -z "$(cat stopped_services | grep -o $service)" ] && ! [ $service = "basic.yml" ]; then
+    if [ -z "$(cat stopped_services | grep -o $service)" ]; then
       echo "Parando serviço: $service" | log info stop
       docker-compose -p avapolos -f $service down | log debug stop
       echo $service >> stopped_services
@@ -62,12 +61,6 @@ else
       docker-compose -p avapolos -f manutencao.yml up -d  | log debug stop
     fi
     echo "Página de manutenção atualizada." | log debug stop
-  fi
-
-  if [ "$specified" = "false" ]; then
-    echo "Removendo rede docker 'avapolos'." | log debug stop
-    docker-compose -p avapolos -f manutencao.yml down  | log debug stop
-    docker network rm avapolos || true | log debug stop
   fi
 
   rm $SCRIPTS_PATH/startstop.lock

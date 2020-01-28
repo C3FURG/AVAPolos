@@ -43,12 +43,17 @@ else
   createSyncFileDirList
   chown -R avapolos:avapolos $masterFileDirListPath $syncFileDirListPath
 
-  createControlRecord 0 E 'instaladorAvapolos'
+  createControlRecord 0 E 'instaladorAVAPolos'
   stopDBMaster
   ###TO-DO: tornar moodle inacessivel
   clearQueue
   #apagando o registro de controle do clone para que uma nova clonagem possa ser gerada quando desejad
 fi
+
+source $NOIP_ENV_PATH
+previousDomain=$DOMAIN
+
+bash $INSTALL_SCRIPTS_PATH/setup_dns.sh null null avapolos
 
 stop
 
@@ -89,5 +94,7 @@ echo "Tamanho: $(du -h /opt/AVAPolos_instalador_POLO | awk {'print $1'})" | log 
 echo "Em "$runtime"s." | log info sync
 
 echo "Reiniciando serviços." | log info sync
+
+bash $INSTALL_SCRIPTS_PATH/setup_dns.sh null null $previousDomain
 
 start

@@ -1,64 +1,100 @@
 #!/usr/bin/env bash
 
 source /etc/avapolos/header.sh
+if [[ -f $NOIP_ENV_PATH ]]; then
+  source $NOIP_ENV_PATH
+fi
+
+DOMAIN=${DOMAIN:=avapolos}
 
 ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
-if [ $1 = "name" ]; then
-  stop
-  echo "Configurando o servidor para utilizar nomes." | log info access_mode
+switch_name() {
+  echo "Configurando para acesso com nomes." | log debug access_mode
 
-  str="$ip:81"
-  sed -i "s/"$str"/moodle.avapolos/g" $DATA_PATH/moodle/public/config.php
-  sed -i "s/"$str"/moodle.avapolos/g" $DATA_PATH/hub/public/index.html
+  rm -f $DATA_PATH/inicio/public/ip
+  touch $DATA_PATH/inicio/public/name
 
-  str="$ip:82"
-  sed -i "s/"$str"/wiki.avapolos/g" $DATA_PATH/wiki/public/LocalSettings.php
-  sed -i "s/"$str"/wiki.avapolos/g" $DATA_PATH/hub/public/index.html
+  #Change the address in Moodle's config.php
+  if [[ -f $DATA_PATH/moodle/public/config.php ]]; then
+    for line in $(cat $DATA_PATH/moodle/public/config.php); do
+      if [[ $line =~ wwwroot ]]; then
+        lineNumber=$(cat $DATA_PATH/moodle/public/config.php | grep -n "$line" | cut -d: -f1)
+        newLine='$CFG->wwwroot   = "http:\/\/moodle.'$DOMAIN'";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/moodle/public/config.php
+      fi
+    done
+  fi
 
-  str="$ip:83\/jspui"
-  sed -i "s/"$str"/educapes.avapolos\/jspui/g" $DATA_PATH/hub/public/index.html
-
-  str="$ip:84"
-  sed -i "s/"$str"/downloads.avapolos/g" $DATA_PATH/downloads/public/index.html
-  sed -i "s/"$str"/downloads.avapolos/g" $DATA_PATH/hub/public/index.html
-
-  str="$ip:85"
-  sed -i "s/"$str"/controle.avapolos/g" $DATA_PATH/hub/public/index.html
-  sed -i "s/"$str"/controle.avapolos/g" $DATA_PATH/controle/public/php/config.php
+  #Change the address in Wiki's LocalSettings.php
+  if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
+    for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
+      if [[ $line =~ wgServer ]]; then
+        lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
+        newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
+      fi
+    done
+  fi
 
   sudo sed -i '/hub_80\.yml/d' $SERVICES_PATH/enabled_services
   echo "hub_name.yml" >> $SERVICES_PATH/enabled_services
   echo "router.yml" >> $SERVICES_PATH/enabled_services
+}
 
-  echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+switch_ip() {
+  echo "Configurando para acesso com ip." | log debug access_mode
 
-  start
-elif [ $1 = "ip" ]; then
-  stop
+  rm -f $DATA_PATH/inicio/public/name
+  touch $DATA_PATH/inicio/public/ip
 
-  echo "Configurando o servidor para utilizar IPs e portas." | log info access_mode
-  sed -i "s/moodle.avapolos/"$ip":81""/g" $DATA_PATH/moodle/public/config.php
-  sed -i "s/moodle.avapolos/"$ip":81/g" $DATA_PATH/hub/public/index.html
+  #Change the address in Moodle's config.php
+  if [[ -f $DATA_PATH/moodle/public/config.php ]]; then
+    for line in $(cat $DATA_PATH/moodle/public/config.php); do
+      if [[ $line =~ wwwroot ]]; then
+        lineNumber=$(cat $DATA_PATH/moodle/public/config.php | grep -n "$line" | cut -d: -f1)
+        newLine='$CFG->wwwroot   = "http:\/\/'$ip':81";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/moodle/public/config.php
+      fi
+    done
+  fi
 
-  sed -i "s/wiki.avapolos/"$ip":82/g" $DATA_PATH/wiki/public/LocalSettings.php
-  sed -i "s/wiki.avapolos/"$ip":82/g" $DATA_PATH/hub/public/index.html
-
-  sed -i "s/educapes.avapolos\/jspui/"$ip":83\/jspui/g" $DATA_PATH/hub/public/index.html
-
-  sed -i "s/downloads.avapolos/"$ip":84/g" $DATA_PATH/downloads/public/index.html
-  sed -i "s/downloads.avapolos/"$ip":84/g" $DATA_PATH/hub/public/index.html
-
-  sed -i "s/controle.avapolos\/jspui/"$ip":85\/jspui/g" $DATA_PATH/hub/public/index.html
-  sed -i "s/controle.avapolos/"$ip":84/g" $DATA_PATH/controle/public/php/config.php
+  #Change the address in Wiki's LocalSettings.php
+  if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
+    for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
+      if [[ $line =~ wgServer ]]; then
+        lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
+        newLine='$wgServer = "http:\/\/'$ip':82";'
+        sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
+      fi
+    done
+  fi
 
   sudo sed -i '/hub_name\.yml/d' $SERVICES_PATH/enabled_services
   sudo sed -i '/router\.yml/d' $SERVICES_PATH/enabled_services
   echo "hub_80.yml" >> $SERVICES_PATH/enabled_services
+}
 
-  echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+update_ip() {
+  sed -i 's/{IP}/'$ip'/' $DATA_PATH/inicio/public/index.php
+  sed -ri 's/([0-9]{1,3}\.){3}[0-9]{1,3}/'$ip'/' $DATA_PATH/inicio/public/index.php
+}
 
-  start
-else
-  echo "Uso: switch.sh [name/ip]"
-fi
+case "$1" in
+  name )
+    stop
+    switch_name
+    echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+    start
+    ;;
+  ip )
+    stop
+    switch_ip
+    echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+    start
+    ;;
+
+  * )
+    echo "Argumento incorreto.." | log error access_mode
+    ;;
+esac
