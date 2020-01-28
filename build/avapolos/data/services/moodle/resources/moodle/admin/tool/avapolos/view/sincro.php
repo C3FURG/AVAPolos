@@ -41,13 +41,25 @@ else if ($fromform = $exportform->get_data()) {
   if($choice[0] == "offline"){
     try{
       echo "Aguardando exportação...";
-      echo "<script src='sweetalert2.all.min.js'></script>
+      echo "
+      <style>
+      	.swal2-title{
+      		display: block !important;
+      	}
+      </style>
+      <script src='sweetalert2.all.min.js'></script>
       <script>
         let timerInterval = Swal.fire({
-          title: 'Aguarde exportação em andamento!',
+          title: '<img style=\"margin-top: 30px; height: 80px;\" src=\"logoAVA2.png\" /><br /><br/><h4>Aguarde exportação em andamento!</h4>'+
+          '<img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 40px;\">',
+          html:
+			'',
           allowOutsideClick: false,
+          showCloseButton: false,
+		  showCancelButton: false,
+		  showConfirmButton: false,
           onBeforeOpen: () => {
-            Swal.showLoading()
+           
             let temporizadorAjax = setInterval(()=>{
               var request = new XMLHttpRequest();
                 request.onreadystatechange = function() {
@@ -68,10 +80,13 @@ else if ($fromform = $exportform->get_data()) {
                            })
                         }else{
                            Swal.fire({
-                             type: 'success',
-                             title: 'Exportação realizada com sucesso!',
+                             type: 'html',
+                             title: '<img style=\"margin-top: 30px; height: 80px;\" src=\"logoAVA2.png\" /><br /><br/><h4 style=\"color: #5F6A44;\">Exportação realizada com sucesso!</h4>'+
+                             '<img src=\"okay-1.1s-289px.png\" style=\"height: 60px; \">',
                    allowOutsideClick: false,
-                              html: '<b><a href=\"'+response+'\">Clique aqui para baixar o arquivo de exportação.</a> <br /><br /><a href=\"javascript:history.back()\">Clique aqui para voltar.</a></b>',
+                              html:     
+                              '<b><a style=\"font-size: 13pt;\" href=\"'+response+'\"><img style=\"height: 30px;\" src=\"download-1.4s-203px.png\"> Clique aqui para baixar o arquivo de exportação</a> <br /><br />'+
+                              '<a style=\"font-size: 11pt; color: #626262;\" href=\"javascript:history.back()\">Clique aqui para voltar</a></b>',
                               showConfirmButton: false,
                            })
 
@@ -109,10 +124,16 @@ else if ($fromform = $exportform->get_data()) {
           echo "<script src='sweetalert2.all.min.js'></script>
 <script>
 let timerInterval = Swal.fire({
-                        title: 'Aguarde, exportação e envio em andamento!',
-                        allowOutsideClick: false,
+                        title: '<img style=\"margin-top: 30px; height: 80px;\" src=\"logoAVA2.png\" /><br /><br/><h4>Aguarde exportação em andamento!</h4>'+
+					  '<img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 40px;\">',
+					  html:
+						'',
+					  allowOutsideClick: false,
+					  showCloseButton: false,
+					  showCancelButton: false,
+					  showConfirmButton: false,
                         onBeforeOpen: () => {
-                              Swal.showLoading()
+                              
                               let temporizadorAjax = setInterval(()=>{
                                  var request = new XMLHttpRequest();
                                  request.onreadystatechange = function() {
@@ -133,10 +154,13 @@ let timerInterval = Swal.fire({
                                                 })
                                              }else{
                                                 Swal.fire({
-                                                   type: 'success',
-                                                   title: 'Exportação realizada com sucesso!',
-                                                   allowOutsideClick: false,
-                                                   html: '<b> O arquivo foi gerado e enviado com sucesso. <br /><a href=\"javascript:history.back()\">Clique aqui para voltar.</a></b>',
+                                                   type: 'html',
+											     title: '<img style=\"margin-top: 30px; height: 80px;\" src=\"logoAVA2.png\" /><br /><br/><h4 style=\"color: #5F6A44;\">Exportação realizada com sucesso!</h4>'+
+											     '<img src=\"okay-1.1s-289px.png\" style=\"height: 60px; \">',
+									   allowOutsideClick: false,
+											      html:     
+											      '<b><a style=\"font-size: 13pt;\" href=\"'+response+'\"><img style=\"height: 30px;\" src=\"download-1.4s-203px.png\"> Clique aqui para baixar o arquivo de exportação</a> <br /><br />'+
+											      '<a style=\"font-size: 11pt; color: #626262;\" href=\"javascript:history.back()\">Clique aqui para voltar</a></b>',
                                                    showConfirmButton: false,
                                                 })
                                              }
@@ -187,9 +211,12 @@ else if($fromform = $importform->get_data()){
 <script>
    let timerInterval = Swal.fire({
       title: 'Aguarde, sincronização em andamento.',
+      html:
+		'<img style=\"height: 80px;\" src=\"logoAVA2.png\" />'+
+		'<br><img src=\"Eclipse-1s-200px (2).gif\" style=\"height: 65px; margin-top: 30px;\">',
       allowOutsideClick: false,
       onBeforeOpen: () => {
-         Swal.showLoading()
+         
          let temporizadorAjax = setInterval(()=>{
             var request = new XMLHttpRequest();
             request.onreadystatechange = function() {
