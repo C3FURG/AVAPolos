@@ -106,11 +106,7 @@ $('#submit').click(function(){
     domain: $('#domainInput').val()
   }
 
-  console.log('http://controle.' + data.domain + '/php/check.php?get')
-  console.log('http://controle.' + data.domain)
-  sweet_alert('http://controle.' + data.domain + '/php/check.php?get', 'http://controle.' + data.domain, 30000)
-
-  console.log(data);
+  sweet_alert('http://controle.' + data.domain + '/php/check.php?get', 'http://controle.' + data.domain)
 
   if ($("#emailInputDiv").attr("hidden")) {
     data.email = "null"
@@ -119,9 +115,14 @@ $('#submit').click(function(){
     data.email = $('#emailInput').val()
     data.pass = $('#passwordInput').val()
   }
-  console.log(data);
+
   $.post("php/action.php?action=setup_dns", data);//.done(function( data )  { alert(data); });
   $('#confirm-submit').modal('toggle');
+
+  setTimeout(function () {
+    console.log("http://controle." + data.domain + "/?page=dns.php");
+    window.location.href = "http://controle." + data.domain + "/?page=dns.php";
+  }, 100000);
 });
 
 </script>

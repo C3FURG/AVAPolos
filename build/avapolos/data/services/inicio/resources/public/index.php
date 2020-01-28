@@ -2,7 +2,10 @@
 
 <?php
 
-if ((!file_exists('name')) && (!file_exists('ip'))) || (file_exists('name')){
+// @error_reporting(E_ALL | E_STRICT);
+// @ini_set('display_errors', '1');
+
+if ((!file_exists('name') && !file_exists('ip')) || (file_exists('name'))) {
 	$access_mode="name";
 } else {
 	$access_mode="ip";

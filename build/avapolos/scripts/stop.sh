@@ -29,7 +29,6 @@ else
   export BACKUPS_PATH
 
   if ! [ -z "$1" ]; then
-    #arg=$(sanitize $1)
     arg=$1
     services="$arg"
     specified="true"
@@ -62,12 +61,6 @@ else
       docker-compose -p avapolos -f manutencao.yml up -d  | log debug stop
     fi
     echo "Página de manutenção atualizada." | log debug stop
-  fi
-
-  if [ "$specified" = "false" ]; then
-    echo "Removendo rede docker 'avapolos'." | log debug stop
-    docker-compose -p avapolos -f manutencao.yml down  | log debug stop
-    docker network rm avapolos || true | log debug stop
   fi
 
   rm $SCRIPTS_PATH/startstop.lock

@@ -25,7 +25,7 @@
   <script src="vendor/popper.min.js"></script>
 
   <!-- BS4 -->
-  <link href="vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="vendor/bootstrap.min.css" rel="stylesheet">
   <script src="vendor/bootstrap.min.js"></script>
 
   <!-- SweetAlert -->

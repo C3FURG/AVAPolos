@@ -1,17 +1,16 @@
-function sweet_alert(url, goto="reload", timeout=0) {
+function sweet_alert(url, goto="reload") {
 	let timerInterval = Swal.fire({
 	title: 'Aguarde.. Operação em andamento!',
 	allowOutsideClick: false,
 	onBeforeOpen: () => {
 	Swal.showLoading()
-	startTime=0;
 	let temporizadorAjax = setInterval(()=>{
 	  var request = new XMLHttpRequest();
 	    request.onreadystatechange = function() {
 	      if(request.readyState === 4) {
 	        if(request.status === 200) {
 	          let response = request.responseText;
-	          if(response == 'true') || ((timeout > 0) && (startTime > timeout)){
+	          if (response == 'true') {
 	            Swal.close();
 	            clearInterval(temporizadorAjax);
 							boxHtml="";
@@ -37,7 +36,6 @@ function sweet_alert(url, goto="reload", timeout=0) {
 	    }
 	    request.open('Get', url);
 	    request.send();
-			startTime+=5000;
 	},5000);
 	},
 	onClose: () => {

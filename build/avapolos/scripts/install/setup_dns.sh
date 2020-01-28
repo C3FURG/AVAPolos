@@ -57,11 +57,11 @@ change_domains() {
   if [[ -f $DATA_PATH/wiki/public/LocalSettings.php ]]; then
     for line in $(cat $DATA_PATH/wiki/public/LocalSettings.php); do
       if { [[ $line =~ \$wgServer ]] || [[ $line =~ \$wgScriptPath ]]; } && ! [[ $line =~ \;$ ]]; then
-        lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1)
+        lineNumber=$(cat $DATA_PATH/wiki/public/LocalSettings.php | grep -n "$line" | cut -d: -f1 | head -n1)
         if [[ $line =~ wgServer ]]; then
-          newLine='$wgServer = "http:\/\/wiki.'$DOMAIN'";'
+          newLine=$(sanitize '$wgServer = "http://wiki.'$DOMAIN'";')
         else
-          newLine='$wgScriptPath = "http:\/\/wiki.'$DOMAIN'";'
+          newLine=$(sanitize '$wgScriptPath = "http://wiki.'$DOMAIN'";')
         fi
         sed -i "$lineNumber"'s/.*/'"$newLine"'/' $DATA_PATH/wiki/public/LocalSettings.php
       fi
