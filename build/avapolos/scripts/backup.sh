@@ -45,6 +45,9 @@ while true; do
       label=$label-$service
       shift
     ;;
+    -h )
+      echo "--service, --path"
+    ;;
     *)
       break
     ;;

@@ -68,12 +68,17 @@ readFromPipe() {
   args=()
     if read line <$PIPE; then
       read -a args <<< "$line"
+      echo "Argumentos recebidos: ${args[@]:1}"
       case $line in
         check_services )
         check_services
         ;;
+        test )
+          sleep 5
+          touch $SERVICE_PATH/done
+        ;;
         educapes_download_stop )
-          if ! [ -z "${args[1]}" ]; then
+          if ! [ -z "${args[@]:1}" ]; then
             educapes_download_stop
             touch $SERVICE_PATH/done
           else
@@ -81,7 +86,7 @@ readFromPipe() {
           fi
         ;;
         educapes_download_start )
-          if ! [ -z "${args[1]}" ]; then
+          if ! [ -z "${args[@]:1}" ]; then
             educapes_download_start
             touch $SERVICE_PATH/done
           else
@@ -98,28 +103,28 @@ readFromPipe() {
           stop
         ;;
         access_mode* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/access_mode.sh" "${args[1]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/access_mode.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
         backup* )
-          run "$SCRIPTS_PATH/backup.sh" "${args[@]}"
+          run "$SCRIPTS_PATH/backup.sh" "${args[@]:1}"
           touch $SERVICE_PATH/done
         ;;
         restore* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/restore.sh" "${args[1]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/restore.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
         setup_dns* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[1]}" "${args[2]}" "${args[3]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error

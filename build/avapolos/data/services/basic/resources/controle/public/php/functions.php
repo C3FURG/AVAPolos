@@ -8,6 +8,22 @@ if ($debug) {
 	error_reporting(E_ALL);
 }
 
+function startsWith($haystack, $needle)
+{
+     $length = strlen($needle);
+     return (substr($haystack, 0, $length) === $needle);
+}
+
+function endsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+
+    return (substr($haystack, -$length) === $needle);
+}
+
 function return_progress_educapes(){
   $data=@file_get_contents("../../educapes/download/wget-log");
   if ($data == FALSE) {

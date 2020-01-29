@@ -23,6 +23,11 @@ if (isset($_GET['action'])) {
 			echo $retVal;
 			break;
 
+		case 'test':
+			system("echo 'test' > ../../service/pipe", $retVal);
+			echo $retVal;
+			break;
+
 		case 'start':
 			system("echo 'start' > ../../service/pipe", $retVal);
 			echo $retVal;
