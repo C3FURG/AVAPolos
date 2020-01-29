@@ -8,17 +8,20 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-    
+
     require_once("header.php");
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitLogin']) && $_POST['submitLogin'] != ''){
-        $DB = pg_connect("host=db_moodle_ies port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+        $DB = pg_connect("host=db_controle port=5432 dbname=avapolos user=avapolos password=@bancoava.C4p35*&") or die('connection failed');
 
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = md5(filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS));
 
-        $queryLogin = pg_query($DB, "SELECT * FROM public.avapolos_controle_login WHERE login = '".$login."' AND password = '".$password."' ");
+        // echo $login;
+        // echo $password;
+
+        $queryLogin = pg_query($DB, "SELECT * FROM public.controle_login WHERE login = '".$login."' AND password = '".$password."' ");
 
         //echo "SELECT * FROM public.avapolos_controle_login WHERE login = '".$login."' AND password = '".$password."' ";
         if($queryLogin && pg_num_rows($queryLogin) > 0){
@@ -32,7 +35,7 @@
         }else{
             $dadosLogin = false;
 
-            //echo "Login ou senha incorretos";
+            echo "Login ou senha incorretos";
 
             $_SESSION['error_msg'] = "Login ou senha incorretos";
 
@@ -42,7 +45,7 @@
 
             //session_destroy();
         }
-        
+
     }
 ?>
 <!DOCTYPE html>
@@ -79,13 +82,13 @@
                                             <?php
                                                     unset($_SESSION['error_msg']);
                                                 } //end error msg
-                                            ?>                                       
+                                            ?>
                                             <div class="form-group d-flex align-items-center mt-4 mb-0">
                                                 <button type='submit' name='submitLogin' value='submitLogin' class="btn btn-success d-block mx-auto">Entrar</button>
                                             </div>
                                         </form>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -95,7 +98,7 @@
                 </main>
 
             </div>
-            
+
         </div>
         <footer class="sticky-footer" style='width: 100%;'>
           <div class="container my-auto">

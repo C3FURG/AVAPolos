@@ -29,32 +29,32 @@ execDockerCommand moodle "php /app/public/avapolos_dev/repo.php"
 execDockerCommand moodle "php /app/public/avapolos_dev/impar.php"
 execDockerCommand moodle "php /app/public/avapolos_dev/par.php"
 
-execSQL db_moodle_ies "
+execSqlOnMoodleDB db_moodle_ies "
   ALTER DATABASE moodle SET bdr.skip_ddl_locking = true;
   ALTER DATABASE moodle SET bdr.skip_ddl_replication = true;
 "
-execSQL db_moodle_polo "
+execSqlOnMoodleDB db_moodle_polo "
   ALTER DATABASE moodle SET bdr.skip_ddl_locking = true;
   ALTER DATABASE moodle SET bdr.skip_ddl_replication = true;
 "
 
 #Email change confirmation disable.
-#execSQL db_moodle_ies "UPDATE mdl_config SET VALUE=0 WHERE id=243;"
+#execSqlOnMoodleDB db_moodle_ies "UPDATE mdl_config SET VALUE=0 WHERE id=243;"
 
 #Mobile app enable.
-# execSQL db_moodle_ies "UPDATE mdl_config SET VALUE=1 WHERE id=484;"
-# execSQL db_moodle_ies "UPDATE mdl_external_services SET enabled=1 WHERE shortname LIKE '%moodle_mobile_app%';"
+# execSqlOnMoodleDB db_moodle_ies "UPDATE mdl_config SET VALUE=1 WHERE id=484;"
+# execSqlOnMoodleDB db_moodle_ies "UPDATE mdl_external_services SET enabled=1 WHERE shortname LIKE '%moodle_mobile_app%';"
 
-# execSQL db_moodle_ies "SELECT * FROM mdl_config WHERE id=243 OR id=484;"
-# execSQL db_moodle_ies "SELECT * FROM mdl_external_services WHERE shortname LIKE '%mobile%';"
+# execSqlOnMoodleDB db_moodle_ies "SELECT * FROM mdl_config WHERE id=243 OR id=484;"
+# execSqlOnMoodleDB db_moodle_ies "SELECT * FROM mdl_external_services WHERE shortname LIKE '%mobile%';"
 
 execDockerCommand "moodle" "php /app/public/admin/cli/purge_caches.php"
 
 echo "Checando instalação do Moodle na IES."
-execSQL db_moodle_ies "SELECT * from mdl_user;"
+execSqlOnMoodleDB db_moodle_ies "SELECT * from mdl_user;"
 
 echo "Checando instalação do Moodle no POLO."
-execSQL db_moodle_polo "SELECT * from mdl_user;"
+execSqlOnMoodleDB db_moodle_polo "SELECT * from mdl_user;"
 
 testURL "http://moodle.avapolos"
 
