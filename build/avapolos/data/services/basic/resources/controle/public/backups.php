@@ -1,7 +1,7 @@
 <?php
-require_once("php/config.php");
+require_once("config.php");
 
-if ($debug) {
+if ($CFG->debug) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
@@ -91,7 +91,7 @@ if ($dirArray == FALSE) {
 
   $(document).ready(function(){
 
-		debug=<?php if ($debug) { echo "true;"; } else echo "false;";?>
+		debug=<?php if ($CFG->debug) { echo "true;"; } else echo "false;";?>
 
     $("#backupConfirmBtn").click(function(){
       dataObj = {}

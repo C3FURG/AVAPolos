@@ -1,5 +1,5 @@
 <?php
-require_once("php/config.php");
+require_once("config.php");
 require_once("php/functions.php");
 
 $found=false;
@@ -55,7 +55,7 @@ $(document).ready(function(){
         location.reload();
       }, 60000);
     }
-    $.get( "php/action.php?action=<?php if ($debug) { echo 'test"'; } else echo '" + string'?>);
+    $.get( "php/action.php?action=<?php if ($CFG->debug) { echo 'test"'; } else echo '" + string'?>);
   }
 
   $(".painel_btn").click(function(e) {

@@ -303,8 +303,8 @@ execDockerCommand(){ # $1=container  $2=command
    eval "docker exec $1 $2"
 }
 
-execSQL(){ # $1 = containerName # $1 = database name # $2 SQL statement
-   execDockerCommand $1 "psql -U moodle -d $2 -c \"$3\""
+execSQL(){ # $1 = containerName # $1 = user $3 = dbname # $4 SQL statement
+   execDockerCommand $1 "psql -U "$2" -d "$3" -c \"$4\""
 }
 
 execSqlOnMoodleDB(){ # $1 = containerName # $2 SQL statement

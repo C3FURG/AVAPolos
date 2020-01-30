@@ -137,6 +137,7 @@ readFromPipe() {
 
 main() {
   readFromPipe
+  sleep 1
 }
 
 if [[ ! -p $PIPE ]]; then
@@ -147,7 +148,7 @@ fi
 echo "Daemon AVAPolos iniciado." | log info
 echo "Rodando check incial automático." | log debug
 
-check_services
+check_services &
 update_moodle_hosts &
 
 while true; do
