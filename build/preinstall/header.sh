@@ -45,6 +45,8 @@ else
 fi
 
 export INSTALLER_FILENAME="avapolos_$INSTALLER_VERSION"
+export CLONE_INSTALLER_FILENAME='avapolos_'$INSTALLER_VERSION'_POLO'
+export CLONE_INSTALLER_PATH="/opt/avapolos_clone/"
 
 #Logger function.
 log() { #$1-> mode[debug,info,error,warn] #$2-> source[examples: console,service,cli], reads from STDIN

@@ -10,30 +10,22 @@ docker-compose up -d db_controle
 
 waitForHealthy db_controle
 
-execSqlOnMoodleDB db_controle "CREATE DATABASE avapolos;"
-
-execSQL db_controle avapolos "
-  CREATE ROLE avapolos;
-  ALTER USER avapolos WITH LOGIN PASSWORD '@bancoava.C4p35*&';
-  GRANT ALL PRIVILEGES ON DATABASE avapolos TO avapolos;
-";
-
-execSQL db_controle avapolos "
+execSqlOnMoodleDB db_controle "
 CREATE TABLE public.controle_login
 (
     id SERIAL PRIMARY KEY,
     login character varying(255) NOT NULL,
     password character varying(255) NOT NULL
 );
-ALTER TABLE public.controle_login OWNER to avapolos;
 "
 
 hash=$(echo -n $CONTROLE_PASSWORD | md5sum | cut -d ' ' -f 1)
-execSQL db_controle avapolos "
-  INSERT INTO controle_login (login, password) VALUES ('admin', '$hash');
+execSqlOnMoodleDB db_controle "
+  INSERT INTO public.controle_login (login, password) VALUES ('admin', '$hash');
 "
+execSqlOnMoodleDB db_controle "SELECT * FROM public.controle_login;"
 
-if ! [[ -z "$(execSQL db_controle avapolos "SELECT * FROM controle_login;" | grep -o row)" ]]; then
+if ! [[ -z "$(execSqlOnMoodleDB db_controle "SELECT * FROM public.controle_login;" | grep -o row)" ]]; then
   echo "Banco configurado com sucesso." | log debug data_compiler
 else
   echo "Ocorreu um erro na configuração do banco, parando script." | log error data_compiler

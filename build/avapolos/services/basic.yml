@@ -2,6 +2,19 @@ version: '2'
 
 services:
 
+  db_controle:
+    container_name: db_controle
+    image: avapolos/postgres:bdr
+    environment:
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - UID=${PUID}
+    volumes:
+     - ${BASIC_DATA_DIR}/db_controle:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+
   controle:
     container_name: controle
     image: avapolos/webserver:lite
@@ -11,6 +24,7 @@ services:
       - ${SERVICE_PATH}:/app/service
       - ${LOG_PATH}:/app/log
       - ${BACKUPS_PATH}:/app/public/backups
+      - ${CLONE_INSTALLER_PATH}:/app/public/avapolos_clone/
     networks:
       avapolos:
       proxy:

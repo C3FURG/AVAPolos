@@ -83,17 +83,6 @@ if ($dirArray == FALSE) {
   </tbody>
 </table>
 
-<style media="screen">
-.well {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-}
-</style>
-
 <script src="vendor/jquery.ui.widget.js" type="text/javascript"></script>
 <script src="vendor/jquery.iframe-transport.js" type="text/javascript"></script>
 <script src="vendor/jquery.fileupload.js" type="text/javascript"></script>
