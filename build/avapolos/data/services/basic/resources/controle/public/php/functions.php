@@ -1,5 +1,9 @@
 <?php
+session_start();
 
+if(!$_SESSION['login']){ //caso não esteja logado, redireciona para o login
+	header('Location: ../login.php');
+}
 if ($CFG->debug) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);

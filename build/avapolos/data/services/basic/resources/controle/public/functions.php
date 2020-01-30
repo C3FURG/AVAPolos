@@ -9,10 +9,8 @@ foreach (scandir('avapolos_clone') as $file) {
     $clone_installer_file = 'avapolos_clone/' . $file;
   }
 }
+?>
 
-
-
- ?>
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm">
@@ -55,7 +53,7 @@ $(document).ready(function(){
         location.reload();
       }, 60000);
     }
-    $.get( "php/action.php?action=<?php if ($CFG->debug) { echo 'test"'; } else echo '" + string'?>);
+    $.get("php/action.php?action=<?php if ($CFG->debug) {echo "test";} else { echo "string"; }?>");
   }
 
   $(".painel_btn").click(function(e) {

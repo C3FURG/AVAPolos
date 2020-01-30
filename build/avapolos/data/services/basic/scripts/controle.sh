@@ -27,6 +27,7 @@ cp -rf $tmp/fontawesome-free-5.11.2-web/* $BASIC_DATA_DIR/controle/public/vendor
 cp -rf $tmp/fileupload/js/jquery.fileupload.js $BASIC_DATA_DIR/controle/public/vendor/
 cp -rf $tmp/fileupload/js/jquery.iframe-transport.js $BASIC_DATA_DIR/controle/public/vendor/
 cp -rf $tmp/fileupload/js/vendor/jquery.ui.widget.js $BASIC_DATA_DIR/controle/public/vendor/
+wget -O $BASIC_DATA_DIR/controle/public/vendor/jquery.mask.min.js "https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/popper.min.js "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/jquery-3.3.1.min.js "https://code.jquery.com/jquery-3.3.1.min.js"
 wget -O $BASIC_DATA_DIR/controle/public/vendor/bootstrap.min.css "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"

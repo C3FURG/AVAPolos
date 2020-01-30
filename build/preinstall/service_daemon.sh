@@ -108,6 +108,14 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
+        update_network* )
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/update_network.sh" "${args[@]:1}"
+            touch $SERVICE_PATH/done
+          else
+            echo "Comando inválido, argumentos insuficientes." | log error
+          fi
+        ;;
         backup* )
           run "$SCRIPTS_PATH/backup.sh" "${args[@]:1}"
           touch $SERVICE_PATH/done

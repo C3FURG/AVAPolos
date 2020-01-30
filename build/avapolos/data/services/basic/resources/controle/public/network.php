@@ -1,10 +1,14 @@
+<?php
+require_once('config.php');
+?>
+
 <div class="row">
   <div class="col-sm">
     <div class="well">
       <p class="text-center">Modo de acesso</p>
       <div class="text-center">
         <button class="bg-dark btn btn-primary painel_btn" id="access_mode_ip">IP</button>
-        <button class="bg-dark btn btn-primary painel_btn" id="access_mode_name">Nomes</button>
+        <button class="bg-dark btn btn-primary painel_btn" id="access_mode_name">Nome</button>
       </div>
     </div>
   </div>
@@ -18,9 +22,53 @@
       </div>
       <div class="form-group">
         <label for="ipInput">IP Manual</label>
-        <input id="ipInput" class="form-control" type="text">
+        <input type="text" class="ip form-control" id="ipInput" maxlength="15">
+        <h6 id="ipInputError" class="d-none text-danger">Endereço IP inválido.</h6>
       </div>
-      <button id="submitBtn" type="button" class="bg-dark btn btn-primary">Salvar</button>
+      <button id="networkSubmitBtn" type="button" class="bg-dark btn btn-primary">Salvar</button>
     </form>
   </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('.ip').mask('099.099.099.099');
+
+    function run(string) {
+    sweet_alert('/php/check.php?get')
+    if (string == "stop") {
+      setTimeout(function () {
+        location.reload();
+      }, 60000);
+    }
+    $.get("php/action.php?action=<?php echo ($CFG->debug) ? "test" : "string"; ?>");
+  }
+
+  $(".painel_btn").click(function(e) {
+    //alert($(this).attr('id'));
+    run($(this).attr('id'));
+  })
+
+  $("#networkSubmitBtn").click(function(e) {
+    debug = <?php echo ($CFG->debug) ? "true" : "false";?>;
+    data = {};
+    data.action = "update_network";
+    data.dhcp = ($('#dhcpCheck').is(':checked')) ? true : false;
+    if ($('#ipInput').val()) {
+      data.ip = $('#ipInput').val();
+    }
+
+    console.log(data);
+    $.get("php/action.php", data).done(function(data, e) {
+      console.log(/badIP/.test(data));
+      if ('/badIP/'.test(data)) {
+        sweet_alert('/php/check.php?get')
+        $('#ipInputError').removeClass('d-none');
+      } else {
+        $('#ipInputError').addClass('d-none');
+      }
+    });
+  });
+});
+
+</script>
