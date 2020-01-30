@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
   <li class="nav-item <?php if ($page == "home.php") { echo "active"; } ?>">
-    <a class="nav-link" href="?page=home.php">
+    <a class="nav-link" href="?page=home.php"> 
       <i class="fas fa-fw fa-home"></i>
       <span>Home</span>
     </a>
@@ -35,5 +35,11 @@
     <a class="nav-link" href="?page=dyndns.php">
       <i class="fas fa-fw fa-cog"></i>
       <span>DNS Dinâmico</span></a>
+  </li>
+
+  <li class="nav-item <?php if ($page == "report.php") { echo "active"; } ?>">
+    <a class="nav-link" href="?page=report.php">
+      <i class="fas fa-flag"></i>
+      <span>Reportar Problema</span></a>
   </li>
 </ul>
