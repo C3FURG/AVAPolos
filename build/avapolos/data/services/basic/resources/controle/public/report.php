@@ -1,14 +1,32 @@
+<?php
+  $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+
+  $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1 ");
+
+  //echo "SELECT * FROM public.avapolos_controle_login WHERE login = '".$login."' AND password = '".$password."' ";
+  if($queryRegistro && pg_num_rows($queryRegistro) > 0){
+    $dadosRegistro = pg_fetch_array($queryRegistro);
+    $emailDev = $dadosRegistro['email_dev'];
+  }else{
+    $emailDev = 'E-mail do suporte não cadastrado';
+  }
+?>
+
 <form role="form" id="formfield" action="#" method="post">
   <div class="form-group mb-5">
     <label for="password"><b>Enviar reporte para os desenvolvedores</b></label><br>
-    <input type="checkbox" name='email-dev'> report_avapolos@furg.br
+    <label>
+      <input type="checkbox" name='email-dev'> <?php echo $emailDev; ?>
+    </label>
     <small id="passwordHelp" class="form-text text-muted">Caso deseje enviar informações aos desenvolvedores da plataforma, marque essa opção</small>
     
   </div>
   <div class="form-group mb-5">
     <label for="password"><b>Enviar reporte para instituição responsável</b></label>
     <small id="passwordHelp" class="form-text text-muted"></small>
-    <input type="checkbox" name='email-suporte-ies' checked disabled> ies@instituicao.br
+    <label>
+      <input type="checkbox" name='email-suporte-ies' checked disabled> ies@instituicao.br
+    </label>
     <hr>
   </div>
   

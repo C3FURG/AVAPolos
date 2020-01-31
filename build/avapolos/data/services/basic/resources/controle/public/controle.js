@@ -1,4 +1,4 @@
-function sweet_alert(url) {
+function sweet_alert(url, goto="reload") {
 	let timerInterval = Swal.fire({
 	title: 'Aguarde.. Operação em andamento!',
 	allowOutsideClick: false,
@@ -10,14 +10,20 @@ function sweet_alert(url) {
 	      if(request.readyState === 4) {
 	        if(request.status === 200) {
 	          let response = request.responseText;
-	          if(response == 'true'){
+	          if (response == 'true') {
 	            Swal.close();
 	            clearInterval(temporizadorAjax);
+							boxHtml="";
+							if (goto == "reload") {
+								boxHtml='<a href=\"javascript:location.reload()\">OK</a>';
+							} else {
+								boxHtml='<a href=\"' + goto + '\">OK</a>';
+							}
 	            Swal.fire({
 	              type: 'success',
 	              title: 'Operação realizada com sucesso!',
 	              allowOutsideClick: false,
-	              html: '<a href=\"javascript:location.reload()\">OK</a>',
+	              html: boxHtml,
 	              showConfirmButton: false
 	            })
 	          }else{

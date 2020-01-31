@@ -12,20 +12,21 @@
   <link href="vendor/xterm.min.css" rel="stylesheet">
   <script src="vendor/xterm.min.js"></script>
 
+  <!-- jQuery -->
+  <script src="vendor/jquery-3.3.1.min.js"></script>
+
   <!-- Template stuff -->
   <link href="css/controle.min.css" rel="stylesheet">
+  <!-- <script src="vendor/sb-admin.min.js"></script> -->
 
   <!-- Font -->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
-  <!-- jQuery -->
-  <script src="vendor/jquery-3.3.1.min.js"></script>
 
   <!-- Popper -->
   <script src="vendor/popper.min.js"></script>
 
   <!-- BS4 -->
-  <link href="vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="vendor/bootstrap.min.css" rel="stylesheet">
   <script src="vendor/bootstrap.min.js"></script>
 
   <!-- SweetAlert -->
