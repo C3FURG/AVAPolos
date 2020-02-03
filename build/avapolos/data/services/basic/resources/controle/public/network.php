@@ -34,7 +34,7 @@ $(document).ready(function(){
 
   $('.ip').mask('099.099.099.099');
 
-    function run(string) {
+  function run(string) {
     sweet_alert('/php/check.php?get')
     if (string == "stop") {
       setTimeout(function () {
@@ -52,23 +52,24 @@ $(document).ready(function(){
   $("#networkSubmitBtn").click(function(e) {
     debug = <?php echo ($CFG->debug) ? "true" : "false";?>;
     data = {};
-    data.action = "update_network";
-    data.dhcp = ($('#dhcpCheck').is(':checked')) ? true : false;
-    if ($('#ipInput').val()) {
-      data.ip = $('#ipInput').val();
+    if (debug) {
+      data.action="test";
+    } else {
+      data.action = "update_network";
+      data.dhcp = ($('#dhcpCheck').is(':checked')) ? true : false;
+      if ($('#ipInput').val()) {
+        data.ip = $('#ipInput').val();
+      }
     }
 
-    console.log(data);
     $.get("php/action.php", data).done(function(data, e) {
-      console.log(/badIP/.test(data));
-      if ('/badIP/'.test(data)) {
-        sweet_alert('/php/check.php?get')
+      if (data == "badIp") {
         $('#ipInputError').removeClass('d-none');
       } else {
+        sweet_alert('/php/check.php?get')
         $('#ipInputError').addClass('d-none');
       }
     });
   });
 });
-
 </script>

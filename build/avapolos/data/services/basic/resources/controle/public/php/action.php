@@ -1,10 +1,4 @@
 <?php
-session_start();
-
-if(!$_SESSION['login']){ //caso não esteja logado, redireciona para o login
-  header('Location: ../login.php');
-}
-
 require_once("../config.php");
 require_once("functions.php");
 
@@ -58,11 +52,14 @@ if (isset($_GET['action'])) {
       $ip = ($ip == "") ? "null" : $ip;
       $dhcp = filter_input(INPUT_GET, 'dhcp', FILTER_SANITIZE_SPECIAL_CHARS);
       if ($ip != "null") {
-        echo (exec("echo " . $ip . " | grep -Eo '^(([0-9]{1,3})\.){3}[0-9]{1,3}$'") != "") ?: "badIp";
-      }
-      $cmd = "echo 'update_network " . $dhcp . " " . $ip . "' > ../../service/pipe";
-      system($cmd, $retVal);
-      echo $retVal;
+				if (exec("echo " . $ip . " | grep -Eo '^(([0-9]{1,3})\.){3}[0-9]{1,3}$'") == "") {
+					echo "badIp";
+					die();
+				}
+			}
+			$cmd = "echo 'update_network " . $dhcp . " " . $ip . "' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
 			break;
 
 		case 'access_mode_name':

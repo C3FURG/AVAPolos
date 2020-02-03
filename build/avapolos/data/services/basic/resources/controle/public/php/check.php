@@ -1,11 +1,4 @@
 <?php
-
-session_start();
-
-if(!$_SESSION['login']){ //caso não esteja logado, redireciona para o login
-	header('Location: ../login.php');
-}
-
 require_once("../config.php");
 
 if ($CFG->debug) {
