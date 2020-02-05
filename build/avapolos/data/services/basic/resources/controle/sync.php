@@ -31,13 +31,13 @@ if ($dirArray == FALSE) {
 			<input type="checkbox" id="moodleCheck" value="moodle">
 			<label for="moodle">Moodle</label>
 			<br>
-			<button id="backupConfirmBtn" type="button" class='bg-dark btn btn-primary'>Executar Backup</button>
+			<button id="backupConfirmBtn" type="button" class='bg-dark btn btn-primary'>Executar Sincronização</button>
 		</div>
 
 		<div class="col-sm">
 			<form>
 			  <div class="form-group">
-					<label for="fileInput">Upload do arquivo de backup</label>
+					<label for="fileInput">Upload do arquivo de sincronização</label>
 			    <input type="file" class="form-control-file" name="Filesbackup" id="fileupload" multiple data-url="php/backup.php">
 			  </div>
 			</form>
@@ -47,7 +47,32 @@ if ($dirArray == FALSE) {
 </div>
 
 <div class="container-fluid well">
-  <div class="cronjobselector">
+  <div>
+    <h6 style='color: rgb(33, 37, 41);'><b>Sincronização Programado</b></h6>
+    <div class='col-md-3'>
+      <div class='row'>
+        <div class='col-lg-6'>
+          <div class='form-group'>
+            <label class='radio'>
+              <input type="radio" class='click-back-prog' name="back-programado" value='habilitado' checked> Habilitado
+            </label>
+          </div>
+        </div>
+        <div class='col-lg-6'>
+          <div class='form-group'>
+            <label class='radio'>
+              <input type="radio" class='click-back-prog' name="back-programado" value='desabilitado' > Desabilitado
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+  </div>
+
+  <div class="cronjobselector" id='cron-job-backup'>
   <fieldset id="cronjob_expression_picker" class="cron-manual-selector">
       <!-- timeAndDates html copyright and copied from easycron html manual picker -->
       <div class="timesAndDates table-responsive" style="">
@@ -55,10 +80,10 @@ if ($dirArray == FALSE) {
               <thead style="border-top: none !important;">
                   <tr class="maintitle">
                       <th>Hora
-                        <span class="questionTip" title="Hora em que o backup será realizado, pode selecionar vários horários, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span>
+                        <span class="questionTip" title="Hora em que o sincronização será realizado, pode selecionar vários horários, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span>
                       </th>
-                      <th>Dia do Mês <span class="questionTip" title="Dia do mês em que o backup será realizado, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span></th>
-                      <th>Dia da Semana <span class="questionTip" title="Dia da semana em que o backup será realizado, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span></th>
+                      <th>Dia do Mês <span class="questionTip" title="Dia do mês em que o sincronização será realizada, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span></th>
+                      <th>Dia da Semana <span class="questionTip" title="Dia da semana em que o sincronização será realizada, segure a tecla CTRL para selecionar mais de um ou clique e arraste com o mouse"><i class="fas fa-question-circle" style="color: rgb(153, 153, 153);"></i></span></th>
                   </tr>
               </thead>
               <tbody>
@@ -306,6 +331,9 @@ if ($dirArray == FALSE) {
       </div>
   </fieldset>
   </div>
+  <div class='col-md-3'>
+    <button class='btn btn-success'>Salvar</button>
+  </div>
 </div>
 
 <table class="table">
@@ -367,6 +395,14 @@ if ($dirArray == FALSE) {
 <script type="text/javascript">
 
   $(document).ready(function(){
+
+    $('.click-back-prog').on('click', function(){
+      if($(this).val() == 'habilitado'){
+        $('#cron-job-backup').show(500);
+      }else{
+        $('#cron-job-backup').hide(500);
+      }
+    })
 
 		debug=<?php if ($debug) { echo "true;"; } else echo "false;";?>
 
