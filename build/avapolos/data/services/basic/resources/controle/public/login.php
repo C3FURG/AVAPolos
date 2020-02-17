@@ -5,15 +5,19 @@
         session_destroy();
     }
 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    require_once("config.php");
+
+    if ($CFG->debug) {
+      ini_set('display_errors', 1);
+      ini_set('display_startup_errors', 1);
+      error_reporting(E_ALL);
+    }
 
     require_once("header.php");
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitLogin']) && $_POST['submitLogin'] != ''){
-        $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+        $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
 
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = md5(filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS));

@@ -1,19 +1,18 @@
 <?php
-require_once("php/config.php");
+require_once("config.php");
 
-if ($debug) {
+if ($CFG->debug) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 }
 
+$showFiles = true;
 $dirArray=(@scandir("backups/"));
+$dirArray = array_diff($dirArray, [".", "..", "notas.txt"]);
+// var_dump($dirArray);
 if ($dirArray == FALSE) {
-  echo "
-  <div class='alert alert-danger' role='alert'>
-    O diretório de backups não foi encontrado!
-  </div>";
-  die();
+	$showFiles = false;
 }
 ?>
 
@@ -54,22 +53,22 @@ if ($dirArray == FALSE) {
         <div class='col-lg-6'>
           <div class='form-group'>
             <label class='radio'>
-              <input type="radio" class='click-back-prog' name="back-programado" value='habilitado' checked> Habilitado
+              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='habilitado' checked> Habilitado
             </label>
           </div>
         </div>
         <div class='col-lg-6'>
           <div class='form-group'>
             <label class='radio'>
-              <input type="radio" class='click-back-prog' name="back-programado" value='desabilitado' > Desabilitado
+              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='desabilitado' > Desabilitado
             </label>
           </div>
         </div>
       </div>
     </div>
-    
-    
-    
+
+
+
   </div>
 
   <div class="cronjobselector" id='cron-job-backup'>
@@ -87,7 +86,7 @@ if ($dirArray == FALSE) {
                   </tr>
               </thead>
               <tbody>
-                  <tr class="mainbody">                    
+                  <tr class="mainbody">
                       <td valign="top"  style='width: 250px'>
 
                           <ul>
@@ -172,7 +171,7 @@ if ($dirArray == FALSE) {
                                             </option>
                                             <option value="23">
                                                 23
-                                            </option>                                    
+                                            </option>
                                         </select>
                                     </td>
                                   </tr>
@@ -210,7 +209,7 @@ if ($dirArray == FALSE) {
                                             <option value="7">
                                                 7
                                             </option>
-                                            
+
                                           <option value="8">
                                               8
                                           </option>
@@ -232,7 +231,7 @@ if ($dirArray == FALSE) {
                                             <option value="14">
                                                 14
                                             </option>
-                                        
+
                                           <option value="15">
                                               15
                                           </option>
@@ -254,7 +253,7 @@ if ($dirArray == FALSE) {
                                           <option value="21">
                                               21
                                           </option>
-                                          
+
                                         <option value="22">
                                             22
                                         </option>
@@ -287,13 +286,13 @@ if ($dirArray == FALSE) {
                                           </option>
                                         </select>
 
-                                        
-                                  
+
+
                                       </td>
                                   </tr>
                               </tbody>
                           </table>
-                      </td>                    
+                      </td>
                       <td valign="top">
                           <ul>
                               <li><label class="radio"><input checked="checked" data-ena="0" data-mode="0" data-name="weekdays[]" name="all_weekdays" type="radio" value="1">
@@ -321,7 +320,7 @@ if ($dirArray == FALSE) {
                           </table>
                       </td>
                   </tr>
-                  
+
               </tbody>
           </table>
       </div>
@@ -336,6 +335,7 @@ if ($dirArray == FALSE) {
   </div>
 </div>
 
+<?php if ($showFiles): ?>
 <table class="table">
   <thead>
     <tr>
@@ -376,17 +376,7 @@ if ($dirArray == FALSE) {
 
   </tbody>
 </table>
-
-<style media="screen">
-.well {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-}
-</style>
+<?php endif; ?>
 
 <script src="vendor/jquery.ui.widget.js" type="text/javascript"></script>
 <script src="vendor/jquery.iframe-transport.js" type="text/javascript"></script>
@@ -397,6 +387,7 @@ if ($dirArray == FALSE) {
   $(document).ready(function(){
 
     $('.click-back-prog').on('click', function(){
+			alert("oi");
       if($(this).val() == 'habilitado'){
         $('#cron-job-backup').show(500);
       }else{
@@ -404,7 +395,15 @@ if ($dirArray == FALSE) {
       }
     })
 
-		debug=<?php if ($debug) { echo "true;"; } else echo "false;";?>
+		$('#enable-programmable').on('click', function() {
+			alert('o');
+			$('#cron-job-backup').attr("hidden", false)
+		});
+		$('#disable-programmable').on('click', function() {
+			$('#cron-job-backup').attr("hidden", true)
+		});
+
+		debug=<?php if ($CFG->debug) { echo "true;"; } else echo "false;";?>
 
     $("#backupConfirmBtn").click(function(){
       dataObj = {}

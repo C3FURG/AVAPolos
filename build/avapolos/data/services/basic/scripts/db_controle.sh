@@ -10,8 +10,6 @@ docker-compose up -d db_controle
 
 waitForHealthy db_controle
 
-
-
 execSQL db_controle avapolos avapolos "
   ALTER USER avapolos WITH PASSWORD 'bd10b9a2e191deafe6af';
 "
