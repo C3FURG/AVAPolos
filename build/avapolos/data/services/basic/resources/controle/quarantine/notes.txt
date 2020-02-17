@@ -1,2 +1,0 @@
-Files on quarantine go here.
-Don't remove this folder!
