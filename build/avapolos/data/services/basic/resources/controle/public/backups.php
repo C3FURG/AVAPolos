@@ -45,22 +45,22 @@ if ($dirArray == FALSE) {
 	</div>
 </div>
 
-<div class="container-fluid well">
+<div class="container-fluid well" hidden>
   <div>
-    <h6 style='color: rgb(33, 37, 41);'><b>Backup Programado</b></h6>
+    <p><b>Backup Programado</b></p>
     <div class='col-md-3'>
       <div class='row'>
         <div class='col-lg-6'>
           <div class='form-group'>
             <label class='radio'>
-              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='habilitado' checked> Habilitado
+              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='habilitado' > Habilitado
             </label>
           </div>
         </div>
         <div class='col-lg-6'>
           <div class='form-group'>
             <label class='radio'>
-              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='desabilitado' > Desabilitado
+              <input type="radio" name="radio-programmable" class='click-back-prog' name="back-programado" value='desabilitado' checked> Desabilitado
             </label>
           </div>
         </div>
@@ -331,7 +331,7 @@ if ($dirArray == FALSE) {
   </fieldset>
   </div>
   <div class='col-md-3'>
-    <button class='btn btn-success'>Salvar</button>
+    <button id="" type="button" class='bg-dark btn btn-primary'>Salvar</button>
   </div>
 </div>
 
@@ -376,6 +376,10 @@ if ($dirArray == FALSE) {
 
   </tbody>
 </table>
+<?php else: ?>
+<div class="alert alert-warning">
+	Não há backups no momento.
+</div>
 <?php endif; ?>
 
 <script src="vendor/jquery.ui.widget.js" type="text/javascript"></script>
@@ -386,22 +390,15 @@ if ($dirArray == FALSE) {
 
   $(document).ready(function(){
 
+		$('#cron-job-backup').hide(0);
+
     $('.click-back-prog').on('click', function(){
-			alert("oi");
       if($(this).val() == 'habilitado'){
         $('#cron-job-backup').show(500);
       }else{
         $('#cron-job-backup').hide(500);
       }
     })
-
-		$('#enable-programmable').on('click', function() {
-			alert('o');
-			$('#cron-job-backup').attr("hidden", false)
-		});
-		$('#disable-programmable').on('click', function() {
-			$('#cron-job-backup').attr("hidden", true)
-		});
 
 		debug=<?php if ($CFG->debug) { echo "true;"; } else echo "false;";?>
 

@@ -1,6 +1,5 @@
 <?php
-
-require_once("../config.php")
+require_once("../config.php");
 
 if ($CFG->debug) {
 	ini_set('display_errors', 1);
