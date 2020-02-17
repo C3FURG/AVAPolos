@@ -8,33 +8,32 @@
 
   <title>AVAPolos - Controle</title>
 
-  <!-- Xterm.js -->
-  <link href="vendor/xterm.min.css" rel="stylesheet">
-  <script src="vendor/xterm.min.js"></script>
 
   <!-- jQuery -->
-  <script src="vendor/jquery-3.3.1.min.js"></script>
-
-  <!-- Template stuff -->
-  <link href="css/controle.min.css" rel="stylesheet">
-  <!-- <script src="vendor/sb-admin.min.js"></script> -->
-
-  <!-- Font -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <script src="vendor/jquery/jquery.min.js" type="text/javascript"></script>
 
   <!-- Popper -->
-  <script src="vendor/popper.min.js"></script>
-
+  <script src="vendor/popper/popper.min.js" type="text/javascript"></script>
+  
   <!-- BS4 -->
-  <link href="vendor/bootstrap.min.css" rel="stylesheet">
-  <script src="vendor/bootstrap.min.js"></script>
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+
+  <!-- Template stuff -->
+  <link href="css/controle.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Font -->
+  <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet" type="text/css">
+
+
 
   <!-- SweetAlert -->
-  <script src='sweetalert2.all.min.js'></script>
+  <script src='vendor/sweetalert/sweetalert2.all.min.js'></script>
 
   <!-- Controle -->
-  <script src='controle.js'></script>
+  <script src='js/controle.js'></script>
 
   <!-- jQuery Mask -->
-  <script src="vendor/jquery.mask.min.js"></script>
+  <script src="vendor/jquery-mask/jquery.mask.min.js"></script>
 </head>

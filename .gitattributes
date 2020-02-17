@@ -1,0 +1,5 @@
+#Fixing PHP detected as Hacklang
+*.php linguist-language=PHP
+
+#Marking vendored code.
+build/avapolos/data/services/basic/resources/controle/public/vendor/* linguist-vendored
