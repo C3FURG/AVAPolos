@@ -15,7 +15,6 @@
   <!-- jQuery -->
   <script src="vendor/jquery-3.3.1.min.js"></script>
 
-
   <!-- Template stuff -->
   <link href="css/controle.min.css" rel="stylesheet">
   <!-- <script src="vendor/sb-admin.min.js"></script> -->

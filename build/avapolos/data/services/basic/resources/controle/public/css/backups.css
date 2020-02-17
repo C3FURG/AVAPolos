@@ -1,0 +1,31 @@
+.custom-container {
+  display: block;
+  margin: 20px;
+  padding: 20px;
+}
+
+.cronjobselector {
+}
+
+.cronjobselector .timesAndDates ul li,
+.cronjobselector .timesAndDates ul {
+  list-style: none;
+  margin: 0;
+  padding: 0px 10px;
+}
+
+.cronjobselector select:disabled {
+  background: #ccc;
+}
+
+.cronjobselector select{
+	width: 40px;
+}
+
+.cronjobselector select option{
+	font-size: 14pt;
+}
+
+#sortableTableNaN td{
+	border: none !important;
+}
