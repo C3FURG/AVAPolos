@@ -1,22 +1,19 @@
 <?php
-    require_once("config.php");
     session_start();
 
     if(isset($_GET['pg']) && $_GET['pg'] == 'logout'){
         session_destroy();
     }
 
-    if ($CFG->debug) {
-      ini_set('display_errors', 1);
-      ini_set('display_startup_errors', 1);
-      error_reporting(E_ALL);
-    }
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
     require_once("header.php");
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitLogin']) && $_POST['submitLogin'] != ''){
-        $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
+        $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
 
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = md5(filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS));
@@ -63,6 +60,7 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header">
                                         <img class='mx-auto d-block' src='img/logoAVA2.png' style='height: 60px;'>
+                                        <h3 class="text-center font-weight-light my-4">Login</h3>
                                     </div>
                                     <div class="card-body">
                                         <form action='login.php' method='POST' enctype="multipart/form-data">
@@ -87,7 +85,7 @@
                                                 } //end error msg
                                             ?>
                                             <div class="form-group d-flex align-items-center mt-4 mb-0">
-                                                <button type='submit' name='submitLogin' value='submitLogin' class="bg-dark btn btn-success d-block mx-auto">Entrar</button>
+                                                <button type='submit' name='submitLogin' value='submitLogin' class="btn btn-success d-block mx-auto">Entrar</button>
                                             </div>
                                         </form>
                                     </div>
