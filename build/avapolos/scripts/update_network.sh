@@ -66,6 +66,8 @@ for line in $(cat /etc/network/interfaces); do
   fi
 done
 
+
+
 ifconfig "$interface" down | log debug installer
 ip addr flush dev "$interface" | log debug installer
 service networking restart | log debug installer

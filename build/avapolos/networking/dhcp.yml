@@ -3,11 +3,7 @@ version: '2'
 services:
   networking:
     image: avapolos/dnsmasq
-    container_name: dnsmasq
-    # ports:
-    #   - "53:53/udp" #DNS
-    #   - "5380:8080" #WEBUI
-    #   - "67:67/udp" #Servidor DHCP
+    container_name: dnsmasq-dhcp
     volumes:
       - /etc/hosts:/etc/hosts:ro
       - ./dnsmasq.conf:/etc/dnsmasq.conf

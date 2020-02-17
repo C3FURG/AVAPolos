@@ -26,11 +26,13 @@ end() {
 }
 
 update_moodle_hosts() {
-  docker stop moodle > /dev/null
-  docker start moodle > /dev/null
-  ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
-  echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
-  docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
+  if [[ $(is_enabled moodle.yml) -eq 0 ]]; then
+    docker stop moodle > /dev/null
+    docker start moodle > /dev/null
+    ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+    echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
+    docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
+  fi
 }
 
 trap end EXIT
