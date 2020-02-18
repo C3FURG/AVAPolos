@@ -1,10 +1,4 @@
-<html>
-
 <?php
-
-// @error_reporting(E_ALL | E_STRICT);
-// @ini_set('display_errors', '1');
-
 if ((!file_exists('name') && !file_exists('ip')) || (file_exists('name'))) {
 	$access_mode="name";
 } else {
@@ -30,12 +24,12 @@ switch ($access_mode) {
 		die("Error");
 		break;
 }
-
 ?>
 
+<html>
 	<head>
 		<title></title>
-		 <link rel="stylesheet" type="text/css" href="style.css">
+		 <link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 
 	<body>

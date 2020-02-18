@@ -3,3 +3,4 @@
 
 #Marking vendored code.
 build/avapolos/data/services/basic/resources/controle/public/vendor/* linguist-vendored
+build/avapolos/data/services/basic/resources/downloads/public/vendor/* linguist-vendored
