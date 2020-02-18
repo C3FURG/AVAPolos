@@ -1,14 +1,13 @@
 <?php
+require_once("../config.php");
+require_once("functions.php");
 
-require_once("config.php");
-
-if ($debug) {
+if ($CFG->debug) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 }
 
-require_once("functions.php");
 
 if (isset($_GET['action'])) {
 	#echo $_GET['action'];
@@ -20,6 +19,16 @@ if (isset($_GET['action'])) {
 
 		case 'educapes_download_start':
 			system("echo 'educapes_download_start' > ../../service/pipe", $retVal);
+			echo $retVal;
+			break;
+
+		case 'test':
+			system("echo 'test' > ../../service/pipe", $retVal);
+			echo $retVal;
+			break;
+
+		case 'export_all':
+			system("echo 'export_all' > ../../service/pipe", $retVal);
 			echo $retVal;
 			break;
 
@@ -35,6 +44,21 @@ if (isset($_GET['action'])) {
 
 		case 'access_mode_ip':
 			system("echo 'access_mode ip' > ../../service/pipe", $retVal);
+			echo $retVal;
+			break;
+
+		case 'update_network':
+      $ip = filter_input(INPUT_GET, 'ip', FILTER_SANITIZE_SPECIAL_CHARS);
+      $ip = ($ip == "") ? "null" : $ip;
+      $dhcp = filter_input(INPUT_GET, 'dhcp', FILTER_SANITIZE_SPECIAL_CHARS);
+      if ($ip != "null") {
+				if (exec("echo " . $ip . " | grep -Eo '^(([0-9]{1,3})\.){3}[0-9]{1,3}$'") == "") {
+					echo "badIp";
+					die();
+				}
+			}
+			$cmd = "echo 'update_network " . $dhcp . " " . $ip . "' > ../../service/pipe";
+			system($cmd, $retVal);
 			echo $retVal;
 			break;
 

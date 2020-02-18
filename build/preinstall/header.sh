@@ -45,6 +45,8 @@ else
 fi
 
 export INSTALLER_FILENAME="avapolos_$INSTALLER_VERSION"
+export CLONE_INSTALLER_FILENAME='avapolos_'$INSTALLER_VERSION'_POLO'
+export CLONE_INSTALLER_PATH="/opt/avapolos_clone/"
 
 #Logger function.
 log() { #$1-> mode[debug,info,error,warn] #$2-> source[examples: console,service,cli], reads from STDIN
@@ -424,9 +426,18 @@ testURL() { #$1-> URL
 }
 
 #Checks if a docker network exists, if not, adds it.
-add_docker_network() { #$1-> Network name}
+add_docker_network() { #$1-> Network name
   if [[ "$(docker network inspect "$1" > /dev/null 2>&1 || true)" ]]; then
     docker network create "$1"
+  fi
+}
+
+#Checks if a service is enabled.
+is_enabled() { #$1-> service.yml
+  if ! [[ -z $(cat $SERVICES_PATH/enabled_services | grep -o $1) ]]; then
+    echo 0
+  else
+    echo 1
   fi
 }
 
@@ -453,3 +464,4 @@ export -f show_var
 export -f waitForHealthy
 export -f testURL
 export -f add_docker_network
+export -f is_enabled

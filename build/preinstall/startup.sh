@@ -68,6 +68,7 @@ echo -e "avapolos\navapolos" | sudo passwd $AVAPOLOS_USER
 mkdir -p $ETC_PATH
 mkdir -p $LOG_PATH
 mkdir -p $SERVICE_PATH
+mkdir -p $CLONE_INSTALLER_PATH
 
 cp avapolos.sh $ETC_PATH
 cp header.sh $ETC_PATH

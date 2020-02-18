@@ -1,6 +1,26 @@
 version: '2.1'
 
 services:
+  db_controle:
+    container_name: db_controle
+    image: avapolos/postgres:bdr
+    environment:
+     - POSTGRES_USER=avapolos
+     - POSTGRES_PASSWORD=password
+     - POSTGRES_DB=avapolos
+     - UID=${PUID}
+    volumes:
+     - ${BASIC_DATA_DIR}/db_controle:/var/lib/postgresql/data
+    networks:
+      avapolos:
+    stop_signal: SIGINT
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moodle"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   controle:
     container_name: controle
     image: avapolos/webserver:lite

@@ -104,7 +104,7 @@ startSync(){ #$1 = versao da importacao sendo feita
 
 waitSyncEnd(){ #$1 = nome do container do banco que precisa esperar as operações serem enviadas para o outro nodo;
    echo " ==================== Aguardando sincronização | STATUS = [EM ANDAMENTO]"
-   execSQL $1 "select bdr.wait_slot_confirm_lsn(NULL, NULL)"
+   execSqlOnMoodleDB $1 "select bdr.wait_slot_confirm_lsn(NULL, NULL)"
 }
 
 waitSyncEndMaster(){ #wait for DBMaster to be synchronized with DBSync (to receive all operations DBSync has to send)
@@ -253,22 +253,22 @@ escapePath(){
 
 bdrPauseSync(){ #$1 = container name
   echo " =====> PAUSANDO A SINCRONIZAÇÃO. Banco $1 não irá receber operações de sincronização..."
-  execSQL $1 "select bdr.bdr_apply_pause();"
-  ret=$(execSQL $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
+  execSqlOnMoodleDB $1 "select bdr.bdr_apply_pause();"
+  ret=$(execSqlOnMoodleDB $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
   while [ "$ret" = "f" ]; do
      sleep 3;
-     ret=$(execSQL $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
+     ret=$(execSqlOnMoodleDB $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
   done
   echo " -----------> pausada."
 }
 
 bdrResumeSync(){
    echo " =====> Reestabelecendo a sincronização. Banco $1 voltará a receber operações de sincronização..."
-   execSQL $1 "select bdr.bdr_apply_resume();"
-   ret=$(execSQL $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
+   execSqlOnMoodleDB $1 "select bdr.bdr_apply_resume();"
+   ret=$(execSqlOnMoodleDB $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
    while [ "$ret" = "t" ]; do
       sleep 3;
-      ret=$(execSQL $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
+      ret=$(execSqlOnMoodleDB $1 'select bdr.bdr_apply_is_paused();' | sed -n 3p | grep f -o)
    done
    echo " -----------> reestabelecida."
 }
@@ -303,7 +303,11 @@ execDockerCommand(){ # $1=container  $2=command
    eval "docker exec $1 $2"
 }
 
-execSQL(){ # $1 = containerName $2 SQL statement
+execSQL(){ # $1 = containerName # $1 = user $3 = dbname # $4 SQL statement
+   execDockerCommand $1 "psql -U "$2" -d "$3" -c \"$4\""
+}
+
+execSqlOnMoodleDB(){ # $1 = containerName # $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
@@ -312,11 +316,11 @@ execSQLMoodle(){ # $1 = containerName $2 SQL statement
 }
 
 execSQLMaster(){ # $1 SQL statement
-   execSQL $containerDBMasterName "$1"
+   execSqlOnMoodleDB $containerDBMasterName "$1"
 }
 
 execSQLSync(){ # $1 SQL statement
-   execSql $containerDBSyncName "$1"
+   execSqlOnMoodleDB $containerDBSyncName "$1"
 }
 
 treatRet(){
@@ -378,6 +382,7 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
 }
 
 export -f execSQL
+export -f execSqlOnMoodleDB
 export -f execSQLMoodle
 export -f execDockerCommand
 export -f connectDB

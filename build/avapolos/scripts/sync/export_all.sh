@@ -79,18 +79,21 @@ mkdir preinstall
 rsync -av $INSTALLER_DIR_PATH/* preinstall --exclude=AVAPolos.tar.gz | log debug sync
 cp -rf AVAPolos.tar.gz preinstall
 cd preinstall
-makeself --target $INSTALLER_DIR_PATH --nooverwrite --needroot . AVAPolos_instalador_POLO "Instalador da solução AVAPolos" "./startup.sh" 2>&1 | log debug sync
 
-cp -rf AVAPolos_instalador_POLO /opt
-chmod 755 /opt/AVAPolos_instalador_POLO
+path="$CLONE_INSTALLER_PATH/$CLONE_INSTALLER_FILENAME"
+
+makeself --target $INSTALLER_DIR_PATH --nooverwrite --needroot . $CLONE_INSTALLER_FILENAME "Instalador da solução AVAPolos" "./startup.sh" 2>&1 | log debug sync
+
+cp -rf $CLONE_INSTALLER_PATH $path
+chmod 755 $path
 sudo rm -r $TMP_PATH
 
 end=$(date +%s)
 runtime=$((end-start))
 
 echo "---- Clonagem concluída ----" | log info sync
-echo "Instalador disponível: /opt/AVAPolos_instalador_POLO" | log info sync
-echo "Tamanho: $(du -h /opt/AVAPolos_instalador_POLO | awk {'print $1'})" | log info sync
+echo "Instalador disponível: $path" | log info sync
+echo "Tamanho: $(du -h $path | awk {'print $1'})" | log info sync
 echo "Em "$runtime"s." | log info sync
 
 echo "Reiniciando serviços." | log info sync

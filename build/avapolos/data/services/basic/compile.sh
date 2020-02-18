@@ -8,6 +8,7 @@ docker-compose down
 
 cd scripts
 
+run db_controle.sh
 run controle.sh
 run downloads.sh
 

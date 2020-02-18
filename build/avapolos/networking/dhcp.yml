@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  networking:
+    image: avapolos/dnsmasq
+    container_name: dnsmasq-dhcp
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./dnsmasq.conf:/etc/dnsmasq.conf
+    environment:
+      - HTTP_USER=admin
+      - HTTP_PASS=admin
+    restart: always
+    network_mode: host
+    cap_add:
+      - NET_ADMIN

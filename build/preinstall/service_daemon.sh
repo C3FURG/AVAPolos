@@ -26,28 +26,34 @@ end() {
 }
 
 update_moodle_hosts() {
-  docker stop moodle > /dev/null
-  docker start moodle > /dev/null
-  ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
-  echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
-  docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
+  if [[ $(is_enabled moodle.yml) -eq 0 ]]; then
+    docker stop moodle > /dev/null
+    docker start moodle > /dev/null
+    ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+    echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
+    docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
+  fi
 }
 
 trap end EXIT
 
 educapes_download_stop() {
+  touch /opt/educapes/no_check
   if [ -z "$educapes_pid" ]; then
     echo "No educapes setup PID specified"
-  fi
-    touch /opt/educapes/no_check
+  else
     echo "Enviando SIGTERM para o processo $educapes_pid" | log debug
     kill -s SIGTERM $educapes_pid
+  fi
 }
 
 educapes_download_start() {
-    echo "Rodando check_educapes" | log debug
-    rm -rf "$EDUCAPES_PATH/no_check"
-    check_services
+  if [[ -f /opt/educapes/no_check ]]; then
+    rm /opt/educapes/no_check
+  fi
+  echo "Rodando check_educapes" | log debug
+  rm -rf "$EDUCAPES_PATH/no_check"
+  check_services
 }
 
 check_services() {
@@ -68,58 +74,65 @@ readFromPipe() {
   args=()
     if read line <$PIPE; then
       read -a args <<< "$line"
+      echo "Argumentos recebidos: ${args[@]:1}"
       case $line in
         check_services )
         check_services
         ;;
+        test )
+          sleep 5
+          touch $SERVICE_PATH/done
+        ;;
+        export_all )
+          export_all
+          touch $SERVICE_PATH/done
+        ;;
         educapes_download_stop )
-          if ! [ -z "${args[1]}" ]; then
-            educapes_download_stop
-            touch $SERVICE_PATH/done
-          else
-            echo "Comando inválido, argumentos insuficientes." | log error
-          fi
+          educapes_download_stop
+          touch $SERVICE_PATH/done
         ;;
         educapes_download_start )
-          if ! [ -z "${args[1]}" ]; then
-            educapes_download_start
-            touch $SERVICE_PATH/done
-          else
-            echo "Comando inválido, argumentos insuficientes." | log error
-          fi
+          educapes_download_start
+          touch $SERVICE_PATH/done
         ;;
-        start )
-          start
+        restart )
+          restart
           touch $SERVICE_PATH/done
         ;;
         stop )
-          touch $SERVICE_PATH/done
-          sleep 4
           stop
         ;;
         access_mode* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/access_mode.sh" "${args[1]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/access_mode.sh" "${args[@]:1}"
+            touch $SERVICE_PATH/done
+          else
+            echo "Comando inválido, argumentos insuficientes." | log error
+          fi
+        ;;
+        update_network* )
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/update_network.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
         backup* )
-          run "$SCRIPTS_PATH/backup.sh" "${args[@]}"
+          run "$SCRIPTS_PATH/backup.sh" "${args[@]:1}"
           touch $SERVICE_PATH/done
         ;;
         restore* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$SCRIPTS_PATH/restore.sh" "${args[1]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SCRIPTS_PATH/restore.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
         setup_dns* )
-          if ! [ -z "${args[1]}" ]; then
-            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[1]}" "${args[2]}" "${args[3]}"
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
             echo "Comando inválido, argumentos insuficientes." | log error
@@ -134,6 +147,7 @@ readFromPipe() {
 
 main() {
   readFromPipe
+  sleep 1
 }
 
 if [[ ! -p $PIPE ]]; then
@@ -144,8 +158,8 @@ fi
 echo "Daemon AVAPolos iniciado." | log info
 echo "Rodando check incial automático." | log debug
 
-check_services
-update_moodle_hosts
+check_services &
+update_moodle_hosts &
 
 while true; do
   main

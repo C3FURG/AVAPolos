@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  networking:
+    image: avapolos/dnsmasq
+    container_name: dnsmasq-dns
+    ports:
+      - "53:53/udp"
+    networks:
+      avapolos:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=manutencao"
+      - "traefik.frontend.rule=Host:dns.avapolos"
+      - "traefik.port=5380"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ../data/dns/dnsmasq.conf:/etc/dnsmasq.conf
+    environment:
+      - HTTP_USER=admin
+      - HTTP_PASS=admin
+    restart: always
+    cap_add:
+      - NET_ADMIN
+
+
+networks:
+  avapolos:
+    external: true
+  proxy:
+    external: true

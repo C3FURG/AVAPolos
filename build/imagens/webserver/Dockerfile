@@ -10,7 +10,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
 RUN echo "@php https://dl.bintray.com/php-alpine/v3.8/php-7.2" >> /etc/apk/repositories
 
 #Adicionando pacotes básicos
-RUN apk update && apk add apache2 openntpd tzdata ca-certificates shadow
+RUN apk update && apk add apache2 openntpd tzdata ca-certificates shadow file
 
 # Setup apache and php
 RUN apk --no-cache add \

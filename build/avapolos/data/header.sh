@@ -46,6 +46,9 @@ export PACK_DIR=$ROOT_DIR/pack
 export LOGFILE_PATH=$ROOT_DIR/data_compiler.log
 
 #Moodle variables
+export CONTROLE_PASSWORD="Admin@123"
+
+#Moodle variables
 export MOODLE_PASSWORD="Admin@123"
 export MOODLE_DIR=$SERVICES_DIR/moodle
 export MOODLE_DATA_DIR=$MOODLE_DIR/data
