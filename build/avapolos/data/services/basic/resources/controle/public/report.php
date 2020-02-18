@@ -37,13 +37,28 @@
   
   <button type="button" name="btn" id="submitBtn" class="btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
   <br><br>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link " href="#">Active</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+    </li>
+  </ul>
 </form>
 <?php
   $zip = new ZipArchive;
 
   //echo "logs_".date("d_m_Y")."_".date("H_i_s").".zip";
 
-  $filename = "./logs_generated/logs_".date("d_m_Y")."_".date("H_i_s").".zip";
+  $filename = "./log/logs_".date("d_m_Y")."_".date("H_i_s").".zip";
 
   $logFiles = scandir("/app/log/");
 
