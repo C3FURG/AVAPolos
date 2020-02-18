@@ -1,4 +1,4 @@
-instaladores/*.tar.gz
-instaladores/*.apk
-instaladores/*.tgz
-instaladores/*.zip
+public/instaladores/*.tar.gz
+public/instaladores/*.apk
+public/instaladores/*.tgz
+public/instaladores/*.zip

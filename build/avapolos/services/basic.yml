@@ -6,9 +6,6 @@ services:
     container_name: db_controle
     image: avapolos/postgres:bdr
     environment:
-     - POSTGRES_USER=avapolos
-     - POSTGRES_PASSWORD=password
-     - POSTGRES_DB=avapolos
      - UID=${PUID}
     volumes:
      - ${BASIC_DATA_DIR}/db_controle:/var/lib/postgresql/data

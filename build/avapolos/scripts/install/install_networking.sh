@@ -31,7 +31,7 @@ echo "Configurando rede." | log info installer
 
 rm -rf $NETWORKING_PATH/enable
 
-#Funcions used to get the default network configuration.
+#Functions used to get the default network configuration.
 getInterface() {
 
   blacklist="lo docker br veth tun"
@@ -146,12 +146,7 @@ getNameservers(){ #$1-> interface
   fi
 
 }
-getNetwork () { #$1-> ip
-  if ! [ -z "$1" ]; then
-    network="$(echo $1 | grep -Eo '([0-9]{1,3}\.){3}')0"
-    echo $network
-  fi
-}
+
 getNetmask() { #$1-> interface
   if ! [ -z "$1" ]; then
     netmask=$(ifconfig $1 | grep netmask | awk '{print $4}')
@@ -199,10 +194,6 @@ generateHostsConfig() { # $1-> ip(without mask)
   echo -e "#AVAPolos config end"
 }
 generateNetworkConfig() { # $1-> interface $2-> ip/mask $3-> gateway $4-> dns1 $5-> dns2
-  if [ -z "$1" ]; then
-    echo "Nenhum ip foi passado para o generateNetworkConfig" | log error installer
-    exit 1
-  fi
   echo -e "#AVAPolos config start"
   echo -e "auto $1"
   echo -e "iface $1 inet static"

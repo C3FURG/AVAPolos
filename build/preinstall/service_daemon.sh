@@ -118,6 +118,14 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
+        update_sync_remote_ip* )
+          if ! [ -z "${args[@]:1}" ]; then
+            run "$SYNC_PATH/setRemoteAddr.sh" "${args[@]:1}"
+            touch $SERVICE_PATH/done
+          else
+            echo "Comando inválido, argumentos insuficientes." | log error
+          fi
+        ;;
         backup* )
           run "$SCRIPTS_PATH/backup.sh" "${args[@]:1}"
           touch $SERVICE_PATH/done

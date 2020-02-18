@@ -5,15 +5,19 @@
         session_destroy();
     }
 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    require_once('config.php');
 
-    require_once("header.php");
+    if ($CFG->debug) {
+      ini_set('display_errors', 1);
+      ini_set('display_startup_errors', 1);
+      error_reporting(E_ALL);
+    }
+
+    require_once('header.php');
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitRegister']) && $_POST['submitRegister'] != ''){
-        $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+        require_once('php/db.php');
 
         //verifica se já não cadastrou o email do desenvolvedor
         $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1");
@@ -61,9 +65,9 @@
                 //header('Location: http://www.google.com');
                 exit();
             }
-        }   
+        }
 
-        
+
     }
 ?>
 <!DOCTYPE html>
@@ -111,12 +115,12 @@
                                                     unset($_SESSION['error_msg']);
                                                 } //end error msg
                                             ?>
-                                            
+
                                             <div class="form-group mt-4 mb-0">
                                                 <div class="col-md-5 d-block mx-auto">
-                                                    <button type='submit' name='submitRegister' value='submitRegister' class="btn btn-primary btn-block">Salvar Configurações</button>
+                                                    <button type='submit' name='submitRegister' value='submitRegister' class="bg-dark btn btn-primary btn-block">Salvar Configurações</button>
                                                 </div>
-                                                
+
                                             </div>
                                         </form>
                                     </div>

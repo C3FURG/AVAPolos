@@ -1,5 +1,6 @@
 <?php
-  $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+  require_once('config.php');
+  require_once('php/db.php');
 
   $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1 ");
 
@@ -19,7 +20,7 @@
       <input type="checkbox" name='email-dev'> <?php echo $emailDev; ?>
     </label>
     <small id="passwordHelp" class="form-text text-muted">Caso deseje enviar informações aos desenvolvedores da plataforma, marque essa opção</small>
-    
+
   </div>
   <div class="form-group mb-5">
     <label for="password"><b>Enviar reporte para instituição responsável</b></label>
@@ -29,12 +30,12 @@
     </label>
     <hr>
   </div>
-  
+
   <div class="form-group">
     <label for="password"><b>Adicionar comentário</b></label>
     <textarea class='form-control' rows="6" placeholder="Diga-nos detalhes do problema, se possível..."></textarea>
   </div>
-  
+
   <button type="button" name="btn" id="submitBtn" class="btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
   <br><br>
 </form>
@@ -51,7 +52,7 @@
 
   if($zip->open($filename, ZipArchive::CREATE) === TRUE){
     foreach ($logFiles as $key => $value) {
-      
+
 
       if(file_exists('/app/log/'.$value) && is_file('/app/log/'.$value)){
         //echo '/app/log/'.$value;
@@ -59,9 +60,9 @@
           //echo ' - adicionado <br>';
         }else{
           //echo ' - erro <br>';
-        }  
+        }
       }
-      
+
     }
 
     $zip->close();
@@ -69,8 +70,8 @@
     //echo "erro";
   }
 
-  //echo var_dump(scandir("./"));  
+  //echo var_dump(scandir("./"));
 
 
-  
+
 ?>

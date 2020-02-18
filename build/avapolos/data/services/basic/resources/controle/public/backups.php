@@ -10,7 +10,6 @@ if ($CFG->debug) {
 $showFiles = true;
 $dirArray=(@scandir("backups/"));
 $dirArray = array_diff($dirArray, [".", "..", "notas.txt"]);
-// var_dump($dirArray);
 if ($dirArray == FALSE) {
 	$showFiles = false;
 }
@@ -382,9 +381,9 @@ if ($dirArray == FALSE) {
 </div>
 <?php endif; ?>
 
-<script src="vendor/jquery.ui.widget.js" type="text/javascript"></script>
-<script src="vendor/jquery.iframe-transport.js" type="text/javascript"></script>
-<script src="vendor/jquery.fileupload.js" type="text/javascript"></script>
+<script src="vendor/fileupload/js/vendor/jquery.ui.widget.js" type="text/javascript"></script>
+<script src="vendor/fileupload/js/jquery.iframe-transport.js" type="text/javascript"></script>
+<script src="vendor/fileupload/js/jquery.fileupload.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 

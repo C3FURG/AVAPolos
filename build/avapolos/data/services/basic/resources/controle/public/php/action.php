@@ -8,10 +8,14 @@ if ($CFG->debug) {
 	error_reporting(E_ALL);
 }
 
-
 if (isset($_GET['action'])) {
-	#echo $_GET['action'];
-	switch ($_GET['action']) {
+	$action = $_GET['action'];
+} elseif (isset($_POST['action'])) {
+	$action = $_POST['action'];
+}
+
+if (isset($action)) {
+	switch ($action) {
 		case 'educapes_download_stop':
 			system("echo 'educapes_download_stop' > ../../service/pipe", $retVal);
 			echo $retVal;
@@ -48,16 +52,25 @@ if (isset($_GET['action'])) {
 			break;
 
 		case 'update_network':
-      $ip = filter_input(INPUT_GET, 'ip', FILTER_SANITIZE_SPECIAL_CHARS);
-      $ip = ($ip == "") ? "null" : $ip;
-      $dhcp = filter_input(INPUT_GET, 'dhcp', FILTER_SANITIZE_SPECIAL_CHARS);
+      $ip = filter_input(INPUT_POST, 'ip', FILTER_SANITIZE_SPECIAL_CHARS);
+      $gw = filter_input(INPUT_POST, 'gw', FILTER_SANITIZE_SPECIAL_CHARS);
+      $mask = filter_input(INPUT_POST, 'mask', FILTER_SANITIZE_SPECIAL_CHARS);
+      $dns1 = filter_input(INPUT_POST, 'dns1', FILTER_SANITIZE_SPECIAL_CHARS);
+      $dns2 = filter_input(INPUT_POST, 'dns2', FILTER_SANITIZE_SPECIAL_CHARS);
       if ($ip != "null") {
 				if (exec("echo " . $ip . " | grep -Eo '^(([0-9]{1,3})\.){3}[0-9]{1,3}$'") == "") {
 					echo "badIp";
 					die();
 				}
 			}
-			$cmd = "echo 'update_network " . $dhcp . " " . $ip . "' > ../../service/pipe";
+			$cmd = "echo 'update_network " . $ip . " " . $gw . " " . $mask ." " . $dns1 ." " . $dns2 . "' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
+			break;
+
+		case 'update_sync_remote_ip':
+			$ip = filter_input(INPUT_POST, 'ip', FILTER_SANITIZE_SPECIAL_CHARS);
+			$cmd = "echo 'update_sync_remote_ip " . $ip . "' > ../../service/pipe";
 			system($cmd, $retVal);
 			echo $retVal;
 			break;

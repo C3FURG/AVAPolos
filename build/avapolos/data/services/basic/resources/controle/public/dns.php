@@ -128,7 +128,7 @@ $('#submit').click(function(){
     data.pass = $('#passwordInput').val()
   }
 
-  $.post("php/action.php?action=<?php if ($debug) { echo "test"; } else echo "setup_dns";?>", data);//.done(function( data )  { alert(data); });
+  $.post("php/action.php?action=<?php if ($CFG->debug) { echo "test"; } else echo "setup_dns";?>", data);//.done(function( data )  { alert(data); });
   $('#confirm-submit').modal('toggle');
 
   setTimeout(function () {
