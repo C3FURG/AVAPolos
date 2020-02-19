@@ -93,7 +93,7 @@ $(document).ready(function(){
         $('#errorAlert').removeClass('d-none');
       } else {
         $('#errorAlert').addClass('d-none');
-        sweet_alert('/php/check.php?get')
+        sweet_alert('/php/check.php')
       }
     });
   });

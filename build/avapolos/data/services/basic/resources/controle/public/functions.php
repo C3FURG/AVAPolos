@@ -40,34 +40,32 @@ if ($CFG->debug) {
   </div>
 </div>
 
-<style media="screen">
-.well {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-}
 </style>
 <script type="text/javascript">
-$(document).ready(function(){
+  $(document).ready(function(){
 
-  function run(string) {
-    sweet_alert('/php/check.php?get')
-    if (string == "stop") {
-      setTimeout(function () {
-        location.reload();
-      }, 20000);
+    debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
+
+    function run(string) {
+      data = {}
+      if (debug) {
+        data.action = "test";
+      } else {
+        data.action = string;
+        if (string == "stop") {
+          setTimeout(function () {
+            location.reload();
+          }, 20000);
+        }
+      }
+      $.post("php/action.php", data);
+      sweet_alert('/php/check.php')
     }
-    $.get( "php/action.php?action=<?php if ($debug) { echo 'test"'; } else echo '" + string'?>).done(function( data ) { $('#log').html(data); });
-  }
 
-  $(".painel_btn").click(function(e) {
-    //alert($(this).attr('id'));
-    run($(this).attr('id'));
-  })
+    $(".painel_btn").click(function(e) {
+      run($(this).attr('id'));
+    })
 
-});
+  });
 
 </script>

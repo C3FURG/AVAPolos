@@ -389,8 +389,9 @@ if ($dirArray == FALSE) {
 
   $(document).ready(function(){
 
-		$('#cron-job-backup').hide(0);
+		debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
 
+		$('#cron-job-backup').hide(0);
     $('.click-back-prog').on('click', function(){
       if($(this).val() == 'habilitado'){
         $('#cron-job-backup').show(500);
@@ -399,32 +400,45 @@ if ($dirArray == FALSE) {
       }
     })
 
-		debug=<?php if ($CFG->debug) { echo "true;"; } else echo "false;";?>
-
-    $("#backupConfirmBtn").click(function(){
-      dataObj = {}
+    $("#backupConfirmBtn").click(function() {
+			data = {};
 			if ($('#moodleCheck').is(':checked')) {
-				dataObj.service = $("#moodleCheck").val();
+				data.service = $("#moodleCheck").val();
 			}
-
-			sweet_alert('php/check.php?get')
 			if (debug) {
-				$.get("php/action.php?action=test");
+				data.action = "test";
+				$.post("php/action.php", data);
 			} else {
-				$.get("php/backup.php", dataObj);
+				$.post("php/backup.php", data);
 			}
+			sweet_alert('php/check.php');
     });
 
     $("#backupRestoreBtn").click(function(){
-			// sweet_alert('php/check.php?get')
-      $.get("php/backup.php", { restore: $(this).val() }).done(function( data ) { alert(data); });
+			data = {};
+			data.restore = $(this).val();
+			if (debug) {
+				data.action = "test";
+				$.post("php/action.php", data);
+			} else {
+				$.post("php/backup.php", data);
+			}
+			sweet_alert('php/check.php');
     });
 
     $("#backupDeleteBtn").click(function(){
-      $.get("php/backup.php", { delete: $(this).val() });
-			setTimeout(function () {
-				location.reload();
-			}, 1000);
+			data = {};
+			data.delete = $(this).val();
+			if (debug) {
+				data.action = "test";
+				$.post("php/action.php", data);
+			} else {
+				$.post("php/backup.php", data).done(function() {
+					setTimeout(function () {
+						location.reload();
+					}, 1000);
+				});
+			}
     });
 
 		$(function () {
@@ -454,6 +468,5 @@ if ($dirArray == FALSE) {
             }
         });
     });
-
   });
 </script>

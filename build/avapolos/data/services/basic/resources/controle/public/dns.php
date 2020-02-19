@@ -1,14 +1,11 @@
 <?php
-require_once("php/config.php");
- ?>
-
-<!-- Breadcrumbs-->
-<ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <a href="#">Configurações</a>
-  </li>
-  <li class="breadcrumb-item active">DNS</li>
-</ol>
+require_once("config.php");
+if ($CFG->debug) {
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+}
+?>
 
 <div class="jumbotron">
   <p>Passos para a configuração do DNS Dinâmico:</p>
@@ -41,7 +38,7 @@ require_once("php/config.php");
     <input type="text" class="form-control" id="domainInput" aria-describedby="domainHelp" placeholder="Insira o domínio" required>
     <small id="domainHelp" class="form-text text-muted">Domínio para o seu POLO EAD.</small>
   </div>
-  <button type="button" name="btn" id="submitBtn" class="btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
+  <button type="button" name="btn" id="submitBtn" class="bg-dark btn btn-primary" data-toggle="modal" data-target="#confirm-submit">Enviar</button>
   <br><br>
 </form>
 
@@ -74,67 +71,70 @@ require_once("php/config.php");
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" id="submit">Enviar</button>
+                <button id="submit" type="submit" class="bg-dark btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
 
-function togglePasswordVisibility() {
-  var x = document.getElementById("passwordInput");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
+  $(document).ready(function(){
 
-function toggleVisibility(elementId) {
-  if ($(elementId).attr("hidden")) {
-    $(elementId).attr("hidden", false)
-  } else $(elementId).attr("hidden", true)
-}
+		debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
 
-$('#hideForm').on('click', function() {
-    toggleVisibility("#emailInputDiv")
-    toggleVisibility("#passwordInputDiv")
-    toggleVisibility("#modalEmailTr")
-    toggleVisibility("#modalPassTr")
-});
+    function togglePasswordVisibility() {
+      var x = document.getElementById("passwordInput");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+    function toggleVisibility(elementId) {
+      if ($(elementId).attr("hidden")) {
+        $(elementId).attr("hidden", false)
+      } else $(elementId).attr("hidden", true)
+    }
 
-$('#submitBtn').click(function() {
-  $('#modalEmail').text($('#emailInput').val());
-  $('#modalPass').text($('#passwordInput').val());
-  $('#modalDomain').text($('#domainInput').val());
-});
+    $('#hideForm').on('click', function() {
+      toggleVisibility("#emailInputDiv")
+      toggleVisibility("#passwordInputDiv")
+      toggleVisibility("#modalEmailTr")
+      toggleVisibility("#modalPassTr")
+    });
+    $('#submitBtn').click(function() {
+      $('#modalEmail').text($('#emailInput').val());
+      $('#modalPass').text($('#passwordInput').val());
+      $('#modalDomain').text($('#domainInput').val());
+    });
 
-$('#submit').click(function(){
+    $('#submit').click(function() {
+      data = {};
+      if (debug) {
+        data.action = "test";
+      } else {
+        data.action = "setup_dns";
+      }
+      data.email = "null";
+      data.pass = "null";
+      data.domain = $('#domainInput').val();
 
-  data = {
-    email: "",
-    pass: "",
-    domain: $('#domainInput').val()
-  }
+      if (!$("#emailInputDiv").attr("hidden")) {
+        data.email = $('#emailInput').val()
+        data.pass = $('#passwordInput').val()
+      }
 
-  sweet_alert('http://controle.' + data.domain + '/php/check.php?get', 'http://controle.' + data.domain)
+      $.post("php/action.php", data);
+      $('#confirm-submit').modal('toggle');
+      sweet_alert('http://controle.' + data.domain + '/php/check.php', 'http://controle.' + data.domain)
 
-  if ($("#emailInputDiv").attr("hidden")) {
-    data.email = "null"
-    data.pass = "null"
-  } else {
-    data.email = $('#emailInput').val()
-    data.pass = $('#passwordInput').val()
-  }
+      setTimeout(function () {
+        console.log("http://controle." + data.domain + "/?page=dns.php");
+        window.location.href = "http://controle." + data.domain + "/?page=dns.php";
+      }, 100000);
+    });
 
-  $.post("php/action.php?action=<?php if ($CFG->debug) { echo "test"; } else echo "setup_dns";?>", data);//.done(function( data )  { alert(data); });
-  $('#confirm-submit').modal('toggle');
-
-  setTimeout(function () {
-    console.log("http://controle." + data.domain + "/?page=dns.php");
-    window.location.href = "http://controle." + data.domain + "/?page=dns.php";
-  }, 100000);
-});
+  });
 
 </script>

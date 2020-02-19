@@ -1,17 +1,29 @@
 <?php
 require_once('config.php');
 ?>
-
+<style media="screen">
+  .fa-question-circle {
+    opacity: 0.6;
+    cursor: pointer;
+  }
+</style>
 <div class="row well">
   <div class="col-md">
-    <p class="text-center"><b>Modo de acesso</b></p>
+    <p class="text-center"><b>Modo de acesso</b> <i class="far fa-question-circle" data-toggle="popover" data-content="Acesso do servidor por nome ou IP."></i></p>
     <div class="text-center">
       <button class="bg-dark btn btn-primary painel_btn" id="access_mode_ip">IP</button>
       <button class="bg-dark btn btn-primary painel_btn" id="access_mode_name">Nome</button>
     </div>
   </div>
   <div class="col-md">
-    <p class="text-center"><b>DHCP</b></p>
+    <p class="text-center"><b>DNS</b> <i class="far fa-question-circle" data-toggle="popover" data-content="Habilitar ou não o servidor DNS."></i></p>
+    <div class="text-center">
+      <button class="bg-dark btn btn-primary painel_btn" id="enable_dns">Sim</button>
+      <button class="bg-dark btn btn-primary painel_btn" id="disable_dns">Não</button>
+    </div>
+  </div>
+  <div class="col-md">
+    <p class="text-center"><b>DHCP</b> <i class="far fa-question-circle" data-toggle="popover" data-content="Habilitar ou não o servidor DHCP."></i></p>
     <div class="text-center">
       <button class="bg-dark btn btn-primary painel_btn" id="enable_dhcp">Sim</button>
       <button class="bg-dark btn btn-primary painel_btn" id="disable_dhcp">Não</button>
@@ -112,6 +124,10 @@ require_once('config.php');
 <script type="text/javascript">
 
 $(document).ready(function(){
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+
   $('#errorAlert').addClass('d-none');
   $('.ip').mask('099.099.099.099');
 
@@ -124,8 +140,8 @@ $(document).ready(function(){
   }
 
   function run(string) {
-    sweet_alert('/php/check.php?get')
-    $.get("php/action.php?action=<?php echo ($CFG->debug) ? "test" : "string"; ?>");
+    sweet_alert('/php/check.php')
+    $.post("php/action.php?action=<?php echo ($CFG->debug) ? "test" : "string"; ?>");
   }
 
   $(".painel_btn").click(function(e) {
@@ -170,7 +186,10 @@ $(document).ready(function(){
         $('#errorAlert').removeClass('d-none');
       } else {
         $('#errorAlert').addClass('d-none');
-        sweet_alert('/php/check.php?get')
+        sweet_alert('/php/check.php')
+        setTimeout(function () {
+          location.reload();
+        }, 60000);
       }
     });
   });

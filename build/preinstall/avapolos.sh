@@ -97,6 +97,11 @@ while true; do
       connectDB $containerDBSyncName
       exit 0
     ;;
+    --reset-password)
+      shift
+      execDockerCommand controle "php /app/public/bin/reset.php"
+      exit 0
+    ;;
     *)
       usage
       exit 0

@@ -7,14 +7,11 @@ if ($CFG->debug) {
 	error_reporting(E_ALL);
 }
 
-if (isset($_GET['get'])) {
-	if (file_exists('../../service/done')) {
-		echo "true";
-		unlink('../../service/done');
-	} else {
-		echo "false";
-	}
-	die;
+if (file_exists('../../service/done')) {
+	echo "true";
+	unlink('../../service/done');
+} else {
+	echo "false";
 }
 
 ?>

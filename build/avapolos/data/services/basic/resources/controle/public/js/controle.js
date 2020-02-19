@@ -34,7 +34,7 @@ function sweet_alert(url, goto="reload") {
 	        }
 	      }
 	    }
-	    request.open('Get', url);
+	    request.open('Post', url);
 	    request.send();
 	},5000);
 	},

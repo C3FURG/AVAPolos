@@ -29,8 +29,9 @@
       <a class="dropdown-item <?php if ($page == "backups.php") { echo "disabled"; } ?>" href="?page=backups.php">Backups</a>
       <div class="dropdown-divider"></div>
       <h6 class="dropdown-header"><i class="fas fa-fw fa-cog"></i> Configurações</h6>
-      <a class="dropdown-item <?php if ($page == "configs.php") { echo "disabled"; } ?>" href="?page=configs.php">Gerais</a>
+      <!-- <a class="dropdown-item <?php if ($page == "configs.php") { echo "disabled"; } ?>" href="?page=configs.php">Gerais</a> -->
       <a class="dropdown-item <?php if ($page == "network.php") { echo "disabled"; } ?>" href="?page=network.php">Rede</a>
+      <a class="dropdown-item <?php if ($page == "dns.php") { echo "disabled"; } ?>" href="?page=dns.php">DNS</a>
       <a class="dropdown-item <?php if ($page == "sync.php") { echo "disabled"; } ?>" href="?page=sync.php">Sincronização</a>
     </div>
   </li>

@@ -23,26 +23,27 @@ function endsWith($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
-function return_progress_educapes(){
-  $data=@file_get_contents("../../educapes/download/wget-log");
-  if ($data == FALSE) {
-    $data="Não foi possível encontrar o arquivo de log do download do eduCAPES.";
-  }
-  echo $data;
+function returnLog($logName) {
+	$handle = @fopen("../../log/" . $logName, "r");
+	if ($handle) {
+		while (($line = fgets($handle)) !== false) {
+			echo $line."\r";
+		}
+		fclose($handle);
+	} else {
+		echo "Não foi possível encontrar o arquivo de log especificado.\r\n";
+	}
 }
 
-function return_service_log(){
-  $data=@file_get_contents("../../log/service.log");
-  if ($data == FALSE) {
-    $data="Não foi possível encontrar o arquivo de log do serviço.";
-  }
-
-  if ($data == "") {
-    echo "Nenhum dado.";
-  } else {
-    echo $data;
-  }
+function return_progress_educapes() {
+	$handle = @fopen("../../educapes/download/wget-log", "r");
+	if ($handle) {
+		while (($line = fgets($handle)) !== false) {
+			echo $line."\r";
+		}
+		fclose($handle);
+	} else {
+		echo "Não foi possível encontrar o arquivo de log especificado.\r\n";
+	}
 }
-
-
 ?>

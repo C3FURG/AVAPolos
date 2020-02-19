@@ -1,49 +1,67 @@
 <?php
-
-$subject="";
-
-if (isset($_GET['subject'])) {
-  switch ($_GET['subject']) {
-    case 'educapes_download':
-    $subject="educapes_download";
-    break;
-
-    case 'service':
-    $subject="service";
-    break;
-
-    default:
-      $subject="none";
-      break;
-
-  }
+require_once('config.php');
+if ($CFG->debug) {
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
 }
-#echo $subject;
 ?>
 
-<a href="?page=monitor.php&subject=service" class="btn btn-primary<?php if ($subject == "service") { echo "disabled"; } ?>">Serviço</a>
-<a href="?page=monitor.php&subject=educapes_download" class="btn btn-primary<?php if ($subject == "educapes_download") { echo "disabled"; } ?>">Download eduCAPES</a>
+<link rel="stylesheet" href="vendor/xterm/xterm.css" type="text/css"/>
+<script src="vendor/xterm/xterm.js" charset="utf-8"></script>
+<script src="vendor/xterm/FitAddon.js" charset="utf-8"></script>
 
-<br>
+<div class="well">
+  <p>Selecione o objeto que deseja monitorar.</p>
+  <button type="button" class="bg-dark btn btn-primary monitor_btn" id="service">Serviço AVAPolos</button>
+  <button type="button" class="bg-dark btn btn-primary monitor_btn" id="educapes_download">Download do eduCAPES</button>
+</div>
 
-<p>Monitoramento: <?php echo $subject; ?></p>
+<div class="container">
+  <div class="well">
+    <div id="terminal">
+      <script>
+        $(document).ready(function(){
 
-<textarea style="resize: none; min-width: 100%; min-height: 300px;" readonly id="log" rows="3"></textarea>
+          var subject = "service";
+          $( ".monitor_btn" ).click(function() {
+            subject = $(this).attr('id');
+          });
 
-<script type="text/javascript">
-  $(document).ready(function(){
+          debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
 
-    $.get( "php/action.php?action=get_progress&subject=<?php echo $subject; ?>", function( data ) {
-      $( "#log" ).html( data );
-      //alert( data );
-    });
+          const terminal = new Terminal();
+          const fitAddon = new FitAddon();
 
-    setInterval(function() {
-      $.get( "php/action.php?action=get_progress&subject=<?php echo $subject; ?>", function( data ) {
-        $( "#log" ).html( data );
-        //alert( data );
-      });
-    }, 2000);
+          terminal.open(document.getElementById('terminal'));
+          terminal.loadAddon(fitAddon);
+          fitAddon.fit();
 
-  });
-</script>
+          data = {}
+          data.action = "get_log";
+          data.subject = subject;
+
+          $.post("php/action.php", data).done(function(data) {
+            terminal.clear();
+            terminal.write(data);
+          });
+
+          setInterval(function () {
+            console.log(data);
+            console.log(subject);
+            data.subject = subject;
+            $.post("php/action.php", data).done(function(data) {
+              terminal.clear();
+              terminal.write(data);
+            });
+          }, 1000);
+
+
+        });
+
+    </script>
+  </div>
+
+  </div>
+
+</div>

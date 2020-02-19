@@ -1,4 +1,14 @@
 <?php
+session_start();
+function checkLogin() {
+	if(!isset($_SESSION['login'])) { //caso não esteja logado
+		header("HTTP/1.1 401 Unauthorized");
+		header("Location: ../401.php");
+		die();
+	}
+}
+checkLogin();
+
 require_once("../config.php");
 require_once("functions.php");
 
@@ -8,14 +18,8 @@ if ($CFG->debug) {
 	error_reporting(E_ALL);
 }
 
-if (isset($_GET['action'])) {
-	$action = $_GET['action'];
-} elseif (isset($_POST['action'])) {
-	$action = $_POST['action'];
-}
-
-if (isset($action)) {
-	switch ($action) {
+if (isset($_POST['action'])) {
+	switch ($_POST['action']) {
 		case 'educapes_download_stop':
 			system("echo 'educapes_download_stop' > ../../service/pipe", $retVal);
 			echo $retVal;
@@ -75,6 +79,30 @@ if (isset($action)) {
 			echo $retVal;
 			break;
 
+		case 'enable_dhcp':
+			$cmd = "echo 'enable_dhcp' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
+			break;
+
+		case 'disable_dhcp':
+			$cmd = "echo 'disable_dhcp' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
+			break;
+
+		case 'enable_dns':
+			$cmd = "echo 'enable_dns' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
+			break;
+
+		case 'disable_dns':
+			$cmd = "echo 'disable_dns' > ../../service/pipe";
+			system($cmd, $retVal);
+			echo $retVal;
+			break;
+
 		case 'access_mode_name':
 			system("echo 'access_mode name' > ../../service/pipe", $retVal);
 			echo $retVal;
@@ -89,14 +117,14 @@ if (isset($action)) {
 			}
 			break;
 
-		case 'get_progress':
-			if (isset($_GET['subject'])) {
-				switch ($_GET['subject']) {
+		case 'get_log':
+			if (isset($_POST['subject'])) {
+				switch ($_POST['subject']) {
 					case 'educapes_download':
 						echo return_progress_educapes();
 						break;
 					case 'service':
-						echo return_service_log();
+						echo returnLog("service.log");
 						break;
 
 					default:

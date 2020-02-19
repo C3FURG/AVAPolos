@@ -146,7 +146,6 @@ getNameservers(){ #$1-> interface
   fi
 
 }
-
 getNetmask() { #$1-> interface
   if ! [ -z "$1" ]; then
     netmask=$(ifconfig $1 | grep netmask | awk '{print $4}')
@@ -178,7 +177,6 @@ generateHostsConfig() { # $1-> ip(without mask)
     echo "Nenhum ip foi passado para o generateHostsConfig" | log error installer
     exit 1
   fi
-  echo "Gerando arquivo /etc/hosts" | log debug installer
   echo -e "#AVAPolos config start"
   echo -e "$1 avapolos"
   echo -e "$1 controle.avapolos"
@@ -193,15 +191,14 @@ generateHostsConfig() { # $1-> ip(without mask)
   echo -e "$1 teste.avapolos"
   echo -e "#AVAPolos config end"
 }
-generateNetworkConfig() { # $1-> interface $2-> ip/mask $3-> gateway $4-> dns1 $5-> dns2
+generateNetworkConfig() { # $1-> interface $2-> ip $3-> netmask $4-> gateway $5-> dns1 $6-> dns2
   echo -e "#AVAPolos config start"
   echo -e "auto $1"
   echo -e "iface $1 inet static"
   echo -e "address $2"
-  if ! [ -f "$INSTALL_SCRIPTS_PATH/polo" ]; then
-    echo -e "gateway $3"
-  fi
-  echo -e "dns-nameservers $4 $5"
+  echo -e "netmask $3"
+  echo -e "gateway $4"
+  echo -e "dns-nameservers $5 $6"
   echo -e "#AVAPolos config end"
 }
 generateResolvConfig() { #$1 DNS1 $2 DNS2
@@ -292,8 +289,8 @@ main() {
   disableDefaultNetworkServices
 
   echo "Configurando arquivo /etc/network/interfaces" | log debug installer
-  # $1-> interface $2-> ip/mask $3-> gateway $4-> network $5-> netmask $6-> dns1 $7-> dns2
-  generateNetworkConfig "$INTERFACE" "$IP" "$GATEWAY" "$NS1" "$NS2" >> /etc/network/interfaces
+  # $1-> interface $2-> ip $3-> netmask $4-> gateway $5-> dns1 $6-> dns2
+  generateNetworkConfig "$INTERFACE" "$IP" "$NETMASK" "$GATEWAY" "$NS1" "$NS2" >> /etc/network/interfaces
   ifconfig "$INTERFACE" down | log debug installer
   ip addr flush dev "$INTERFACE" | log debug installer
   service networking restart | log debug installer

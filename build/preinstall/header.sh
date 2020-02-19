@@ -149,12 +149,15 @@ Operações básicas: (necessita instalar)
        --start (SERVIÇO.yml)   Inicia os serviços disponíveis.
        --stop (SERVIÇO.yml)    Para todos serviços disponíveis.
        --restart (SERVIÇO.yml) Reinicia todos os serviços.
+
+Operações avançadas: (necessita instalar)
   -b,  --backup (ARQUIVO)      Executa um backup do diretório de serviços.
   -r,  --restore (ARQUIVO)     Restaura um backup feito anteriormente.
        --export-all            Executa a clonagem da instalação.
        --access [ip/name]      Configura o acesso aos serviços.
+       --reset-password        Reseta a senha do painel de controle.
 
-Operações para desenvolvedores:
+Operações para desenvolvedores: (necessita instalar)
        --connect-db-master     Conecta ao banco de dados master.
        --connect-db-sync     Conecta ao banco de dados sync.
 "
@@ -385,10 +388,15 @@ undoConfig() {
   fi
   return=$(cat $1 | grep -no AVAPolos | cut -d: -f1)
   return=$(echo $return)
-  line1=$(echo $return | awk '{print $1}')
-  line2=$(echo $return | awk '{print $2}')
-  str="$line1","$line2"\d
-  sudo sed -i "$str" "$1"
+  if ! [[ -z "$return" ]]; then
+    line1=$(echo $return | awk '{print $1}')
+    line2=$(echo $return | awk '{print $2}')
+    str="$line1","$line2"\d
+    sudo sed -i "$str" "$1"
+  fi
+  if ! [[ -z $(cat $1 | grep -no AVAPolos) ]]; then
+    undoConfig "$1"
+  fi
 }
 
 #Shows a env var
