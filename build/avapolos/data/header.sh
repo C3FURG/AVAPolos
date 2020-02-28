@@ -45,41 +45,52 @@ export PACK_DIR=$ROOT_DIR/pack
 
 export LOGFILE_PATH=$ROOT_DIR/data_compiler.log
 
-#Moodle variables
+#Moodle variables.
 export CONTROLE_PASSWORD="Admin@123"
 
-#Moodle variables
+#Moodle variables.
 export MOODLE_PASSWORD="Admin@123"
 export MOODLE_DIR=$SERVICES_DIR/moodle
 export MOODLE_DATA_DIR=$MOODLE_DIR/data
 export MOODLE_RESOURCES_DIR=$MOODLE_DIR/resources
 
-#Wiki variables
+#Wiki variables.
 export WIKI_PASSWORD="Admin@123"
 export WIKI_DIR=$SERVICES_DIR/wiki
 export WIKI_DATA_DIR=$WIKI_DIR/data
 export WIKI_RESOURCES_DIR=$WIKI_DIR/resources
 
-#Downloads variables
+#Downloads variables.
 export BASIC_DIR=$SERVICES_DIR/basic
 export BASIC_DATA_DIR=$BASIC_DIR/data
 export BASIC_RESOURCES_DIR=$BASIC_DIR/resources
 
-#Downloads variables
+#Downloads variables.
 export TRAEFIK_DIR=$SERVICES_DIR/traefik
 export TRAEFIK_DATA_DIR=$TRAEFIK_DIR/data
 export TRAEFIK_RESOURCES_DIR=$TRAEFIK_DIR/resources
 
-#Controle variables
+#Controle variables.
 export INICIO_DIR=$SERVICES_DIR/inicio
 export INICIO_DATA_DIR=$INICIO_DIR/data
 export INICIO_RESOURCES_DIR=$INICIO_DIR/resources
 
-#Manutencao variables
+#Manutencao variables.
 export MANUTENCAO_DIR=$SERVICES_DIR/manutencao
 export MANUTENCAO_DATA_DIR=$MANUTENCAO_DIR/data
 export MANUTENCAO_RESOURCES_DIR=$MANUTENCAO_DIR/resources
 
+#Dnsmasq variables.
+export DNSMASQ_DIR=$SERVICES_DIR/dnsmasq
+export DNSMASQ_DATA_DIR=$DNSMASQ_DIR/data
+export DNSMASQ_RESOURCES_DIR=$DNSMASQ_DIR/resources
+
+#DHCPD variables.
+export DHCPD_DIR=$SERVICES_DIR/dhcpd
+export DHCPD_DATA_DIR=$DHCPD_DIR/data
+export DHCPD_RESOURCES_DIR=$DHCPD_DIR/resources
+
+#Export the functions.
 export -f run
 export -f setHosts
 export -f unsetHosts

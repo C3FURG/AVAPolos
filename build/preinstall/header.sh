@@ -5,7 +5,6 @@
 #Paths
 export ROOT_PATH="/opt/avapolos"
 export DATA_PATH="$ROOT_PATH/data"
-export NETWORKING_PATH="$ROOT_PATH/networking"
 export SCRIPTS_PATH="$ROOT_PATH/scripts"
 export INSTALL_SCRIPTS_PATH="$SCRIPTS_PATH/install"
 export RESOURCES_PATH="$ROOT_PATH/resources"
