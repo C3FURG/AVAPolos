@@ -55,14 +55,6 @@ $(document).ready(function(){
   $('#errorAlert').addClass('d-none');
   $('.ip').mask('099.099.099.099');
 
-  //https://stackoverflow.com/questions/4460586/javascript-regular-expression-to-check-for-ip-addresses
-  function ValidateIPaddress(ipaddress) {
-    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
-      return (true)
-    }
-    return (false)
-  }
-
   $('#SubmitBtn').click(function() {
     inputs = ['#ipInput'];
     flag = true;

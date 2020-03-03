@@ -43,3 +43,22 @@ function sweet_alert(url, goto="reload") {
 	}
 })
 }
+
+function run(string, debug) {
+	sweet_alert('/php/check.php')
+	data = {};
+	if (debug) {
+		data.action = "test";
+	} else {
+		data.action = string;
+	}
+	$.post("php/action.php", data);
+}
+
+//https://stackoverflow.com/questions/4460586/javascript-regular-expression-to-check-for-ip-addresses
+function ValidateIPaddress(ipaddress) {
+	if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+		return (true)
+	}
+	return (false)
+}

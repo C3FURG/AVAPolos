@@ -15,20 +15,6 @@ require_once('config.php');
       <button class="bg-dark btn btn-primary painel_btn" id="access_mode_name">Nome</button>
     </div>
   </div>
-  <div class="col-md">
-    <p class="text-center"><b>DNS</b> <i class="far fa-question-circle" data-toggle="popover" data-content="Habilitar ou não o servidor DNS."></i></p>
-    <div class="text-center">
-      <button class="bg-dark btn btn-primary painel_btn" id="enable_dns">Sim</button>
-      <button class="bg-dark btn btn-primary painel_btn" id="disable_dns">Não</button>
-    </div>
-  </div>
-  <div class="col-md">
-    <p class="text-center"><b>DHCP</b> <i class="far fa-question-circle" data-toggle="popover" data-content="Habilitar ou não o servidor DHCP."></i></p>
-    <div class="text-center">
-      <button class="bg-dark btn btn-primary painel_btn" id="enable_dhcp">Sim</button>
-      <button class="bg-dark btn btn-primary painel_btn" id="disable_dhcp">Não</button>
-    </div>
-  </div>
 </div>
 
 <div class="well">
@@ -124,6 +110,9 @@ require_once('config.php');
 <script type="text/javascript">
 
 $(document).ready(function(){
+
+  debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
+
   $(function () {
     $('[data-toggle="popover"]').popover()
   })
@@ -131,21 +120,8 @@ $(document).ready(function(){
   $('#errorAlert').addClass('d-none');
   $('.ip').mask('099.099.099.099');
 
-  //https://stackoverflow.com/questions/4460586/javascript-regular-expression-to-check-for-ip-addresses
-  function ValidateIPaddress(ipaddress) {
-    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
-      return (true)
-    }
-    return (false)
-  }
-
-  function run(string) {
-    sweet_alert('/php/check.php')
-    $.post("php/action.php?action=<?php echo ($CFG->debug) ? "test" : "string"; ?>");
-  }
-
   $(".painel_btn").click(function(e) {
-    run($(this).attr('id'));
+    run($(this).attr('id'), debug);
   })
 
   $('#networkSubmitBtn').click(function() {

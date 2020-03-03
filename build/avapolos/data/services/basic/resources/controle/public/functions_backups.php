@@ -10,9 +10,7 @@ if ($CFG->debug) {
 $showFiles = true;
 $dirArray=(@scandir("backups/"));
 $dirArray = array_diff($dirArray, [".", "..", "notas.txt"]);
-if ($dirArray == FALSE) {
-	$showFiles = false;
-}
+$showFiles = ($dirArray == FALSE ? false : true);
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/backups.css">

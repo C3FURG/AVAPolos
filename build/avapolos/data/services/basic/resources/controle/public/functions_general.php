@@ -23,8 +23,7 @@ if ($CFG->debug) {
       <div class="well well-sm">
         <p class="text-center">Execução da solução</p>
         <div class="text-center">
-          <button class="bg-dark btn btn-primary painel_btn" id="start">Iniciar</button>
-          <button class="bg-dark btn btn-primary painel_btn" id="stop">Parar</button>
+          <button class="bg-dark btn btn-primary painel_btn" id="restart">Reiniciar</button>
         </div>
       </div>
     </div>
@@ -46,24 +45,8 @@ if ($CFG->debug) {
 
     debug = <?php echo ($CFG->debug) ? 'true' : 'false'; ?>;
 
-    function run(string) {
-      data = {}
-      if (debug) {
-        data.action = "test";
-      } else {
-        data.action = string;
-        if (string == "stop") {
-          setTimeout(function () {
-            location.reload();
-          }, 20000);
-        }
-      }
-      $.post("php/action.php", data);
-      sweet_alert('/php/check.php')
-    }
-
     $(".painel_btn").click(function(e) {
-      run($(this).attr('id'));
+      run($(this).attr('id'), debug);
     })
 
   });

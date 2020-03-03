@@ -24,15 +24,17 @@
       <span>Administração</span>
     </a>
     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-      <h6 class="dropdown-header"><i class="fas fa-fw fa-tools"></i> Funções</h6>
-      <a class="dropdown-item <?php if ($page == "functions.php") { echo "disabled"; } ?>" href="?page=functions.php">Gerais</a>
-      <a class="dropdown-item <?php if ($page == "backups.php") { echo "disabled"; } ?>" href="?page=backups.php">Backups</a>
+      <h6 class="dropdown-header"><i class="fas fa-fw fa-tools"></i> Funções:</h6>
+      <a class="dropdown-item <?php if ($page == "functions_general.php") { echo "disabled"; } ?>" href="?page=functions_general.php">Gerais</a>
+      <a class="dropdown-item <?php if ($page == "functions_backups.php") { echo "disabled"; } ?>" href="?page=functions_backups.php">Backups</a>
       <div class="dropdown-divider"></div>
-      <h6 class="dropdown-header"><i class="fas fa-fw fa-cog"></i> Configurações</h6>
-      <!-- <a class="dropdown-item <?php if ($page == "configs.php") { echo "disabled"; } ?>" href="?page=configs.php">Gerais</a> -->
-      <a class="dropdown-item <?php if ($page == "network.php") { echo "disabled"; } ?>" href="?page=network.php">Rede</a>
-      <a class="dropdown-item <?php if ($page == "dns.php") { echo "disabled"; } ?>" href="?page=dns.php">DNS</a>
-      <a class="dropdown-item <?php if ($page == "sync.php") { echo "disabled"; } ?>" href="?page=sync.php">Sincronização</a>
+      <h6 class="dropdown-header"><i class="fas fa-fw fa-network-wired"></i> Rede:</h6>
+      <a class="dropdown-item <?php if ($page == "network_general.php") { echo "disabled"; } ?>" href="?page=network_general.php">Geral</a>
+      <a class="dropdown-item <?php if ($page == "network_dhcp.php") { echo "disabled"; } ?>" href="?page=network_dhcp.php">DHCP</a>
+      <a class="dropdown-item <?php if ($page == "network_dns.php") { echo "disabled"; } ?>" href="?page=network_dns.php">DNS</a>
+      <div class="dropdown-divider"></div>
+      <h6 class="dropdown-header"><i class="fas fa-fw fa-sync"></i> Sincronização:</h6>
+      <a class="dropdown-item <?php if ($page == "sync.php") { echo "disabled"; } ?>" href="?page=sync.php">Online</a>
     </div>
   </li>
   <li class="nav-item <?php if ($page == "report.php") { echo "active"; } ?>">
