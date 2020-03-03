@@ -1,15 +1,19 @@
 <?php
-  $DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+  //$DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
+  require("config-control.php");
+  
+  $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
 
   $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1 ");
 
-  //echo "SELECT * FROM public.avapolos_controle_login WHERE login = '".$login."' AND password = '".$password."' ";
   if($queryRegistro && pg_num_rows($queryRegistro) > 0){
     $dadosRegistro = pg_fetch_array($queryRegistro);
     $emailDev = $dadosRegistro['email_dev'];
   }else{
     $emailDev = 'E-mail do suporte não cadastrado';
   }
+
+  ///$tipoInstalacao = (file_exists("/app/scripts/polo")) ? 'POLO' : 'IES'; // IES ou POLO
 ?>
 
 <form role="form" id="formfield" action="#" method="post">
