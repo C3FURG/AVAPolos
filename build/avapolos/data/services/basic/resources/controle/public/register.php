@@ -143,7 +143,7 @@
                                             
                                             <div class="form-group mt-4 mb-0">
                                                 <div class="col-md-5 d-block mx-auto">
-                                                    <button type='submit' name='submitRegister' value='submitRegister' class="btn btn-primary btn-block">Salvar Configurações</button>
+                                                    <button type='submit' name='submitRegister' value='submitRegister' class="btn btn-success bg-dark btn-block">Salvar Configurações</button>
                                                 </div>
                                                 
                                             </div>

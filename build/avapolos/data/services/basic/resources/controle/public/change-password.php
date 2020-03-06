@@ -83,5 +83,5 @@
       ?>
     </div>
   
-  <button type="submit" name="submitChangePass" value='submitChangePass' id="submitBtn" class="btn btn-success mb-5" >Salvar</button>
+  <button type="submit" name="submitChangePass" value='submitChangePass' id="submitBtn" class="btn btn-primary bg-dark mb-5" >Salvar</button>
 </form>

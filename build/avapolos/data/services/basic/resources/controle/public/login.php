@@ -106,7 +106,7 @@
                                                 } //end error msg
                                             ?>
                                             <div class="form-group d-flex align-items-center mt-4 mb-0">
-                                                <button type='submit' name='submitLogin' value='submitLogin' class="btn btn-success d-block mx-auto">Entrar</button>
+                                                <button type='submit' name='submitLogin' value='submitLogin' class="btn btn-success bg-dark d-block mx-auto">Entrar</button>
                                             </div>
                                         </form>
                                     </div>
