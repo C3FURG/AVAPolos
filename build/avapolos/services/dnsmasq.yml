@@ -9,4 +9,5 @@ services:
     network_mode: host
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATA_PATH/dnsmasq/dnsmasq.conf}:/etc/dnsmasq.conf:ro
+      - /etc/hosts:/etc/hosts:ro
+      - ../data/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro

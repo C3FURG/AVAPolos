@@ -45,7 +45,7 @@ export PACK_DIR=$ROOT_DIR/pack
 
 export LOGFILE_PATH=$ROOT_DIR/data_compiler.log
 
-#Moodle variables.
+#Control variables.
 export CONTROLE_PASSWORD="Admin@123"
 
 #Moodle variables.

@@ -305,7 +305,6 @@ main() {
 
   cd $NETWORKING_PATH
   if [ -f enable ]; then
-    echo "Inicializando dnsmasq, pode ser acessado pela porta 5380. (admin/admin)" | log debug installer
     docker-compose up -d | log debug installer
   fi
 

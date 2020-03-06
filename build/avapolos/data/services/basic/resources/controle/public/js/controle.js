@@ -62,3 +62,18 @@ function ValidateIPaddress(ipaddress) {
 	}
 	return (false)
 }
+
+function toggleVisibility(elementId) {
+	if ($(elementId).attr("hidden")) {
+		$(elementId).attr("hidden", false)
+	} else $(elementId).attr("hidden", true)
+}
+
+function togglePasswordVisibility() {
+	var x = document.getElementById("passwordInput");
+	if (x.type === "password") {
+		x.type = "text";
+	} else {
+		x.type = "password";
+	}
+}

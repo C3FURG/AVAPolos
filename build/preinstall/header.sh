@@ -299,13 +299,13 @@ run() { #$1-> script path #$@-> script's arguments
 if [ -d "$ROOT_PATH" ]; then
   if ! [ -f "$1" ]; then
     echo "O script não foi encontrado: $1" | log error
-    exit 1
+  else
+    command="$1"
+    shift
+    command="$command $@"
+    #sudo -H -u avapolos bash "$command"
+    sudo bash -c "$command"
   fi
-  command="$1"
-  shift
-  command="$command $@"
-  #sudo -H -u avapolos bash "$command"
-  sudo bash -c "$command"
 else
   echo "AVAPolos não está instalado."
   exit 1
@@ -318,10 +318,9 @@ if [ -z "$1" ]; then
   echo "Usage: add_service [SERVICE]" | log error
   exit 1
 fi
-cd $SERVICES_PATH
-echo "Adicinando serviço $1" | log debug
+echo "Adicionando serviço $1" | log debug
 str=$(sanitize $1)
-echo "$1" >> enabled_services
+echo "$1" >> $SERVICES_PATH/enabled_services
 }
 
 #Removes services from the startup stack.
@@ -330,10 +329,9 @@ if [ -z "$1" ]; then
   echo "Usage: remove_service [SERVICE]" | log error
   exit 1
 fi
-cd $SERVICES_PATH
 echo "Removendo serviço $1" | log debug
 str=$(sanitize $1)
-sed -i '/'"$str"'/d' enabled_services
+sed -i '/'"$str"'/d' $SERVICES_PATH/enabled_services
 }
 
 #Enables a service already installed.
@@ -352,7 +350,6 @@ elif ! [ -z "$search_disabled" ]; then
   echo "$arg" >> "$SERVICES_PATH/enabled_services"
 else
   echo "O serviço $arg não está instalado!" | log error
-  exit 1
 fi
 
 }
@@ -374,7 +371,6 @@ elif ! [ -z "$search_disabled" ]; then
   echo "O serviço $arg já está desabilitado!" | log error
 else
   echo "O serviço $arg não está instalado!" | log error
-  exit 1
 fi
 
 }

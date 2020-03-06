@@ -81,6 +81,7 @@ readFromPipe() {
         ;;
         test )
           sleep 5
+          echo "Rodando comando de teste, olá mundo!" | log debug
           touch $SERVICE_PATH/done
         ;;
         export_all )
@@ -138,13 +139,21 @@ readFromPipe() {
             echo "Comando inválido, argumentos insuficientes." | log error
           fi
         ;;
-        setup_dns* )
-          if ! [ -z "${args[@]:1}" ]; then
-            run "$INSTALL_SCRIPTS_PATH/setup_dns.sh" "${args[@]:1}"
-            touch $SERVICE_PATH/done
-          else
-            echo "Comando inválido, argumentos insuficientes." | log error
-          fi
+        enable_dns* )
+          run "$SCRIPTS_PATH/dns.sh" "enable"
+          touch $SERVICE_PATH/done
+        ;;
+        disable_dns* )
+          run "$SCRIPTS_PATH/dns.sh" "disable"
+          touch $SERVICE_PATH/done
+        ;;
+        enable_dhcp* )
+          run "$SCRIPTS_PATH/dhcp.sh" "enable"
+          touch $SERVICE_PATH/done
+        ;;
+        disable_dhcp* )
+          run "$SCRIPTS_PATH/dhcp.sh" "disable"
+          touch $SERVICE_PATH/done
         ;;
         *)
           echo "O serviço recebeu um comando não suportado: $line" | log error

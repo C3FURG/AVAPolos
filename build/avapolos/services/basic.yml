@@ -8,7 +8,7 @@ services:
     environment:
      - UID=${PUID}
     volumes:
-     - ${BASIC_DATA_DIR}/db_controle:/var/lib/postgresql/data
+     - ${DATA_PATH}/db_controle:/var/lib/postgresql/data
     networks:
       avapolos:
     stop_signal: SIGINT

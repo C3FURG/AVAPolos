@@ -18,7 +18,27 @@ execSQL db_controle avapolos avapolos "
   (
       id SERIAL PRIMARY KEY,
       login character varying(255) NOT NULL,
-      password character varying(255) NOT NULL
+      password character varying(255) NOT NULL,
+      last_login timestamp
+  );
+"
+#Text é infinito, pensar melhor.
+execSQL db_controle avapolos avapolos "
+  CREATE TABLE public.controle_reporte
+  (
+      id SERIAL PRIMARY KEY,
+      nome character varying(255) NOT NULL,
+      local character varying(255) NOT NULL,
+      data timestamp NOT NULL,
+      comentario text
+  );
+"
+
+execSQL db_controle avapolos avapolos "
+  CREATE TABLE public.controle_registro
+  (
+      id SERIAL PRIMARY KEY,
+      email_dev character varying(255) NOT NULL,
   );
 "
 

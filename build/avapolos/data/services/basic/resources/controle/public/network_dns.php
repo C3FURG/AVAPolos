@@ -18,7 +18,11 @@ if ($CFG->debug) {
 </div>
 
 <form role="form" id="formfield" action="#" method="post">
-  <input type="checkbox" id="hideForm"> Quero utilizar NO-IP.
+  <label class="switch">
+    <input type="checkbox" id="hideForm">
+    <span class="slider"></span>
+  </label>
+  Quero utilizar DNS Dinâmico.
   <div id="noipHelpText" class="well" hidden>
     <p>Passos para a configuração do DNS Dinâmico:</p>
     <ol>
@@ -93,20 +97,6 @@ if ($CFG->debug) {
     $(".painel_btn").click(function(e) {
       run($(this).attr('id'), debug);
     })
-
-    function togglePasswordVisibility() {
-      var x = document.getElementById("passwordInput");
-      if (x.type === "password") {
-        x.type = "text";
-      } else {
-        x.type = "password";
-      }
-    }
-    function toggleVisibility(elementId) {
-      if ($(elementId).attr("hidden")) {
-        $(elementId).attr("hidden", false)
-      } else $(elementId).attr("hidden", true)
-    }
 
     $('#hideForm').on('click', function() {
       toggleVisibility("#emailInputDiv")

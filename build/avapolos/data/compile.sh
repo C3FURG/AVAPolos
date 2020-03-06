@@ -30,7 +30,9 @@ do
         cd "$SERVICES_DIR/$service"
         echo "Limpando dados do serviço: $service"
         rm -rf data
-        docker-compose down
+        if [[ -f docker-compose.yml ]]; then
+          docker-compose down
+        fi
       done
       exit 0
 		;;
