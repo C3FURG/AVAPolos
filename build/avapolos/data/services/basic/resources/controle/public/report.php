@@ -216,7 +216,7 @@
                       <span aria-hidden='true'>&times;</span>
                     </button>
                   </div>
-                  <div class='modal-body'>
+                  <div class='modal-body' style='word-break: break-word;'>
                     ".$dadosBuscaModal['comentario']."
                   </div>
                 </div>
