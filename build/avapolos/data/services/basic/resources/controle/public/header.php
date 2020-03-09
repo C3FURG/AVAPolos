@@ -36,4 +36,5 @@
 
   <!-- jQuery Mask -->
   <script src="vendor/jquery-mask/jquery.mask.min.js"></script>
+
 </head>

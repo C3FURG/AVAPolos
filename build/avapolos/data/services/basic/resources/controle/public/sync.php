@@ -332,7 +332,7 @@ if ($dirArray == FALSE) {
   </fieldset>
   </div>
   <div class='col-md-3'>
-    <button class='btn btn-success'>Salvar</button>
+    <button class='btn btn-primary bg-dark'>Salvar</button>
   </div>
 </div>
 
