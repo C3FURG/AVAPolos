@@ -34,7 +34,7 @@
       <a class="dropdown-item <?php if ($page == "network_dns.php") { echo "disabled"; } ?>" href="?page=network_dns.php">DNS</a>
       <div class="dropdown-divider"></div>
       <h6 class="dropdown-header"><i class="fas fa-fw fa-sync"></i> Sincronização:</h6>
-      <a class="dropdown-item <?php if ($page == "sync.php") { echo "disabled"; } ?>" href="?page=sync.php">Online</a>
+      <a class="dropdown-item <?php if ($page == "sync_online.php") { echo "disabled"; } ?>" href="?page=sync_online.php">Online</a>
     </div>
   </li>
   <li class="nav-item <?php if ($page == "report.php") { echo "active"; } ?>">

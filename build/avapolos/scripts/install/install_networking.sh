@@ -220,7 +220,7 @@ main() {
 
   if [ -z "$IP" ]; then
 
-    enableDnsmasq="true"
+    enableDHCP="true"
     IP="10.254.0.1/16"
     NS1="10.254.0.1"
     NS2=""
@@ -272,9 +272,9 @@ main() {
     fi
   fi
 
-  if [ "$enableDnsmasq" = "true" ]; then
-    echo "dnsmasq será iniciado." | log debug installer
-    touch $NETWORKING_PATH/enable
+  if [ "$enableDHCP" = "true" ]; then
+    echo "dhcpd será iniciado." | log debug installer
+    enable_service dhcpd.yml
   else
     echo "--------------------------------------------" | log info installer
     echo "Os seguintes parâmetros serão configurados:" | log info installer
@@ -302,11 +302,6 @@ main() {
   rm -rf /etc/resolv.conf
   generateResolvConfig "$NS1" "$NS2" > /etc/resolv.conf
   chmod 777 /etc/resolv.conf
-
-  cd $NETWORKING_PATH
-  if [ -f enable ]; then
-    docker-compose up -d | log debug installer
-  fi
 
   cd $ROOT_PATH
   echo "router.yml" >> $SERVICES_PATH/enabled_services
