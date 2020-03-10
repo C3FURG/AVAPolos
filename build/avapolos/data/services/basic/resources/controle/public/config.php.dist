@@ -9,7 +9,7 @@ $CFG->dbhost    = 'db_controle';
 $CFG->dbport    = 5432;
 $CFG->dbname    = 'avapolos';
 $CFG->dbuser    = 'avapolos';
-$CFG->dbpass    = 'bd10b9a2e191deafe6af';
+$CFG->dbpass    = '${DB_CONTROLE_AVAPOLOS_PASSWORD}';
 
 if ($CFG->debug) {
   var_dump($CFG);

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-show_var PUID
-show_var PGID
-
-mkdir -p $SERVICE_DATA_DIR/{dir1,dir2}
+echo "Limpando diretório de dados." | log debug data_compiler
+rm -rf $DNSMASQ_DATA_DIR/*
+mkdir -p $DNSMASQ_DATA_DIR/dnsmasq
+echo "Parando serviços caso já estejam rodando." | log debug data_compiler
 
 cd scripts
 
 run dnsmasq.sh
+
+echo "Serviço configurado com sucesso!" | log info data_compiler

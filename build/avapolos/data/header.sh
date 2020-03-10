@@ -8,6 +8,27 @@ run() {
   fi
 }
 
+generateSecrets() {
+cat <<EOL
+#Format: SERVICE_USER
+export CONTROLE_ADMIN_PASSWORD=Admin@123
+export CONTROLE_ADMIN_PASSWORD_HASH=$(echo -n $CONTROLE_ADMIN_PASSWORD | md5sum | cut -d ' ' -f 1)
+export DB_CONTROLE_POSTGRES_PASSWORD=$(openssl rand -hex 16)
+export DB_CONTROLE_AVAPOLOS_PASSWORD=$(openssl rand -hex 16)
+export MOODLE_ADMIN_PASSWORD=Admin@123
+export DB_MOODLE_IES_POSTGRES_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_IES_BDRSYNC_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_IES_MOODLE_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_POLO_POSTGRES_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_POLO_BDRSYNC_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_POLO_MOODLE_PASSWORD=$(openssl rand -hex 16)
+export PORTAINER_ADMIN_PASSWORD=Admin@123
+export WIKI_ADMIN_PASSWORD=Admin@123
+export DB_WIKI_POSTGRES_PASSWORD=$(openssl rand -hex 16)
+export DB_WIKI_WIKI_PASSWORD=$(openssl rand -hex 16)
+EOL
+}
+
 setHosts() {
   echo "Redirecionando nomes para a máquina local."
   sudo /bin/sh -c "{
@@ -38,18 +59,14 @@ unsetHosts() {
 
 export PUID=$(id -u $USER)
 export PGID=$(id -g $USER)
-export POSTGRES_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n1)
 export ROOT_DIR=$(pwd)
 export SERVICES_DIR=$ROOT_DIR/services
 export PACK_DIR=$ROOT_DIR/pack
 
 export LOGFILE_PATH=$ROOT_DIR/data_compiler.log
-
-#Control variables.
-export CONTROLE_PASSWORD="Admin@123"
+export SECRETS_FILE=$ROOT_DIR/secrets
 
 #Moodle variables.
-export MOODLE_PASSWORD="Admin@123"
 export MOODLE_DIR=$SERVICES_DIR/moodle
 export MOODLE_DATA_DIR=$MOODLE_DIR/data
 export MOODLE_RESOURCES_DIR=$MOODLE_DIR/resources

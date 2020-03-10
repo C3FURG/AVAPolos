@@ -2,16 +2,13 @@
 
 echo "Compilando downloads.avapolos" | log info data_compiler
 
-echo "Assegurando permissões corretas e limpando diretórios de dados." | log debug data_compiler
-cd $BASIC_DIR
-sudo chown -R $USER:$USER .
-sudo rm -rf $BASIC_DATA_DIR/downloads/*
+mkdir -p $BASIC_DATA_DIR/downloads/public
 
 echo "Baixando Moodle mobile e Moodle desktop." | log debug data_compiler
-wget -N 'https://download.moodle.org/desktop/download.php?platform=linux&arch=32' && mv download.php* $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktoplinux32.tgz | log debug data_compiler
-wget -N 'https://download.moodle.org/desktop/download.php?platform=linux&arch=64' && mv download.php* $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktoplinux64.tgz | log debug data_compiler
-wget -N 'https://download.moodle.org/desktop/download.php?platform=windows' && mv download.php* $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktopwindows.zip | log debug data_compiler
-wget -N 'https://download.moodle.org/desktop/download.php?platform=android' && mv download.php* $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodlemobile.apk | log debug data_compiler
+wget -N 'https://download.moodle.org/desktop/download.php?platform=linux&arch=32' && cp -n 'download.php?platform=linux&arch=32' $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktoplinux32.tgz | log debug data_compiler
+wget -N 'https://download.moodle.org/desktop/download.php?platform=linux&arch=64' && cp -n 'download.php?platform=linux&arch=64' $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktoplinux64.tgz | log debug data_compiler
+wget -N 'https://download.moodle.org/desktop/download.php?platform=windows' && cp -n 'download.php?platform=windows' $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodledesktopwindows.zip | log debug data_compiler
+wget -N 'https://download.moodle.org/desktop/download.php?platform=android' && cp -n 'download.php?platform=android' $BASIC_RESOURCES_DIR/downloads/public/instaladores/moodlemobile.apk | log debug data_compiler
 echo "Instaladores baixados com sucesso." | log debug data_compiler
 
 echo "Copiando recursos do serviço." | log debug data_compiler

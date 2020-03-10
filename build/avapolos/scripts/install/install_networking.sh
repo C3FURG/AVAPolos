@@ -273,8 +273,9 @@ main() {
   fi
 
   if [ "$enableDHCP" = "true" ]; then
-    echo "dhcpd será iniciado." | log debug installer
+    echo "dhcpd e dnsmasq será iniciado." | log debug installer
     enable_service dhcpd.yml
+    enable_service dnsmasq.yml
   else
     echo "--------------------------------------------" | log info installer
     echo "Os seguintes parâmetros serão configurados:" | log info installer

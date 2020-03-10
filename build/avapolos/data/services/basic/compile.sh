@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Limpando diretório de dados." | log debug data_compiler
+echo "Assegurando permissões corretas e limpando diretório de dados." | log debug
+sudo chown -R $USER:$USER .
 rm -rf $BASIC_DATA_DIR/*
-mkdir -p $BASIC_DATA_DIR/{controle,downloads}
+mkdir -p $BASIC_DATA_DIR/{controle,downloads,db_controle}
+
 echo "Parando serviços caso já estejam rodando." | log debug data_compiler
 docker-compose down
 

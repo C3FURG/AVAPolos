@@ -1,4 +1,1 @@
-public/instaladores/*.tar.gz
-public/instaladores/*.apk
-public/instaladores/*.tgz
-public/instaladores/*.zip
+public/instaladores/download.php?*

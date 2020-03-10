@@ -8,6 +8,9 @@ source functions.sh
 cd $dir
 unset dir
 source header.sh
+generateSecrets > secrets
+chmod 600 secrets
+source secrets
 
 while true
 do
@@ -25,6 +28,10 @@ do
 			shift
       export KEEPALIVE="true"
 		;;
+		--ignore-base)
+			shift
+      export IGNORE_BASE="true"
+		;;
 		--cleanup)
       for service in $(ls $SERVICES_DIR | grep -v TEMPLATE); do
         cd "$SERVICES_DIR/$service"
@@ -34,6 +41,8 @@ do
           docker-compose down
         fi
       done
+      remove_docker_network avapolos
+      remove_docker_network proxy
       exit 0
 		;;
     -*)
@@ -52,30 +61,27 @@ sudo chown $USER:$USER -R .
 
 mkdir -p $PACK_DIR/data && rm -rf $PACK_DIR/data/*
 
-echo "Criando rede Docker avapolos_build e proxy" | log debug data_compiler
-# add_docker_network avapolos
-# add_docker_network proxy
-docker network create avapolos || true
-docker network create proxy || true
+echo "Criando rede Docker avapolos e proxy" | log debug data_compiler
+add_docker_network avapolos | log debug data_compiler
+add_docker_network proxy | log debug data_compiler
 
 if [[ -z "$(cat /etc/hosts | grep -o 'AVAPOLOS BUILD START')" ]]; then
   setHosts | log debug data_compiler
 fi
 
-cd $TRAEFIK_DIR
-echo "Compilando traefik" | log info data_compiler
-run compile.sh
-cp -rf $TRAEFIK_DATA_DIR/* "$PACK_DIR/data/"
-
-cd $INICIO_DIR
-echo "Compilando inicio.avapolos" | log info data_compiler
-run compile.sh
-cp -rf $INICIO_DATA_DIR/* "$PACK_DIR/data/"
-
-cd $MANUTENCAO_DIR
-echo "Compilando manutencao" | log info data_compiler
-run compile.sh
-cp -rf $MANUTENCAO_DATA_DIR/* "$PACK_DIR/data/"
+if ! [[ "$IGNORE_BASE" = "true" ]]; then
+  export MANUTENCAO=""
+  BASE_SERVICES="TRAEFIK INICIO MANUTENCAO DHCPD DNSMASQ"
+  echo "Compilando serviços base: $BASE_SERVICES"
+  for service in $BASE_SERVICES; do
+    dir=$service"_DIR"
+    data_dir=$service"_DATA_DIR"
+    cd "${!dir}"
+    echo "Compilando $service" | log info data_compiler
+    run compile.sh
+    cp -rf "${!data_dir}"/* "$PACK_DIR/data/"
+  done
+fi
 
 #SERVICES=${SERVICES:-$(ls | grep -v TEMPLATE | grep -v traefik)}
 SERVICES=${SERVICES:-$(for svc in $(cat $ROOT_DIR/../services/enabled_services | grep -v educapes); do echo $(echo $svc | cut -d . -f1); done)}
@@ -100,6 +106,8 @@ if ! [[ "$KEEPALIVE" = "true" ]]; then
     echo "Parando serviço $service" | log debug data_compiler
     docker-compose down
   done
+  remove_docker_network avapolos
+  remove_docker_network proxy
 fi
 
 cd $PACK_DIR

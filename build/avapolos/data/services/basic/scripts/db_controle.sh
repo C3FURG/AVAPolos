@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-echo "Assegurando permissões corretas." | log debug data_compiler
-sudo chown -R $USER:$USER .
+echo "Compilando db_controle" | log info data_compiler
 
-cd $BASIC_DIR
-
-echo "Iniciando db_moodle_ies e db_moodle_polo" | log debug data_compiler
+echo "Iniciando db_controle" | log debug data_compiler
 docker-compose up -d db_controle
 
 waitForHealthy db_controle
 
-execSQL db_controle avapolos avapolos "
-  ALTER USER avapolos WITH PASSWORD 'bd10b9a2e191deafe6af';
+execSQL db_controle postgres postgres "
+  CREATE DATABASE avapolos;
+"
+execSQL db_controle postgres postgres "
+  CREATE ROLE avapolos WITH LOGIN PASSWORD '$DB_CONTROLE_AVAPOLOS_PASSWORD';
+  GRANT ALL ON DATABASE avapolos TO avapolos;
 "
 execSQL db_controle avapolos avapolos "
   CREATE TABLE public.controle_login
@@ -38,13 +39,12 @@ execSQL db_controle avapolos avapolos "
   CREATE TABLE public.controle_registro
   (
       id SERIAL PRIMARY KEY,
-      email_dev character varying(255) NOT NULL,
+      email_dev character varying(255) NOT NULL
   );
 "
 
-hash=$(echo -n $CONTROLE_PASSWORD | md5sum | cut -d ' ' -f 1)
 execSQL db_controle avapolos avapolos "
-INSERT INTO public.controle_login (login, password) VALUES ('admin', '$hash');
+INSERT INTO public.controle_login (login, password) VALUES ('admin', '$CONTROLE_ADMIN_PASSWORD_HASH');
 "
 
 execSQL db_controle avapolos avapolos "

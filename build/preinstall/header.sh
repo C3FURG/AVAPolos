@@ -430,8 +430,15 @@ testURL() { #$1-> URL
 
 #Checks if a docker network exists, if not, adds it.
 add_docker_network() { #$1-> Network name
-  if [[ "$(docker network inspect "$1" > /dev/null 2>&1 || true)" ]]; then
+  if [[ -z "$(docker network ls --filter "name=$1" -q)" ]]; then
     docker network create "$1"
+  fi
+}
+
+#Checks if a docker network exists and removes it.
+remove_docker_network() { #$1-> Network name
+  if [[ "$(docker network ls --filter "name=$1" -q)" ]]; then
+    docker network rm "$1"
   fi
 }
 
@@ -467,4 +474,5 @@ export -f show_var
 export -f waitForHealthy
 export -f testURL
 export -f add_docker_network
+export -f remove_docker_network
 export -f is_enabled

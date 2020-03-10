@@ -7,7 +7,7 @@ services:
     image: avapolos/postgres:bdr
     environment:
      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-     - UID=${PUID}
+     - PUID=${PUID}
     volumes:
      - ${MOODLE_DATA_DIR}/db_moodle_ies:/var/lib/postgresql/data
     networks:

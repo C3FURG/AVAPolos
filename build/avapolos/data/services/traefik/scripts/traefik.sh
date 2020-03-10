@@ -13,4 +13,5 @@ cp $TRAEFIK_RESOURCES_DIR/traefik.toml $TRAEFIK_DATA_DIR/traefik/
 echo "Iniciando traefik" | log debug data_compiler
 docker-compose up -d
 
+sleep 3
 testURL "http://traefik.avapolos" | log debug data_compiler
