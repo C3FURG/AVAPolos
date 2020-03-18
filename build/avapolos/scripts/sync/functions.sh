@@ -311,10 +311,6 @@ execSqlOnMoodleDB(){ # $1 = containerName # $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
-execSQLMoodle(){ # $1 = containerName $2 SQL statement
-   execDockerCommand $1 "psql -U moodleuser -d moodle -c \"$2\""
-}
-
 execSQLMaster(){ # $1 SQL statement
    execSqlOnMoodleDB $containerDBMasterName "$1"
 }
@@ -383,6 +379,5 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
 
 export -f execSQL
 export -f execSqlOnMoodleDB
-export -f execSQLMoodle
 export -f execDockerCommand
 export -f connectDB

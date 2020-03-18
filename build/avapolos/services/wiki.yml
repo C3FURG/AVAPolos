@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
 
@@ -6,13 +6,13 @@ services:
     container_name: db_wiki
     image: avapolos/postgres:bdr
     environment:
-      - POSTGRES_PASSWORD=@bancoava.C4p35*&
-      - UID=${PUID}
+      - POSTGRES_PASSWORD=${DB_WIKI_POSTGRES_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
     volumes:
-     - ../data/db_wiki:/var/lib/postgresql/data
+     - ${DATA_PATH}/db_wiki:/var/lib/postgresql/data
     networks:
       avapolos:
-    stop_signal: SIGINT
     restart: unless-stopped
 
   wiki:
@@ -21,14 +21,13 @@ services:
     ports:
       - "82:80"
     volumes:
-      - ../data/wiki:/app/
+      - ${DATA_PATH}/wiki:/app/
     networks:
       avapolos:
       proxy:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - APACHE_SERVER_NAME=wiki
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -45,6 +44,9 @@ services:
       - "traefik.frontend.headers.frameDeny=true"
     cap_add:
       - SYS_TIME
+    depends_on:
+      db_wiki:
+        condition: service_healthy
 
 networks:
   avapolos:

@@ -6,19 +6,14 @@ services:
     container_name: db_wiki
     image: avapolos/postgres:bdr
     environment:
-      - POSTGRES_PASSWORD=@bancoava.C4p35*&
-      - UID=${PUID}
+      - POSTGRES_PASSWORD=${DB_WIKI_POSTGRES_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
     volumes:
-     - ./data/db_wiki:/var/lib/postgresql/data
+     - ${WIKI_DATA_DIR}/db_wiki:/var/lib/postgresql/data
     networks:
       avapolos:
-    stop_signal: SIGINT
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moodle"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   wiki:
     container_name: wiki
@@ -26,14 +21,13 @@ services:
     ports:
       - "82:80"
     volumes:
-      - ./data/wiki:/app/
+      - ${WIKI_DATA_DIR}/wiki:/app/
     networks:
       avapolos:
       proxy:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - APACHE_SERVER_NAME=wiki
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -41,13 +35,6 @@ services:
       - "traefik.frontend.rule=Host:wiki.avapolos"
       - "traefik.port=80"
       - "traefik.docker.network=proxy"
-      - "traefik.frontend.headers.STSSeconds=315360000"
-      - "traefik.frontend.headers.browserXSSFilter=true"
-      - "traefik.frontend.headers.contentTypeNosniff=true"
-      - "traefik.frontend.headers.forceSTSHeader=true"
-      - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      - "traefik.frontend.headers.STSPreload=true"
-      - "traefik.frontend.headers.frameDeny=true"
     cap_add:
       - SYS_TIME
     depends_on:

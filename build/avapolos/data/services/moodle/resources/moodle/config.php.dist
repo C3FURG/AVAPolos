@@ -10,8 +10,8 @@ $CFG->dbtype    = 'pgsql';
 $CFG->dblibrary = 'native';
 $CFG->dbhost    = 'db_moodle_ies';
 $CFG->dbname    = 'moodle';
-$CFG->dbuser    = 'moodleuser';
-$CFG->dbpass    = '@bancoava.C4p35*&';
+$CFG->dbuser    = 'moodle';
+$CFG->dbpass    = '$DB_MOODLE_MOODLE_PASSWORD';
 $CFG->prefix    = 'mdl_';
 $CFG->dboptions = array (
   'dbpersist' => 0,
@@ -21,7 +21,7 @@ $CFG->dboptions = array (
 
 $CFG->enablewebservices = 1;
 $CFG->enablemobilewebservice = 1;
-#$mobileappdownloadpage = 'htt://mobileappdownloadpage';
+#$mobileappdownloadpage = 'http://mobileappdownloadpage';
 #set_config('setuplink', $mobileappdownloadpage, 'tool_mobile');
 
 #Force language

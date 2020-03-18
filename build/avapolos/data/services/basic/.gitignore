@@ -1,1 +1,5 @@
 data
+scripts/download.php?*
+resources/downloads/public/instaladores/*.apk
+resources/downloads/public/instaladores/*.tgz
+resources/downloads/public/instaladores/*.zip

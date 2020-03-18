@@ -6,7 +6,7 @@ services:
     container_name: manutencao
     image: avapolos/webserver:lite
     volumes:
-      - ../data/manutencao:/app/
+      - ${DATA_PATH}/manutencao:/app/
     networks:
       avapolos:
       proxy:

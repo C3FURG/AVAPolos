@@ -17,9 +17,16 @@ services:
       - "traefik.frontend.rule=Host:traefik.avapolos"
       - "traefik.port=8080"
       - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ../data/traefik:/etc/traefik
+      - ${DATA_PATH}/traefik:/etc/traefik
 
 networks:
   avapolos:

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 run() {
-  bash $1
+  bash "$1"
   if [[ $? -ne 0 ]]; then
     echo "Ocorreu um erro no script $1!"
     exit 1
@@ -12,16 +12,13 @@ generateSecrets() {
 cat <<EOL
 #Format: SERVICE_USER
 export CONTROLE_ADMIN_PASSWORD=Admin@123
-export CONTROLE_ADMIN_PASSWORD_HASH=$(echo -n $CONTROLE_ADMIN_PASSWORD | md5sum | cut -d ' ' -f 1)
+export CONTROLE_ADMIN_PASSWORD_HASH=$(echo -n "Admin@123" | md5sum | cut -d ' ' -f 1)
 export DB_CONTROLE_POSTGRES_PASSWORD=$(openssl rand -hex 16)
 export DB_CONTROLE_AVAPOLOS_PASSWORD=$(openssl rand -hex 16)
 export MOODLE_ADMIN_PASSWORD=Admin@123
-export DB_MOODLE_IES_POSTGRES_PASSWORD=$(openssl rand -hex 16)
-export DB_MOODLE_IES_BDRSYNC_PASSWORD=$(openssl rand -hex 16)
-export DB_MOODLE_IES_MOODLE_PASSWORD=$(openssl rand -hex 16)
-export DB_MOODLE_POLO_POSTGRES_PASSWORD=$(openssl rand -hex 16)
-export DB_MOODLE_POLO_BDRSYNC_PASSWORD=$(openssl rand -hex 16)
-export DB_MOODLE_POLO_MOODLE_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_POSTGRES_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_BDRSYNC_PASSWORD=$(openssl rand -hex 16)
+export DB_MOODLE_MOODLE_PASSWORD=$(openssl rand -hex 16)
 export PORTAINER_ADMIN_PASSWORD=Admin@123
 export WIKI_ADMIN_PASSWORD=Admin@123
 export DB_WIKI_POSTGRES_PASSWORD=$(openssl rand -hex 16)

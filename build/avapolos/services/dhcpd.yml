@@ -9,4 +9,4 @@ services:
     network_mode: host
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ../data/dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro
+      - ${DATA_PATH/dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro

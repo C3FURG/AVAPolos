@@ -6,7 +6,7 @@ services:
     container_name: hub_name
     image: avapolos/webserver:lite
     volumes:
-      - ../data/inicio:/app/
+      - ${DATA_PATH}/inicio:/app/
     networks:
       avapolos:
       proxy:

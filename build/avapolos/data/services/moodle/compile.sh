@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-show_var PUID
-show_var PGID
-show_var POSTGRES_PASSWORD
-show_var MOODLE_PASSWORD
-
-echo "Removendo arquivos anteriores." | log debug data_compiler
+echo "Assegurando permissões corretas e limpando diretório de dados." | log debug
+sudo chown -R $USER:$USER .
 rm -rf $MOODLE_DATA_DIR/*
-mkdir -p $MOODLE_DATA_DIR/{db_moodle_ies,db_moodle_polo,moodle}
+mkdir -p $MOODLE_DATA_DIR/{moodle,db_moodle_ies,db_moodle_polo}
+
+echo "Parando serviços caso já estejam rodando." | log debug data_compiler
 docker-compose down
 
 cd scripts
@@ -15,4 +13,4 @@ cd scripts
 run bdr.sh
 run moodle.sh
 
-echo "Serviço configurado com sucesso!" | log debug data_compiler
+echo "Serviço configurado com sucesso!" | log info data_compiler

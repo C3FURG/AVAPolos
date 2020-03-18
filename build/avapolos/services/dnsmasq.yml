@@ -10,4 +10,4 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
-      - ../data/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
+      - ${DATA_PATH}/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
