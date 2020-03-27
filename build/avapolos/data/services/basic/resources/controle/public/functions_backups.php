@@ -333,13 +333,15 @@ $showFiles = ($dirArray == FALSE ? false : true);
 </div>
 
 <?php if ($showFiles): ?>
-<table class="table">
+<table id='table-backups' class="table">
   <thead>
     <tr>
       <th scope="col">Nome do arquivo</th>
       <th scope="col">Tamanho</th>
       <th scope="col">Data</th>
       <th scope="col">Operação</th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -467,4 +469,39 @@ $showFiles = ($dirArray == FALSE ? false : true);
         });
     });
   });
+</script>
+
+<link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+ 
+<script type="text/javascript" src="DataTables/datatables.min.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#table-backups').DataTable( {
+        "language": {
+          "decimal":        "",
+          "emptyTable":     "Sem dados disponíveis na tabela",
+          "info":           "Mostrando _START_ até _END_ de _TOTAL_ entradas",
+          "infoEmpty":      "Mostrando 0 até 0 de 0 entradas",
+          "infoFiltered":   "(filtrado de _MAX_ total de entradas)",
+          "infoPostFix":    "",
+          "thousands":      ",",
+          "lengthMenu":     "Mostrando _MENU_ entradas",
+          "loadingRecords": "Carregando...",
+          "processing":     "Processando...",
+          "search":         "Busca:",
+          "zeroRecords":    "Resultados não encontrados",
+          "paginate": {
+              "first":      "Primeira",
+              "last":       "Última",
+              "next":       "Próxima",
+              "previous":   "Anterior"
+          },
+          "aria": {
+              "sortAscending":  ": ativar ordenação crescente",
+              "sortDescending": ": ativar ordenação decrescente"
+          }
+        }
+    });
+  })
 </script>

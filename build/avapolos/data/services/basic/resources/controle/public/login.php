@@ -5,7 +5,7 @@
         session_destroy();
     }
 
-    require_once("config.php");
+    require_once("config-control.php");
 
     if ($CFG->debug) {
       ini_set('display_errors', 1);
@@ -14,10 +14,23 @@
     }
 
     require_once("header.php");
+    $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
+
+
+    $queryLoginAdmin = pg_query($DB, "SELECT * FROM public.controle_login WHERE id = 1");
+    if($queryLoginAdmin && pg_num_rows($queryLoginAdmin) > 0){
+        $dadosLoginAdmin = pg_fetch_array($queryLoginAdmin);
+    }
+
+    //caso o last_login seja nulo, quer dizer que ainda não logou, então redireciona para o cadastro
+    if(!$dadosLoginAdmin['last_login']){
+        header('Location: register.php');
+        exit();
+    }
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitLogin']) && $_POST['submitLogin'] != ''){
-        $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
+
 
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = md5(filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS));
@@ -29,10 +42,14 @@
 
         //echo "SELECT * FROM public.avapolos_controle_login WHERE login = '".$login."' AND password = '".$password."' ";
         if($queryLogin && pg_num_rows($queryLogin) > 0){
+
             $dadosLogin = pg_fetch_array($queryLogin);
 
             //salva os dados na session para verificar nas páginas
             $_SESSION['login'] = $dadosLogin['login'];
+
+            //salva o last_login como sendo a data atual
+            $queryEdit = pg_query($DB, "UPDATE public.controle_login SET last_login = '".date("Y-m-d H:i:s")."' WHERE id = ".$dadosLogin['id']);
 
             header('Location: index.php');
             //exit();
