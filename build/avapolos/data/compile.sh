@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-dir=$(pwd)
-cd ../../preinstall
-source header.sh
-cd ../avapolos/scripts/sync/
-source functions.sh
-cd $dir
-unset dir
 source header.sh
 generateSecrets > secrets
 chmod 600 secrets
@@ -56,28 +49,28 @@ do
 		esac
 done
 
-echo "Assegurando permissões corretas" | log debug data_compiler
 sudo chown $USER:$USER -R .
 
 mkdir -p $PACK_DIR/data && rm -rf $PACK_DIR/data/*
 
-echo "Criando rede Docker avapolos e proxy" | log debug data_compiler
-add_docker_network avapolos | log debug data_compiler
-add_docker_network proxy | log debug data_compiler
+log debug "Criando rede Docker avapolos e proxy"
+add_docker_network avapolos
+add_docker_network proxy
 
 if [[ -z "$(cat /etc/hosts | grep -o 'AVAPOLOS BUILD START')" ]]; then
-  setHosts | log debug data_compiler
+  log debug "Configurando /etc/hosts"
+  setHosts
 fi
 
 if ! [[ "$IGNORE_BASE" = "true" ]]; then
   export MANUTENCAO=""
   BASE_SERVICES="TRAEFIK INICIO MANUTENCAO DHCPD DNSMASQ"
-  echo "Compilando serviços base: $BASE_SERVICES"
+  log debug "Compilando serviços base: $BASE_SERVICES"
   for service in $BASE_SERVICES; do
     dir=$service"_DIR"
     data_dir=$service"_DATA_DIR"
     cd "${!dir}"
-    echo "Compilando $service" | log info data_compiler
+    log info "Compilando $service"
     run compile.sh
     cp -rf "${!data_dir}"/* "$PACK_DIR/data/"
   done

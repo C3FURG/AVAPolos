@@ -41,7 +41,7 @@ installBuildDeps() {
 		rsync \
 		dpkg-dev \
 		makeself \
-		&& touch .buildDependencies || echo "Erro na instalação." && exit 1
+		&& touch .buildDependencies || exit 1
 	fi
 }
 
@@ -67,7 +67,7 @@ usage() {
 # $1-> Template name
 setTemplate() {
 
-  cd $BUILD_PATH/templates
+  cd $BUILD_DIR_PATH/templates
 
   if [ -z "$1" ]; then
     templates=($(ls | cut -d "." -f1))
@@ -99,14 +99,14 @@ setTemplate() {
   echo "Template $template selecionado" | log debug
   echo "Stacks: $stacks" | log debug
   echo "Imagens: $images" | log debug
-  echo $template > $BUILD_PATH/active_template
+  echo $template > $BUILD_DIR_PATH/active_template
 
 }
 
 checkForActiveTemplate() {
-	if [ -f "$BUILD_PATH/active-template" ]; then
-		template=$(cat $BUILD_PATH/template)
-		source $BUILD_PATH/"$template.sh"
+	if [ -f "$BUILD_DIR_PATH/active-template" ]; then
+		template=$(cat $BUILD_DIR_PATH/template)
+		source $BUILD_DIR_PATH/"$template.sh"
 		echo "Utilizando template: $template" | log debug
 		echo "Stacks: $stacks" | log debug
 		echo "Imagens: $images" | log debug
@@ -114,6 +114,12 @@ checkForActiveTemplate() {
 		setTemplate "completo"
 	fi
 }
+
+export BUILD_DIR_PATH="$PWD/../"
+export BUILD_AVAPOLOS_PATH="$BUILD_DIR_PATH/avapolos"
+export BUILD_DATA_PATH="$BUILD_AVAPOLOS_PATH/data"
+export INSTALLER_VERSION="beta-0.2-$(date +%d.%m.%y)"
+
 
 export -f installDocker
 export -f ensureDockerIsActive

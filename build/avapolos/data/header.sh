@@ -56,7 +56,7 @@ unsetHosts() {
 
 export PUID=$(id -u $USER)
 export PGID=$(id -g $USER)
-export ROOT_DIR=$(pwd)
+export ROOT_DIR=$BUILD_AVAPOLOS_PATH/data
 export SERVICES_DIR=$ROOT_DIR/services
 export PACK_DIR=$ROOT_DIR/pack
 

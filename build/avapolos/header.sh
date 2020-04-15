@@ -29,8 +29,7 @@ export HOME_PATH="/home/$AVAPOLOS_USER"
 export SSH_PATH="$HOME_PATH/.ssh"
 
 #Version file retrieval.
-export INSTALLER_VERSION="$(cat $ROOT_PATH/version)"
-export INSTALLER_VERSION=${INSTALLER_VERSION:-$(cat version)}
+export INSTALLER_VERSION=${INSTALLER_VERSION:-$(cat $ROOT_PATH/version)}
 if [[ -z $INSTALLER_VERSION ]]; then
   echo "Versão não especificada no arquivo \'version\'"
   exit 1

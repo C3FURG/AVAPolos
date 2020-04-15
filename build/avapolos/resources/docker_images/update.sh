@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 
-cd ../../../preinstall
-source header.sh
-cd ../avapolos/resources/docker_images
-
-LOGFILE_PATH="$compilerRoot/build.log"
-
-echo "update.sh docker_images" | log debug
+log debug "update.sh docker_images"
 
 if ! [ -f "images" ]; then
-  echo "Arquivo images não encontrado!" | log error
+  log error "Arquivo images não encontrado!"
   exit 1
 fi
 
@@ -21,11 +15,9 @@ start=$(date +%s)
 #brendowdf/dpsace-educapes:latest brendowdf/dspace-postgres-educapes:latest
 images=$(cat images)
 
-echo "images to check: ${images[@]}" | log debug
+log debug "Atualizando imagens: ${images[@]}"
 
 rm -f *.tar
-
-pwd=$PWD
 
 #For every image, download it.
 for img in $images; do
@@ -34,10 +26,10 @@ for img in $images; do
   lastName=$(echo $img | cut -d"/" -f2 | cut -d":" -f2)
   imgFileName=$(echo $firstName"_"$lastName".tar")
 
-  echo "Checando imagem: $img" | log debug
-  docker pull $img | log debug
+  log debug "Checando imagem: $img"
+  docker pull $img || exit 1
 
-  docker save -o $imgFileName $img
+  docker save -o $imgFileName $img || exit 1
 
 done
 
@@ -48,4 +40,4 @@ end=$(date +%s)
 runtime=$((end-start))
 
 #Let the user know it's done and the runtime
-echo "Imagens atualizadas com sucesso, em "$runtime"s." | log info
+log info "Imagens atualizadas com sucesso, em "$runtime"s."

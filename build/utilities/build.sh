@@ -6,14 +6,13 @@ installDocker
 ensureDockerIsActive
 installBuildDeps
 
-export BUILD_PATH="$PWD/../"
-echo "beta-0.2-$(date +%d.%m.%y)" > $BUILD_PATH/version
-sudo chown $USER:$USER -R $BUILD_PATH
-cd $BUILD_PATH
+echo $INSTALLER_VERSION > $BUILD_DIR_PATH/version
+sudo chown $USER:$USER -R $BUILD_DIR_PATH
+cd $BUILD_AVAPOLOS_PATH
 
-source $BUILD_PATH/header.sh
+source header.sh
 
-export LOGFILE_PATH="$BUILD_PATH/build.log"
+export LOGFILE_PATH="$BUILD_DIR_PATH/build.log"
 export LOGGER_LVL="info"
 
 checkForActiveTemplate
@@ -102,58 +101,57 @@ fi
 
 start=$(date +%s)
 
-cd $BUILD_PATH/avapolos/services
+cd $BUILD_DIR_PATH/avapolos/services
 echo "" > enabled_services
 for stack in $stacks; do
   echo "$stack" >> enabled_services
 done
 
-cd $BUILD_PATH/avapolos/resources/docker_images
+cd $BUILD_DIR_PATH/avapolos/resources/docker_images
 echo "" > images
 for image in $images; do
   echo "$image" >> images
 done
 
 if [ "$update" = "y" ]; then
-  cd $BUILD_PATH/avapolos/resources
+  cd $BUILD_DIR_PATH/avapolos/resources
   bash update_resources.sh
-  if [ "$?" -ne 0 ]; then
-		echo "Erro na atualização dos recursos."
-		exit 1
+  	if [ "$?" -ne 0 ]; then
+	echo "Erro na atualização dos recursos."
+	exit 1
 	fi
 fi
 
-
-echo "Gerando instalador com a versão: $INSTALLER_VERSION" | log info
+log info "Gerando instalador com a versão: $INSTALLER_VERSION"
 
 #FIXME
 if [ "$pull" = "y" ]; then
 	echo "Buscando serviços da instalação atual." | log debug
   sudo avapolos --stop
 	echo "Compactando pacote de servicos." | log debug
-  tar --use-compress-program="pigz -9" -cf $BUILD_PATH/avapolos/data.tar.gz $ROOT_PATH/data
+  tar --use-compress-program="pigz -9" -cf $BUILD_DIR_PATH/avapolos/data.tar.gz $ROOT_PATH/data
   cd $installRoot
   sudo chown $USER:$USER -R "$installRoot"
 	sudo avapolos --start
 elif [ "$build_data" = "y" ]; then
 	echo "Compilando os dados dos serviços" | log info
-	cd $BUILD_PATH/avapolos/data
+	cd $BUILD_DATA_PATH
 	bash compile.sh
 fi
 
 mkdir -p ../packing
 mkdir -p ../installer-packing
 
-sudo chown $USER:$USER -R $BUILD_PATH
+sudo chown $USER:$USER -R $BUILD_DIR_PATH
 
 echo "Executando rsync." | log debug
-rsync -avmq --progress $BUILD_PATH $BUILD_PATH/packing --exclude data --delete
+rsync -avmq --progress $BUILD_DIR_PATH $BUILD_DIR_PATH/packing --exclude data --delete
 
 echo "Empacotando solução." | log info
-cd $BUILD_PATH/packing && tar --use-compress-program='pigz -9' -cf AVAPolos.tar.gz *
+cd $BUILD_DIR_PATH/packing && tar --use-compress-program='pigz -9' -cf AVAPolos.tar.gz *
 
-mv AVAPolos.tar.gz $BUILD_PATH/installer-packing
-cp $BUILD_PATH/avapolos/startup.sh $BUILD_PATH/installer-packing
+mv AVAPolos.tar.gz $BUILD_DIR_PATH/installer-packing
+cp $BUILD_DIR_PATH/avapolos/startup.sh $BUILD_DIR_PATH/installer-packing
 makeself -q --pigz --target $INSTALLER_DIR_PATH --needroot . $INSTALLER_FILENAME 'Instalador da solução AVAPolos' './startup.sh'
 
 rm -rf AVAPolos.tar.gz
