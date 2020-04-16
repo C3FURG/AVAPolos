@@ -18,6 +18,7 @@ log debug "Iniciando webserver"
 
 docker-compose up -d downloads
 
+sleep 3
 testURL "http://downloads.avapolos"                                       
 testURL "http://downloads.avapolos/instaladores/moodledesktoplinux32.tgz" 
 testURL "http://downloads.avapolos/instaladores/moodledesktoplinux64.tgz" 

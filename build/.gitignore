@@ -1,4 +1,6 @@
 pack
+packing
+installer_packing
 cache
 *.log
 avapolos_alpha*

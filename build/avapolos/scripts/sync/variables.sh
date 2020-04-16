@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source /etc/avapolos/header.sh
-
 #SYNC VARIABLES
 remoteServerAddress="0.0.0.0"
 

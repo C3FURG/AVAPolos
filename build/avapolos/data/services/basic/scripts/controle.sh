@@ -11,4 +11,5 @@ envsubst '$DB_CONTROLE_AVAPOLOS_PASSWORD' < $BASIC_DATA_DIR/controle/public/conf
 log debug "Iniciando webserver" 
 docker-compose up -d controle
 
+sleep 3
 testURL "http://controle.avapolos"

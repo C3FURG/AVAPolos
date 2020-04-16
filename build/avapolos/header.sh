@@ -43,7 +43,7 @@ export CLONE_INSTALLER_PATH="/opt/avapolos_clone/"
 export LOGGER_LVL=${LOGGER_LVL:="debug"}
 export LOGFILE_PATH="${LOGFILE_PATH:="$LOG_PATH/avapolos.log"}"
 export TIMESTAMP_SCHEME=${TIMESTAMP_SCHEME:="%d-%m-%Y %H:%M:%S"}
-export LOGFILE_MAXLINECOUNT=${LOGFILE_MAXLINECOUNT:=10}
+export LOGFILE_MAXLINECOUNT=${LOGFILE_MAXLINECOUNT:=3000}
 
 #Logger function.
 #$1-> mode[debug,info,error,warn], $2-> data

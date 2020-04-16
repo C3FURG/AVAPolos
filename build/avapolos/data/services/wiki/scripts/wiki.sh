@@ -25,4 +25,5 @@ docker exec -it wiki php /app/public/maintenance/install.php --dbtype="postgres"
   "Wiki AVAPolos" \
   "Admin"
 
+sleep 3
 testURL "http://wiki.avapolos"

@@ -54,4 +54,5 @@ execSqlOnMoodleDB db_moodle_ies "SELECT * from mdl_user;"
 echo "Checando instalação do Moodle no POLO."
 execSqlOnMoodleDB db_moodle_polo "SELECT * from mdl_user;"
 
+sleep 3
 testURL "http://moodle.avapolos"

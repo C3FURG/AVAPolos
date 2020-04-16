@@ -107,4 +107,4 @@ cp $ROOT_DIR/secrets $PACK_DIR/data
 
 cd $PACK_DIR
 tar --use-compress-program="pigz -9" -cf data.tar.gz data
-cp -rf data.tar.gz $ROOT_DIR/../
+cp -rf data.tar.gz ../

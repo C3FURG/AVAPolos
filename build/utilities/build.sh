@@ -8,12 +8,17 @@ installBuildDeps
 
 echo $INSTALLER_VERSION > $BUILD_DIR_PATH/version
 sudo chown $USER:$USER -R $BUILD_DIR_PATH
+cd $BUILD_AVAPOLOS_PATH/scripts/sync/
+
+source variables.sh
+source functions.sh
+
 cd $BUILD_AVAPOLOS_PATH
 
 source header.sh
 
 export LOGFILE_PATH="$BUILD_DIR_PATH/build.log"
-export LOGGER_LVL="info"
+export LOGGER_LVL="debug"
 
 checkForActiveTemplate
 
@@ -139,22 +144,21 @@ elif [ "$build_data" = "y" ]; then
 	bash compile.sh
 fi
 
-mkdir -p ../packing
-mkdir -p ../installer-packing
+mkdir -p $BUILD_DIR_PATH/packing
+mkdir -p $BUILD_DIR_PATH/installer_packing
 
 sudo chown $USER:$USER -R $BUILD_DIR_PATH
-
 log debug "Executando rsync." 
-rsync -avmq --progress $BUILD_DIR_PATH $BUILD_DIR_PATH/packing --exclude data --delete
+rsync -avm --progress $BUILD_AVAPOLOS_PATH $BUILD_DIR_PATH/packing --exclude data --delete
 
 log info "Empacotando solução." 
-cd $BUILD_DIR_PATH/packing && tar --use-compress-program='pigz -9' -cf AVAPolos.tar.gz *
+cd $BUILD_DIR_PATH/packing
+tar --use-compress-program='pigz -9' -cf AVAPolos.tar.gz *
 
-mv AVAPolos.tar.gz $BUILD_DIR_PATH/installer-packing
-cp $BUILD_DIR_PATH/avapolos/startup.sh $BUILD_DIR_PATH/installer-packing
-makeself -q --pigz --target $INSTALLER_DIR_PATH --needroot . $INSTALLER_FILENAME 'Instalador da solução AVAPolos' './startup.sh'
-
-rm -rf AVAPolos.tar.gz
+mv AVAPolos.tar.gz $BUILD_DIR_PATH/installer_packing/
+cp $BUILD_DIR_PATH/avapolos/startup.sh $BUILD_DIR_PATH/installer_packing/
+cd $BUILD_DIR_PATH/installer_packing
+makeself --pigz --target $INSTALLER_DIR_PATH --needroot . $INSTALLER_FILENAME 'Instalador da solução AVAPolos' './startup.sh'
 
 mv -f $INSTALLER_FILENAME ..
 cd ..
@@ -167,13 +171,3 @@ log info "---- Compilação Concluída ----"
 log info "Instalador disponível: $INSTALLER_FILENAME"
 log info "Tamanho: $(du -h $INSTALLER_FILENAME | awk {'print $1'})"
 log info "Em "$runtime"s." 
-
-# sudo docker run -it \
-#   -e PUID=$(id -u $USER) \
-#   -e PGID=$(id -g $USER) \
-#   -v /var/run/docker.sock:/run/docker.sock \
-#   -v $(which docker):/bin/docker \
-#   -v $dir:/home/avapolos/avapolos-infra \
-#   -v /usr/local/bin/avapolos:/usr/local/bin/avapolos \
-#   avapolos/build:v0 \
-#   "/compilar.sh $@"

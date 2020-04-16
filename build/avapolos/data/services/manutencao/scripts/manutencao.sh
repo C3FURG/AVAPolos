@@ -14,5 +14,6 @@ cp -rf $MANUTENCAO_RESOURCES_DIR/public $MANUTENCAO_DATA_DIR/manutencao
 log debug "Iniciando webserver" 
 docker-compose up -d
 
+sleep 3
 testURL "http://manutencao.avapolos"
 log debug "Manutencao configurado com sucesso!" 

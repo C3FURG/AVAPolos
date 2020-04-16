@@ -115,7 +115,7 @@ checkForActiveTemplate() {
 	fi
 }
 
-export BUILD_DIR_PATH="$PWD/../"
+export BUILD_DIR_PATH="$PWD/.."
 export BUILD_AVAPOLOS_PATH="$BUILD_DIR_PATH/avapolos"
 export BUILD_DATA_PATH="$BUILD_AVAPOLOS_PATH/data"
 export INSTALLER_VERSION="beta-0.2-$(date +%d.%m.%y)"

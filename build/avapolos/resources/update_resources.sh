@@ -28,7 +28,7 @@ if [ "$update" = "y" ]; then
 
   if [ "$update_images" = "y" ]; then
     cd ../docker_images
-    sudo bash update.sh
+    bash update.sh
   fi
 fi
 

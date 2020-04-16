@@ -14,4 +14,5 @@ cp -rf $INICIO_RESOURCES_DIR/public $INICIO_DATA_DIR/inicio/
 log debug "Iniciando webserver" 
 docker-compose up -d
 
-testURL "inicio.avapolos"
+sleep 3
+testURL "http://inicio.avapolos"
