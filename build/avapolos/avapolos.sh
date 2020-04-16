@@ -14,7 +14,7 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error cli
+  log error "Não foi encontrado o arquivo header.sh" 
   exit 1
 fi
 
@@ -35,7 +35,7 @@ while true; do
 	  ;;
     --loglvl)
       shift
-      echo "alterando nível de log para: $1" | log info cli
+      log info "alterando nível de log para $1"
       export $LOGGER_LVL="$1"
       echo "$1" > "$ETC_PATH/logger.conf"
       shift
@@ -52,7 +52,7 @@ while true; do
 	  ;;
     --restart)
       shift
-      echo "Reiniciando avapolos" | log info cli
+      log info "Reiniciando avapolos" 
       stop
       start
       exit 0

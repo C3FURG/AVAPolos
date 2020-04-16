@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Compilando moodle.avapolos" | log info data_compiler
+log info "Compilando moodle.avapolos" 
 
 #Download do moodle 3.7
 tmp=$(mktemp -d -t moodle_download.XXXXXXX)

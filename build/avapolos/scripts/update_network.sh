@@ -54,7 +54,7 @@ echo -e "#AVAPolos config end"
 }
 generateHostsConfig() { # $1-> ip(without mask)
 if [ -z "$1" ]; then
-  echo "Nenhum ip foi passado para o generateHostsConfig" | log error installer
+  log error "Nenhum ip foi passado para o generateHostsConfig" 
   exit 1
 fi
 echo -e "#AVAPolos config start"
@@ -94,8 +94,8 @@ undoConfig /etc/hosts
 generateNetworkConfig "$interface" "$ip" "$mask" "$gw" "$dns1" "$dns2" >> /etc/network/interfaces
 generateHostsConfig "$ip" >> /etc/hosts
 
-ifconfig "$interface" down | log debug installer
-ip addr flush dev "$interface" | log debug installer
-service networking restart | log debug installer
+ifconfig "$interface" down
+ip addr flush dev "$interface"
+service networking restart
 
 start

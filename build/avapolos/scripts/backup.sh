@@ -4,7 +4,7 @@ source /etc/avapolos/header.sh
 source $SYNC_PATH/variables.sh
 source $SYNC_PATH/functions.sh
 
-echo "backup.sh" | log debug backup
+log debug "backup.sh" 
 
 #Backup filename generation.
 timestamp="$(date +%D | sed 's/\//\./g')"
@@ -58,20 +58,20 @@ start=$(date +%s)
 
 case "$service" in
   moodle )
-    echo "Parando serviço." | log debug backup
-    stop moodle.yml
-    echo "Compactando backup." | log debug backup
-    tar --use-compress-program="pigz -9" -cf "$path/$label.tar.gz" $DATA_PATH/$dataDirMaster $DATA_PATH/$dataDirSync $DATA_PATH/moodle/moodledata/filedir $SYNC_PATH/Export/ $SYNC_PATH/Import/ $SYNC_PATH/dadosExportados/
-    echo "Iniciando serviço." | log debug backup
-    start moodle.yml
+  log debug "Parando serviço." 
+  stop moodle.yml
+  log debug "Compactando backup." 
+  tar --use-compress-program="pigz -9" -cf "$path/$label.tar.gz" $DATA_PATH/$dataDirMaster $DATA_PATH/$dataDirSync $DATA_PATH/moodle/moodledata/filedir $SYNC_PATH/Export/ $SYNC_PATH/Import/ $SYNC_PATH/dadosExportados/
+  log debug "Iniciando serviço." 
+  start moodle.yml
   ;;
 
   *)
-  echo "Parando serviços." | log debug backup
+  log debug "Parando serviços." 
   stop
-  echo "Compactando backup." | log debug backup
+  log debug "Compactando backup." 
   tar --use-compress-program="pigz -9" -cf "$path/$label.tar.gz" $DATA_PATH
-  echo "Iniciando serviços." | log debug backup
+  log debug "Iniciando serviços." 
   start
   ;;
 esac
@@ -80,10 +80,10 @@ end=$(date +%s)
 
 runtime=$((end-start))
 
-echo "Backup concluído."
-echo "Arquivo de backup disponível em: $path/$label'.tar.gz'" | log info backup
-echo "Tamanho: $(du -h $path/$label'.tar.gz' | awk {'print $1'})" | log info backup
-echo "Em "$runtime"s." | log info backup
+log info "Backup concluído."
+log info "Arquivo de backup disponível em: $path/$label'.tar.gz'"
+log info "Tamanho: $(du -h $path/$label'.tar.gz' | awk {'print $1'})"
+log info "Em "$runtime"s." 
 
 # source $SYNC_PATH/variables.sh
 # source $SYNC_PATH/functions.sh
@@ -91,7 +91,7 @@ echo "Em "$runtime"s." | log info backup
 # stopDBMaster
 # stopDBSync
 #
-# echo "Creating Backup: $1" | log debug backup
+# echo "Creating Backup: $1"
 #
 # tar cfz "$1" $DATA_PATH/$dataDirMaster $DATA_PATH/$dataDirSync $DATA_PATH/moodle/moodledata/filedir $SYNC_PATH/Export/ $SYNC_PATH/Import/ $SYNC_PATH/dadosExportados/
 #

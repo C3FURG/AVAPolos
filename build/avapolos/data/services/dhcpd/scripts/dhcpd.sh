@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-echo "Compilando dhcpd" | log info data_compiler
+log info "Compilando dhcpd" 
 
-echo "Assegurando permissões corretas e limpando diretórios de dados." | log debug data_compiler
+log debug "Assegurando permissões corretas e limpando diretórios de dados." 
 cd $DHCPD_DIR
 sudo chown -R $USER:$USER .
 sudo rm -rf $DHCPD_DATA_DIR/dhcpd/*
 
-echo "Copiando recursos do serviço." | log debug data_compiler
+log debug "Copiando recursos do serviço." 
 cp $DHCPD_RESOURCES_DIR/dhcpd.conf $DHCPD_DATA_DIR/dhcpd/dhcpd.conf

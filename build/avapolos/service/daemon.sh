@@ -19,7 +19,7 @@ export LOGFILE_PATH="$LOG_PATH/service.log"
 #set +e
 
 end() {
-  echo "Serviço vai parar.." | log debug
+  log debug "Serviço vai parar.." 
   kill -s SIGTERM $educapes_pid
   rm -f $PIPE
   exit 0
@@ -30,7 +30,7 @@ update_moodle_hosts() {
     docker stop moodle > /dev/null
     docker start moodle > /dev/null
     ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
-    echo "Atualizando hosts do Moodle com o ip: $ip." | log debug service
+    log debug "Atualizando hosts do Moodle com o ip: $ip."
     docker exec moodle sh -c "echo \"$ip avapolos\" >> /etc/hosts"
   fi
 }
@@ -42,7 +42,7 @@ educapes_download_stop() {
   if [ -z "$educapes_pid" ]; then
     echo "No educapes setup PID specified"
   else
-    echo "Enviando SIGTERM para o processo $educapes_pid" | log debug
+    log debug "Enviando SIGTERM para o processo $educapes_pid" 
     kill -s SIGTERM $educapes_pid
   fi
 }
@@ -51,7 +51,7 @@ educapes_download_start() {
   if [[ -f /opt/educapes/no_check ]]; then
     rm /opt/educapes/no_check
   fi
-  echo "Rodando check_educapes" | log debug
+  log debug "Rodando check_educapes" 
   rm -rf "$EDUCAPES_PATH/no_check"
   check_services
 }
@@ -61,7 +61,7 @@ check_services() {
   for service in "$(cat enabled_services) $(cat disabled_services)"; do
     case $service in
       "educapes.yml")
-        echo "Checando eduCAPES" | log debug
+        log debug "Checando eduCAPES" 
         run "$INSTALL_SCRIPTS_PATH/setup_educapes.sh" &
         educapes_pid=$!
       ;;
@@ -81,7 +81,7 @@ readFromPipe() {
         ;;
         test )
           sleep 5
-          echo "Rodando comando de teste, olá mundo!" | log debug
+          log debug "Rodando comando de teste, olá mundo!" 
           touch $SERVICE_PATH/done
         ;;
         export_all )
@@ -108,7 +108,7 @@ readFromPipe() {
             run "$SCRIPTS_PATH/access_mode.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
-            echo "Comando inválido, argumentos insuficientes." | log error
+            log error "Comando inválido, argumentos insuficientes." 
           fi
         ;;
         update_network* )
@@ -116,7 +116,7 @@ readFromPipe() {
             run "$SCRIPTS_PATH/update_network.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
-            echo "Comando inválido, argumentos insuficientes." | log error
+            log error "Comando inválido, argumentos insuficientes." 
           fi
         ;;
         update_sync_remote_ip* )
@@ -124,7 +124,7 @@ readFromPipe() {
             run "$SYNC_PATH/setRemoteAddr.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
-            echo "Comando inválido, argumentos insuficientes." | log error
+            log error "Comando inválido, argumentos insuficientes." 
           fi
         ;;
         backup* )
@@ -136,7 +136,7 @@ readFromPipe() {
             run "$SCRIPTS_PATH/restore.sh" "${args[@]:1}"
             touch $SERVICE_PATH/done
           else
-            echo "Comando inválido, argumentos insuficientes." | log error
+            log error "Comando inválido, argumentos insuficientes." 
           fi
         ;;
         enable_dns* )
@@ -156,7 +156,7 @@ readFromPipe() {
           touch $SERVICE_PATH/done
         ;;
         *)
-          echo "O serviço recebeu um comando não suportado: $line" | log error
+          log error "O serviço recebeu um comando não suportado: $line"
         ;;
       esac
   fi
@@ -172,8 +172,8 @@ if [[ ! -p $PIPE ]]; then
     chown avapolos:avapolos $PIPE
 fi
 
-echo "Daemon AVAPolos iniciado." | log info
-echo "Rodando check incial automático." | log debug
+log info "Daemon AVAPolos iniciado." 
+log debug "Rodando check incial automático." 
 
 check_services &
 update_moodle_hosts &

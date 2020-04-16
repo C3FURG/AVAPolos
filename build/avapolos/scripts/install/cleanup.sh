@@ -22,20 +22,20 @@ else
 fi
 
 #Log what script is being run.
-echo "cleanup.sh" | log debug installer
-echo "Executando limpezas finais." | log info installer
+log debug "cleanup.sh" 
+log info "Executando limpezas finais." 
 
 #Add the avapolos' user to the system.
-echo "Adicionando usuário $AVAPOLOS_USER ao grupo Docker." | log debug installer
+log debug "Adicionando usuário $AVAPOLOS_USER ao grupo Docker." 
 #Add him to the docker group.
 usermod -aG docker $AVAPOLOS_USER
 
 #Remove the installation's files.
-echo "Removendo arquivos de instalação." | log debug installer
+log debug "Removendo arquivos de instalação." 
 sudo rm -rf $ROOT_PATH/AVAPolos.tar.gz
 
 #Set up the required permissions.
-echo "Assegurando permissões corretas sobre os diretórios necessários." | log debug installer
+log debug "Assegurando permissões corretas sobre os diretórios necessários." 
 chown $(id -u $AVAPOLOS_USER):$(id -g $AVAPOLOS_GROUP) -R $ROOT_PATH
 chown $(id -u $AVAPOLOS_USER):$(id -g $AVAPOLOS_GROUP) -R $ETC_PATH
 chmod 740 $ROOT_PATH -R

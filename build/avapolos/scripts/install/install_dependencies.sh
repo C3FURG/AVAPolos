@@ -22,11 +22,11 @@ else
 fi
 
 #Log what script is being run.
-echo "install_dependencies.sh" | log debug installer
-echo "Instalando dependências." | log info installer
+log debug "install_dependencies.sh" 
+log info "Instalando dependências." 
 
 #Log what path is being used to search for dependencies.
-echo "Buscando dependências no diretório: $DEPENDENCIES_PATH" | log debug installer
+log debug "Buscando dependências no diretório: $DEPENDENCIES_PATH"
 cd $DEPENDENCIES_PATH
 
 #string="deb [trusted=yes] file://$DEPENDENCIES_PATH ./"
@@ -46,45 +46,23 @@ packages=$(echo $(cat $DEPENDENCIES_PATH/packages | sed -E -e 's/[[:blank:]]+/\n
 echo "Instalando pacotes: $packages"
 
 while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do
-    echo "Aguardando outras instalações terminarem.," | log info installer
-    sleep 3
+  log info "Aguardando outras instalações terminarem." 
+  sleep 3
 done
 
 apt-get install -y --fix-missing $packages
 
-echo "Instalando docker-compose" | log debug installer
+log debug "Instalando docker-compose" 
 sudo cp docker-compose /usr/local/bin/
 sudo chmod +x /usr/local/bin/docker-compose
-
-#dpkg -i *.deb 2>&1 | log debug installer
-
-#   echo "Docker já está instalado" | log debug installer
-#   if [ "$INTERACTIVE" = "y" ]; then
-#     input "Deseja instalar a versão compatível com AVAPolos?" "sim" "nao" 0 "Selecione uma opção."
-#     if [ -x "$(command -v docker)" ]; then
-#       if [ "$option" = "sim" ]; then
-#         echo "Usuário selecionou a reinstalação do Docker." | log info installer
-#         bash $INSTALL_SCRIPTS_PATH/uninstall_docker.sh
-#         cd docker
-#         dpkg_install *.deb
-#       fi
-#   else
-#     bash $INSTALL_SCRIPTS_PATH/uninstall_docker.sh
-#     cd docker
-#     dpkg_install *.deb
-#   fi
-# else
-#   cd docker
-#   dpkg_install *.deb
-# fi
 
 checks=("docker" "docker-compose")
 
 for item in ${checks[@]}; do
   if [ -x "$(command -v "$item")" ]; then
-    echo "$item instalado com sucesso." | log info installer
+log info  "$item instalado com sucesso." 
   else
-  	echo "Houve um erro na instalação do $item, tente novamente." | log error installer
+  	log error "Houve um erro na instalação do $item, tente novamente."
     exit 1
   fi
 done

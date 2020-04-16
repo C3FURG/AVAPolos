@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Compilando wiki.avapolos" | log debug data_compiler
+log debug "Compilando wiki.avapolos" 
 
 tmp=$(mktemp -d -t wiki_download.XXXXXXX)
 wget -O $tmp/wiki.tar.gz https://releases.wikimedia.org/mediawiki/1.31/mediawiki-1.31.4.tar.gz

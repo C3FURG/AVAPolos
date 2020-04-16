@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-echo "Compilando dnsmasq" | log info data_compiler
+log info "Compilando dnsmasq" 
 
-echo "Assegurando permissões corretas e limpando diretórios de dados." | log debug data_compiler
+log debug "Assegurando permissões corretas e limpando diretórios de dados." 
 cd $DNSMASQ_DIR
 sudo chown -R $USER:$USER .
 sudo rm -rf $DNSMASQ_DATA_DIR/dnsmasq/*
 
-echo "Copiando recursos do serviço." | log debug data_compiler
+log debug "Copiando recursos do serviço." 
 cp $DNSMASQ_RESOURCES_DIR/dnsmasq.conf $DNSMASQ_DATA_DIR/dnsmasq/dnsmasq.conf

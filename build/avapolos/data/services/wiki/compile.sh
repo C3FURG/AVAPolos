@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-echo "Assegurando permissões corretas e limpando diretório de dados." | log debug
+log debug "Assegurando permissões corretas e limpando diretório de dados." 
 sudo chown -R $USER:$USER .
 rm -rf $WIKI_DATA_DIR/*
 mkdir -p $WIKI_DATA_DIR/{db_wiki,wiki}
 
-echo "Parando serviços caso já estejam rodando." | log debug data_compiler
+log debug "Parando serviços caso já estejam rodando." 
 docker-compose down
 
 cd scripts
@@ -13,4 +13,4 @@ cd scripts
 run db.sh
 run wiki.sh
 
-echo "Serviço configurado com sucesso!" | log info data_compiler
+log info "Serviço configurado com sucesso!" 

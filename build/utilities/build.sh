@@ -24,9 +24,9 @@ export build_data="y"
 export update_deps="y"
 export update_images="y"
 
-echo "-----------------" | log info
-echo "Iniciando script." | log info
-echo "-----------------" | log info
+log info "-----------------" 
+log info "Iniciando script." 
+log info "-----------------" 
 
 while true
 do
@@ -51,27 +51,27 @@ do
       export update_data="n"
       export update_deps="n"
       export update_images="n"
-      echo "Nada será atualizado." | log info
+      log info "Nada será atualizado." 
 			shift
 		;;
 		--no-update-deps)
 			export update_deps="n"
-      echo "As dependências não serão atualizadas." | log info
+      log info "As dependências não serão atualizadas." 
 			shift
 		;;
 		--no-update-images)
 			export update_images="n"
-      echo "As imagens não serão atualizadas." | log info
+      log info "As imagens não serão atualizadas." 
 			shift
 		;;
 		--no-update-data)
 			export update_data="n"
-      echo "A pasta data não será atualizada." | log info
+      log info "A pasta data não será atualizada." 
 			shift
 		;;
 		--no-build-data)
 			export build_data="n"
-      echo "A pasta data não será compilada." | log info
+      log info "A pasta data não será compilada." 
 			shift
 		;;
 		--help | -h)
@@ -81,7 +81,7 @@ do
 		--loglvl)
 			shift
       export LOGGER_LVL="$1"
-      echo "Mudando nível de log para: $1" | log info
+      log info "Mudando nível de log para $1"
       shift
 		;;
     -*)
@@ -126,15 +126,15 @@ log info "Gerando instalador com a versão: $INSTALLER_VERSION"
 
 #FIXME
 if [ "$pull" = "y" ]; then
-	echo "Buscando serviços da instalação atual." | log debug
+	log debug "Buscando serviços da instalação atual."
   sudo avapolos --stop
-	echo "Compactando pacote de servicos." | log debug
+	log debug "Compactando pacote de servicos."
   tar --use-compress-program="pigz -9" -cf $BUILD_DIR_PATH/avapolos/data.tar.gz $ROOT_PATH/data
   cd $installRoot
   sudo chown $USER:$USER -R "$installRoot"
 	sudo avapolos --start
 elif [ "$build_data" = "y" ]; then
-	echo "Compilando os dados dos serviços" | log info
+	log debug "Compilando os dados dos serviços"
 	cd $BUILD_DATA_PATH
 	bash compile.sh
 fi
@@ -144,10 +144,10 @@ mkdir -p ../installer-packing
 
 sudo chown $USER:$USER -R $BUILD_DIR_PATH
 
-echo "Executando rsync." | log debug
+log debug "Executando rsync." 
 rsync -avmq --progress $BUILD_DIR_PATH $BUILD_DIR_PATH/packing --exclude data --delete
 
-echo "Empacotando solução." | log info
+log info "Empacotando solução." 
 cd $BUILD_DIR_PATH/packing && tar --use-compress-program='pigz -9' -cf AVAPolos.tar.gz *
 
 mv AVAPolos.tar.gz $BUILD_DIR_PATH/installer-packing
@@ -163,10 +163,10 @@ end=$(date +%s)
 
 runtime=$((end-start))
 
-echo "---- Compilação Concluída ----" | log info
-echo "Instalador disponível: $INSTALLER_FILENAME" | log info
-echo "Tamanho: $(du -h $INSTALLER_FILENAME | awk {'print $1'})" | log info
-echo "Em "$runtime"s." | log info
+log info "---- Compilação Concluída ----" 
+log info "Instalador disponível: $INSTALLER_FILENAME"
+log info "Tamanho: $(du -h $INSTALLER_FILENAME | awk {'print $1'})"
+log info "Em "$runtime"s." 
 
 # sudo docker run -it \
 #   -e PUID=$(id -u $USER) \

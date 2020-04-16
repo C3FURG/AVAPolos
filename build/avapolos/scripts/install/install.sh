@@ -44,15 +44,15 @@ for s in "${scripts[@]}"; do
 	#If the last script's return code wasn't 0
 	if [ $? -ne 0 ]; then
 		#Tell the user that's an error and exit the script.
-		echo "Erro no script $s" | log error installer
+		log error "Erro no script $s"
 		exit 1
 	#If it was 0
 	else
 		#Print the progress.
 		counter=$(($counter + 1))
-		echo "-------------------------------"                 | log info installer
-		echo "Progresso da instalação: ($counter/$scriptsLen)" | log info installer
-		echo "-------------------------------"                 | log info installer
+		log info "-------------------------------"                 
+		log info "Progresso da instalação: ($counter/$scriptsLen)" 
+		log info "-------------------------------"                 
 	fi
 
 done
@@ -61,5 +61,5 @@ done
 start
 
 #Start the solution's main service
-echo "Iniciando serviço principal." | log debug installer
-systemctl start avapolos.service | log debug installer
+log debug "Iniciando serviço principal." 
+log debug "$(systemctl start avapolos.service)"

@@ -2,7 +2,7 @@
 
 #This script needs to run as root.
 if [ "$EUID" -ne 0 ]; then
-  echo "Este script precisa ser rodado como root" | log error sync
+  log error "Este script precisa ser rodado como root" 
   exit
 fi
 
@@ -13,7 +13,7 @@ if [ -f "/etc/avapolos/header.sh" ]; then
 #If it's not present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foi encontrado o arquivo header.sh" | log error sync
+  log error "Não foi encontrado o arquivo header.sh" 
   exit 1
 fi
 
@@ -25,7 +25,7 @@ if [ -f $SYNC_PATH/functions.sh ] && [ -f $SYNC_PATH/variables.sh ]; then
 #If they aren't present.
 else
   #Tell the user and exit with an error code.
-  echo "Não foram encontrados os arquivos functions.sh e variables.sh da sync." | log error sync
+  log error "Não foram encontrados os arquivos functions.sh e variables.sh da sync." 
   exit 1
 fi
 
@@ -36,7 +36,7 @@ start=$(date +%s)
 
 services="$(cat $SERVICES_PATH/enabled_services)"
 if [ -z "$(echo $services | grep -o moodle)" ]; then
-  echo "Moodle não está habilitado, pulando etapa de sincronização." | log info sync
+  log info "Moodle não está habilitado, pulando etapa de sincronização." 
 else
   echo "Executando sincronização..."
   createMasterFileDirList
@@ -57,7 +57,7 @@ bash $INSTALL_SCRIPTS_PATH/setup_dns.sh null null avapolos
 
 stop
 
-echo "Copiando arquivos." | log debug sync
+log debug "Copiando arquivos." 
 
 cd $ROOT_PATH
 
@@ -65,24 +65,24 @@ tar cfz data.tar.gz data
 
 rm -rf $TMP_PATH
 mkdir -p $TMP_PATH
-rsync -av $ROOT_PATH/* $TMP_PATH --exclude=data | log debug sync
+rsync -av $ROOT_PATH/* $TMP_PATH --exclude=data
 sudo touch $TMP_PATH/scripts/install/polo
 sudo rm -rf $TMP_PATH/{Import/*,Export/Fila/*}
 rm -rf data.tar.gz
 
 cd $TMP_PATH
 
-echo "Compactando clonagem, pode demorar um pouco." | log debug sync
+log debug "Compactando clonagem, pode demorar um pouco." 
 tar cfz AVAPolos.tar.gz *
 
 mkdir preinstall
-rsync -av $INSTALLER_DIR_PATH/* preinstall --exclude=AVAPolos.tar.gz | log debug sync
+rsync -av $INSTALLER_DIR_PATH/* preinstall --exclude=AVAPolos.tar.gz
 cp -rf AVAPolos.tar.gz preinstall
 cd preinstall
 
 path="$CLONE_INSTALLER_PATH/$CLONE_INSTALLER_FILENAME"
 
-makeself --target $INSTALLER_DIR_PATH --nooverwrite --needroot . $CLONE_INSTALLER_FILENAME "Instalador da solução AVAPolos" "./startup.sh" 2>&1 | log debug sync
+makeself --target $INSTALLER_DIR_PATH --nooverwrite --needroot . $CLONE_INSTALLER_FILENAME "Instalador da solução AVAPolos" "./startup.sh" 2>&1
 
 cp -rf $CLONE_INSTALLER_PATH $path
 chmod 755 $path
@@ -91,12 +91,12 @@ sudo rm -r $TMP_PATH
 end=$(date +%s)
 runtime=$((end-start))
 
-echo "---- Clonagem concluída ----" | log info sync
-echo "Instalador disponível: $path" | log info sync
-echo "Tamanho: $(du -h $path | awk {'print $1'})" | log info sync
-echo "Em "$runtime"s." | log info sync
+log info "---- Clonagem concluída ----" 
+log info "Instalador disponível: $path"
+log info "Tamanho: $(du -h $path | awk {'print $1'})"
+log info "Em "$runtime"s." 
 
-echo "Reiniciando serviços." | log info sync
+log info "Reiniciando serviços." 
 
 bash $INSTALL_SCRIPTS_PATH/setup_dns.sh null null $previousDomain
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-echo "Limpando diretório de dados." | log debug data_compiler
+log debug "Limpando diretório de dados." 
 rm -rf $DNSMASQ_DATA_DIR/*
 mkdir -p $DNSMASQ_DATA_DIR/dnsmasq
-echo "Parando serviços caso já estejam rodando." | log debug data_compiler
+log debug "Parando serviços caso já estejam rodando." 
 
 cd scripts
 
 run dnsmasq.sh
 
-echo "Serviço configurado com sucesso!" | log info data_compiler
+log info "Serviço configurado com sucesso!" 

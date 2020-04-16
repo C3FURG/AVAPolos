@@ -193,12 +193,12 @@ install() {
   if ! [ -d "$ROOT_PATH" ]; then
 
     #Log what script is being run.
-    echo "-------------------- Instalando AVAPolos --------------------" | log info
-    echo "Criando diretório de instalação." | log debug
+    log info "-------------------- Instalando AVAPolos --------------------" 
+    log debug "Criando diretório de instalação." 
 
     #Extract the install archive.
     cd $ROOT_PATH
-    echo "Extraindo arquivos." | log debug
+    log debug "Extraindo arquivos." 
     tar xfz AVAPolos.tar.gz
 
     command="$INSTALL_SCRIPTS_PATH/install.sh $@"
@@ -207,7 +207,7 @@ install() {
     sudo bash -c "$command"
     exit 0
   else
-    echo "Já existe uma instalação." | log error
+    log error "Já existe uma instalação." 
     usage
     exit 0
   fi
@@ -231,7 +231,7 @@ uninstall() {
     option=$(input "O script de desinstalação não foi encontrado, deseja remover a instalação na força bruta?" "sim" "nao" 0 "Selecione uma opção.")
     if [ "$option" = "sim" ]; then
       rm -rf $ROOT_PATH
-      echo "Diretório removido: $ROOT_PATH" | log debug
+      log debug "Diretório removido: $ROOT_PATH"
       exit 0
     fi
   fi
@@ -241,7 +241,7 @@ uninstall() {
 start() { #1 -> stack file: service.yml
 if [ -d "$ROOT_PATH" ]; then
   cd $SCRIPTS_PATH
-  echo "rodando script: $SCRIPTS_PATH/start.sh $@" | log debug
+  log debug "rodando script: $SCRIPTS_PATH/start.sh $@"
   bash $SCRIPTS_PATH/start.sh $@
 else
   echo "AVAPolos não está instalado."
@@ -252,7 +252,7 @@ fi
 #Stop the solution or a specific stack.
 stop() { #1 -> stack file: service.yml
 if [ -d "$ROOT_PATH" ]; then
-  echo "rodando script: $SCRIPTS_PATH/stop.sh $@" | log debug
+  log debug "rodando script: $SCRIPTS_PATH/stop.sh $@"
   bash $SCRIPTS_PATH/stop.sh $@
 else
   echo "AVAPolos não está instalado."
@@ -263,9 +263,9 @@ fi
 #Restart the solution or a specific stack.
 restart() { #1 -> stack file: service.yml
 if [ -d "$ROOT_PATH" ]; then
-  echo "rodando script: $SCRIPTS_PATH/stop.sh $@" | log debug
+  log debug "rodando script: $SCRIPTS_PATH/stop.sh $@"
   bash $SCRIPTS_PATH/stop.sh $@
-  echo "rodando script: $SCRIPTS_PATH/start.sh $@" | log debug
+  log debug "rodando script: $SCRIPTS_PATH/start.sh $@"
   bash $SCRIPTS_PATH/start.sh $@
 else
   echo "AVAPolos não está instalado."
@@ -279,7 +279,7 @@ export_all() {
     cd $SYNC_PATH
     bash export_all.sh
   else
-    echo "AVAPolos não está instalado." | log error
+    log error "AVAPolos não está instalado." 
     exit 1
   fi
 }
@@ -288,7 +288,7 @@ export_all() {
 run() { #$1-> script path #$@-> script's arguments
 if [ -d "$ROOT_PATH" ]; then
   if ! [ -f "$1" ]; then
-    echo "O script não foi encontrado: $1" | log error
+    log error "O script não foi encontrado: $1"
   else
     command="$1"
     shift
@@ -304,50 +304,49 @@ fi
 
 #Adds services to the startup stack.
 add_service() { #$1 -> Service stack file
-if [ -z "$1" ]; then
-  echo "Usage: add_service [SERVICE]" | log error
-  exit 1
-fi
-echo "Adicionando serviço $1" | log debug
-str=$(sanitize $1)
-echo "$1" >> $SERVICES_PATH/enabled_services
+  if [ -z "$1" ]; then
+    log error "Usage: add_service [SERVICE]"
+    exit 1
+  fi
+  log debug "Adicionando serviço $1" 
+  str=$(sanitize $1)
+  echo "$1" >> $SERVICES_PATH/enabled_services
 }
 
 #Removes services from the startup stack.
 remove_service() { #$1 -> Service stack file
-if [ -z "$1" ]; then
-  echo "Usage: remove_service [SERVICE]" | log error
-  exit 1
-fi
-echo "Removendo serviço $1" | log debug
-str=$(sanitize $1)
-sed -i '/'"$str"'/d' $SERVICES_PATH/enabled_services
+  if [ -z "$1" ]; then
+    log error "Usage: remove_service [SERVICE]"
+    exit 1
+  fi
+  log debug "Removendo serviço $1" 
+  str=$(sanitize $1)
+  sed -i '/'"$str"'/d' $SERVICES_PATH/enabled_services
 }
 
 #Enables a service already installed.
 enable_service() { #$1 -> service stack file: service.yml
-if [ -z "$1" ]; then
-  echo "Nenhum serviço foi passado para a enable_service" | log error
-  exit 1
-fi
-arg="$1"
-search=$(cat "$SERVICES_PATH/enabled_services" | grep -o "$arg" || true)
-search_disabled=$(cat "$SERVICES_PATH/disabled_services" | grep -o "$arg" || true)
-if ! [ -z "$search" ]; then
-  echo "O serviço $arg já está habilitado!" | log error
-elif ! [ -z "$search_disabled" ]; then
-  sed -i '/'"$arg"'/d' "$SERVICES_PATH/disabled_services"
-  echo "$arg" >> "$SERVICES_PATH/enabled_services"
-else
-  echo "O serviço $arg não está instalado!" | log error
-fi
-
+  if [ -z "$1" ]; then
+    log error "Nenhum serviço foi passado para a enable_service" 
+    exit 1
+  fi
+  arg="$1"
+  search=$(cat "$SERVICES_PATH/enabled_services" | grep -o "$arg" || true)
+  search_disabled=$(cat "$SERVICES_PATH/disabled_services" | grep -o "$arg" || true)
+  if ! [ -z "$search" ]; then
+    log error "O serviço $arg já está habilitado!" 
+  elif ! [ -z "$search_disabled" ]; then
+    sed -i '/'"$arg"'/d' "$SERVICES_PATH/disabled_services"
+    echo "$arg" >> "$SERVICES_PATH/enabled_services"
+  else
+    log error "O serviço $arg não está instalado!" 
+  fi
 }
 
 #Disables a service already installed.
 disable_service() { #$1 -> service stack file: service.yml
 if [ -z "$1" ]; then
-  echo "Nenhum serviço foi passado para a disable_service" | log error
+  log error "Nenhum serviço foi passado para a disable_service" 
   exit 1
 fi
 #arg=$(sanitize $1)
@@ -358,9 +357,9 @@ if ! [ -z "$search" ]; then
   sed -i '/'"$arg"'/d' "$SERVICES_PATH/enabled_services"
   echo "$arg" >> "$SERVICES_PATH/disabled_services"
 elif ! [ -z "$search_disabled" ]; then
-  echo "O serviço $arg já está desabilitado!" | log error
+  log error "O serviço $arg já está desabilitado!" 
 else
-  echo "O serviço $arg não está instalado!" | log error
+  log error "O serviço $arg não está instalado!" 
 fi
 
 }
@@ -368,8 +367,8 @@ fi
 #Undo configurations that start and end with "AVAPolos" in any file.
 undoConfig() {
   if [ -z "$1" ]; then
-    echo "Nenhum argumento foi passado para o undoConfig." | log error
-    exit 1
+  log error "Nenhum argumento foi passado para o undoConfig." 
+  exit 1
   fi
   return=$(cat $1 | grep -no AVAPolos | cut -d: -f1)
   return=$(echo $return)

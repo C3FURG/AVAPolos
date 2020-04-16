@@ -61,8 +61,8 @@ stop
 
 updateDNS "$dns1" "$dns2"
 
-ifconfig "$interface" down | log debug installer
-ip addr flush dev "$interface" | log debug installer
-service networking restart | log debug installer
+ifconfig "$interface" down 
+ip addr flush dev "$interface"
+service networking restart
 
 start

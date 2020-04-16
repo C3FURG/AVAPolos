@@ -78,16 +78,16 @@ fi
 
 #SERVICES=${SERVICES:-$(ls | grep -v TEMPLATE | grep -v traefik)}
 SERVICES=${SERVICES:-$(for svc in $(cat $ROOT_DIR/../services/enabled_services | grep -v educapes); do echo $(echo $svc | cut -d . -f1); done)}
-echo "Compilando serviços: $SERVICES" | log info data_compiler
+log info "Compilando serviços: $SERVICES"
 for service in $SERVICES; do
-  echo "Compilando serviço $service" | log info data_compiler
+  log info "Compilando serviço $service" 
   cd "$SERVICES_DIR/$service"
   run compile.sh
   cp -rf $SERVICES_DIR/$service/data/* "$PACK_DIR/data/"
 done
 
 if ! [[ "$KEEPALIVE" = "true" ]]; then
-  unsetHosts | log debug data_compiler
+  unsetHosts
   cd $TRAEFIK_DIR
   docker-compose down
   cd $INICIO_DIR
@@ -96,7 +96,7 @@ if ! [[ "$KEEPALIVE" = "true" ]]; then
   docker-compose down
   for service in $SERVICES; do
     cd "$SERVICES_DIR/$service"
-    echo "Parando serviço $service" | log debug data_compiler
+    log debug "Parando serviço $service" 
     docker-compose down
   done
   remove_docker_network avapolos

@@ -3,4 +3,5 @@ cache
 *.log
 avapolos_alpha*
 avapolos_beta*
-active-template
+active_template
+version

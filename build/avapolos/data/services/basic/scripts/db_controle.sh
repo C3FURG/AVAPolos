@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-echo "Compilando db_controle" | log info data_compiler
+log info "Compilando db_controle" 
 
-echo "Iniciando db_controle" | log debug data_compiler
+log debug "Iniciando db_controle" 
 docker-compose up -d db_controle
 
 waitForHealthy db_controle
@@ -52,8 +52,8 @@ execSQL db_controle avapolos avapolos "
 "
 
 if ! [[ -z "$(execSQL db_controle avapolos avapolos "SELECT * FROM public.controle_login;" | grep -o row)" ]]; then
-  echo "Banco configurado com sucesso." | log debug data_compiler
+  log debug "Banco configurado com sucesso." 
 else
-  echo "Ocorreu um erro na configuração do banco, parando script." | log error data_compiler
+  log error "Ocorreu um erro na configuração do banco, parando script." 
   exit 1
 fi

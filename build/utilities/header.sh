@@ -90,15 +90,15 @@ setTemplate() {
       source "$1".sh
       template="$1"
     else
-      echo "O Template especificado não existe." | log error
+      log error "O Template especificado não existe." 
       exit 1
     fi
 
   fi
 
-  echo "Template $template selecionado" | log debug
-  echo "Stacks: $stacks" | log debug
-  echo "Imagens: $images" | log debug
+  log debug "Template $template selecionado" 
+  log debug "Stacks: $stacks"
+  log debug "Imagens: $images"
   echo $template > $BUILD_DIR_PATH/active_template
 
 }
@@ -107,9 +107,9 @@ checkForActiveTemplate() {
 	if [ -f "$BUILD_DIR_PATH/active-template" ]; then
 		template=$(cat $BUILD_DIR_PATH/template)
 		source $BUILD_DIR_PATH/"$template.sh"
-		echo "Utilizando template: $template" | log debug
-		echo "Stacks: $stacks" | log debug
-		echo "Imagens: $images" | log debug
+		log debug "Utilizando template: $template"
+		log debug "Stacks: $stacks" 
+		log debug "Imagens: $images"
 	else
 		setTemplate "completo"
 	fi

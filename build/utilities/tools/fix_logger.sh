@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-files=$(find ../../../../ -name 'install_networking.sh')
+files=$(find ../../../../ -name '*.sh')
 
 for file in $files; do
   echo $file
