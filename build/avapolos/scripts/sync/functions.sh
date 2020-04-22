@@ -13,46 +13,46 @@ restartMoodle(){
 }
 
 startMoodle(){
-    echo "Iniciando Moodle" | log debug sync
-    startContainer $containerMoodleName
-    ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
-    echo "Atualizando hosts do Moodle com o IP: $ip" | log debug sync
-    docker exec $containerMoodleName sh -c "echo \"$ip avapolos\" >> /etc/hosts"
-    echo "Moodle inicializado" | log debug sync
+  log debug "Iniciando Moodle" 
+  startContainer $containerMoodleName
+  ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
+  log debug "Atualizando hosts do Moodle com o IP: $ip" 
+  docker exec $containerMoodleName sh -c "echo \"$ip avapolos\" >> /etc/hosts"
+  log debug "Moodle inicializado" 
 }
 
 stopMoodle(){
-    echo "Parando Moodle" | log debug sync
-    stopContainer $containerMoodleName
-    echo "Moodle Parado" | log debug sync
+  log debug "Parando Moodle" 
+  stopContainer $containerMoodleName
+  log debug "Moodle Parado" 
 }
 
 startDBMaster(){
-    echo "Iniciando db_master" | log debug sync
-    startContainer $containerDBMasterName
-    sleep 3
-    #waitForHealthy $containerDBMasterName
-    echo "db_master inicializado" | log debug sync
+  log debug "Iniciando db_master" 
+  startContainer $containerDBMasterName
+  sleep 3
+  #waitForHealthy $containerDBMasterName
+  log debug "db_master inicializado" 
 }
 
 stopDBMaster(){
-    echo "-> Stopping container DB_MASTER..."
-    stopContainer $containerDBMasterName
-    echo "-----> DOCKER DB_MASTER | STATUS = [OFF]"
+  echo "-> Stopping container DB_MASTER..."
+  stopContainer $containerDBMasterName
+  echo "-----> DOCKER DB_MASTER | STATUS = [OFF]"
 }
 
 startDBSync(){
-    echo "-> Starting container DB_SYNC..."
-    startContainer $containerDBSyncName
-    sleep 3
-    #waitForHealthy $containerDBSyncName
-    echo "----> DOCKER DB_SYNC | STATUS = [ON]"
+  echo "-> Starting container DB_SYNC..."
+  startContainer $containerDBSyncName
+  sleep 3
+  #waitForHealthy $containerDBSyncName
+  echo "----> DOCKER DB_SYNC | STATUS = [ON]"
 }
 
 stopDBSync(){
-    echo "-> Stopping container DB_SYNC..."
-    stopContainer $containerDBSyncName
-    echo "----> DOCKER DB_SYNC | STATUS = [OFF]"
+  echo "-> Stopping container DB_SYNC..."
+  stopContainer $containerDBSyncName
+  echo "----> DOCKER DB_SYNC | STATUS = [OFF]"
 }
 
 connectDB() { #$1-> [db_moodle_ies/db_moodle_polo]
@@ -62,21 +62,21 @@ connectDB() { #$1-> [db_moodle_ies/db_moodle_polo]
 #-------------------------------------------------------------------------------------------------
 
 stopContainer(){ #container
-    echo "Parando container $1" | log debug sync
-    docker stop $1
-    while [ "$(docker inspect -f '{{.State.Running}}' $1)" == true ]; do
-      sleep 5 #10 seconds
-    done
-    echo "Container $1 parado" | log debug sync
+  log debug "Parando container $1" 
+  docker stop $1
+  while [ "$(docker inspect -f '{{.State.Running}}' $1)" == true ]; do
+    sleep 5 #10 seconds
+  done
+  log debug "Container $1 parado" 
 }
 
 startContainer(){ #container
-    echo "Iniciando container $1" | log debug sync
-    docker start $1
-    while [ "$(docker inspect -f '{{.State.Running}}' $1)" == false ]; do
-      sleep 5
-    done
-    echo "Container $1 inicializado" | log debug sync
+  log debug "Iniciando container $1" 
+  docker start $1
+  while [ "$(docker inspect -f '{{.State.Running}}' $1)" == false ]; do
+    sleep 5
+  done
+  log debug "Container $1 inicializado" 
 }
 
 clearQueue(){ # aguarda o master enviar as alterações
@@ -311,10 +311,6 @@ execSqlOnMoodleDB(){ # $1 = containerName # $2 SQL statement
    execDockerCommand $1 "psql -U moodle -d moodle -c \"$2\""
 }
 
-execSQLMoodle(){ # $1 = containerName $2 SQL statement
-   execDockerCommand $1 "psql -U moodleuser -d moodle -c \"$2\""
-}
-
 execSQLMaster(){ # $1 SQL statement
    execSqlOnMoodleDB $containerDBMasterName "$1"
 }
@@ -383,6 +379,5 @@ copyFileToRemoteRepo(){ # $1 = nameFile ### the two machines need to be have pai
 
 export -f execSQL
 export -f execSqlOnMoodleDB
-export -f execSQLMoodle
 export -f execDockerCommand
 export -f connectDB

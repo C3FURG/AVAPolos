@@ -1,3 +1,0 @@
-A princípio só precisa do Docker.
-
-sudo docker run -v /var/run/docker.sock:/run/docker.sock -v $(which docker):/bin/docker -it avapolos/build:v0 bash

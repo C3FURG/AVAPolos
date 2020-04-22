@@ -10,7 +10,7 @@ DOMAIN=${DOMAIN:=avapolos}
 ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
 switch_name() {
-  echo "Configurando para acesso com nomes." | log debug access_mode
+  log debug "Configurando para acesso com nomes." 
 
   rm -f $DATA_PATH/inicio/public/ip
   touch $DATA_PATH/inicio/public/name
@@ -43,7 +43,7 @@ switch_name() {
 }
 
 switch_ip() {
-  echo "Configurando para acesso com ip." | log debug access_mode
+  log debug "Configurando para acesso com ip." 
 
   rm -f $DATA_PATH/inicio/public/name
   touch $DATA_PATH/inicio/public/ip
@@ -84,17 +84,17 @@ case "$1" in
   name )
     stop
     switch_name
-    echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+    log info "Configuração executada com sucesso, iniciando serviços." 
     start
     ;;
   ip )
     stop
     switch_ip
-    echo "Configuração executada com sucesso, iniciando serviços." | log info access_mode
+    log info "Configuração executada com sucesso, iniciando serviços." 
     start
     ;;
 
   * )
-    echo "Argumento incorreto.." | log error access_mode
+    log error "Argumento incorreto.." 
     ;;
 esac

@@ -5,7 +5,7 @@ source $SYNC_PATH/variables.sh
 source $SYNC_PATH/functions.sh
 
 update_manutencao() {
-  echo "Atualizando a página de manutenção" | log debug start
+  log debug "Atualizando a página de manutenção" 
   unset MANUTENCAO
   for service in $(cat stopped_services); do
     rule="$(cat $service | grep traefik.frontend.rule=Host: | cut -d: -f2 | cut -d\" -f1)"
@@ -13,13 +13,13 @@ update_manutencao() {
   done
   MANUTENCAO=$(echo $MANUTENCAO | sed 's/\ /\,/g')
   export MANUTENCAO
-  docker-compose -p avapolos -f manutencao.yml down | log debug start
-  docker-compose -p avapolos -f manutencao.yml up -d | log debug start
-  echo "Página de manutenção atualizada." | log debug start
+  docker-compose -p avapolos -f manutencao.yml down 
+  docker-compose -p avapolos -f manutencao.yml up -d
+  log debug "Página de manutenção atualizada." 
 }
 
 apply_fixes() {
-  echo "Aplicando correções para bugs do Docker" | log debug start
+  log debug "Aplicando correções para bugs do Docker" 
 
   #We have to start all, and apply workarounds.
   # service docker stop
@@ -34,7 +34,7 @@ apply_fixes() {
 }
 
 if [ -f $SCRIPTS_PATH/startstop.lock ]; then
-  echo "Já existe um processo utilizando esse script!" | log error start
+  log error "Já existe um processo utilizando esse script!" 
 else
   touch $SCRIPTS_PATH/startstop.lock
 
@@ -68,13 +68,13 @@ else
 
   if ! ps ax | grep -v grep | grep docker > /dev/null
   then
-      echo "Docker não está rodando, inicializando.."
-      sudo systemctl start docker | log debug start
+      log info "Docker não está rodando, inicializando.."
+      sudo systemctl start docker
   fi
 
   if [ -z "$(cat $SERVICES_PATH/stopped_services)" ]; then
-    echo "Todos os serviços já foram iniciados." | log error start
-    echo "Caso algum serviço apresente erros, utilize o comando --restart para reiniciar a solução." | log error start
+    log error  "Todos os serviços já foram iniciados." 
+    log error  "Caso algum serviço apresente erros, utilize o comando --restart para reiniciar a solução." 
   else
 
     cd $SERVICES_PATH
@@ -86,19 +86,19 @@ else
     for service in $services; do
         if [ -z "$(cat started_services | grep -o $service)" ]; then
           if [ "$service" = "moodle.yml" ]; then
-            echo "Iniciando Moodle." | log debug start
-            docker-compose -p avapolos -f $service up --no-start | log debug start
+            log debug "Iniciando Moodle." 
+            docker-compose -p avapolos -f $service up --no-start 
             startDBMaster
             stopDBSync
             startMoodle
           else
-            echo "Iniciando serviço $service" | log debug start
-            docker-compose -p avapolos -f $service up -d | log debug start
+            log debug "Iniciando serviço $service" 
+            docker-compose -p avapolos -f $service up -d
           fi
           echo $service >> $SERVICES_PATH/started_services
           sed -i '/'"$(sanitize $service)"'/d' stopped_services
         else
-          echo "O serviço $service já está iniciado, ignorando..." | log info start
+          log info "O serviço $service já está iniciado, ignorando..." 
         fi
     done
 

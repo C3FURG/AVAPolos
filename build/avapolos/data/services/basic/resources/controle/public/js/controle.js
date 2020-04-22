@@ -34,7 +34,7 @@ function sweet_alert(url, goto="reload") {
 	        }
 	      }
 	    }
-	    request.open('Get', url);
+	    request.open('Post', url);
 	    request.send();
 	},5000);
 	},
@@ -42,4 +42,38 @@ function sweet_alert(url, goto="reload") {
 	clearInterval(timerInterval)
 	}
 })
+}
+
+function run(string, debug) {
+	sweet_alert('/php/check.php')
+	data = {};
+	if (debug) {
+		data.action = "test";
+	} else {
+		data.action = string;
+	}
+	$.post("php/action.php", data);
+}
+
+//https://stackoverflow.com/questions/4460586/javascript-regular-expression-to-check-for-ip-addresses
+function ValidateIPaddress(ipaddress) {
+	if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+		return (true)
+	}
+	return (false)
+}
+
+function toggleVisibility(elementId) {
+	if ($(elementId).attr("hidden")) {
+		$(elementId).attr("hidden", false)
+	} else $(elementId).attr("hidden", true)
+}
+
+function togglePasswordVisibility() {
+	var x = document.getElementById("passwordInput");
+	if (x.type === "password") {
+		x.type = "text";
+	} else {
+		x.type = "password";
+	}
 }

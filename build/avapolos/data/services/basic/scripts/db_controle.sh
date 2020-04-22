@@ -1,30 +1,50 @@
 #!/usr/bin/env bash
 
-echo "Assegurando permissões corretas." | log debug data_compiler
-sudo chown -R $USER:$USER .
+log info "Compilando db_controle" 
 
-cd $BASIC_DIR
-
-echo "Iniciando db_moodle_ies e db_moodle_polo" | log debug data_compiler
+log debug "Iniciando db_controle" 
 docker-compose up -d db_controle
 
 waitForHealthy db_controle
 
-execSQL db_controle avapolos avapolos "
-  ALTER USER avapolos WITH PASSWORD 'bd10b9a2e191deafe6af';
+execSQL db_controle postgres postgres "
+  CREATE DATABASE avapolos;
+"
+execSQL db_controle postgres postgres "
+  CREATE ROLE avapolos WITH LOGIN PASSWORD '$DB_CONTROLE_AVAPOLOS_PASSWORD';
+  GRANT ALL ON DATABASE avapolos TO avapolos;
 "
 execSQL db_controle avapolos avapolos "
   CREATE TABLE public.controle_login
   (
       id SERIAL PRIMARY KEY,
       login character varying(255) NOT NULL,
-      password character varying(255) NOT NULL
+      password character varying(255) NOT NULL,
+      last_login timestamp
+  );
+"
+#Text é infinito, pensar melhor.
+execSQL db_controle avapolos avapolos "
+  CREATE TABLE public.controle_reporte
+  (
+      id SERIAL PRIMARY KEY,
+      nome character varying(255) NOT NULL,
+      local character varying(255) NOT NULL,
+      data timestamp NOT NULL,
+      comentario text
   );
 "
 
-hash=$(echo -n $CONTROLE_PASSWORD | md5sum | cut -d ' ' -f 1)
 execSQL db_controle avapolos avapolos "
-INSERT INTO public.controle_login (login, password) VALUES ('admin', '$hash');
+  CREATE TABLE public.controle_registro
+  (
+      id SERIAL PRIMARY KEY,
+      email_dev character varying(255) NOT NULL
+  );
+"
+
+execSQL db_controle avapolos avapolos "
+INSERT INTO public.controle_login (login, password) VALUES ('admin', '$CONTROLE_ADMIN_PASSWORD_HASH');
 "
 
 execSQL db_controle avapolos avapolos "
@@ -32,8 +52,8 @@ execSQL db_controle avapolos avapolos "
 "
 
 if ! [[ -z "$(execSQL db_controle avapolos avapolos "SELECT * FROM public.controle_login;" | grep -o row)" ]]; then
-  echo "Banco configurado com sucesso." | log debug data_compiler
+  log debug "Banco configurado com sucesso." 
 else
-  echo "Ocorreu um erro na configuração do banco, parando script." | log error data_compiler
+  log error "Ocorreu um erro na configuração do banco, parando script." 
   exit 1
 fi

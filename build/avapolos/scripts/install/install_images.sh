@@ -17,14 +17,14 @@ else
   exit 1
 fi
 
-echo "install_images.sh" | log debug installer
-echo "Instalando imagens dos microsserviços." | log info installer
+log debug "install_images.sh" 
+log info "Instalando imagens dos microsserviços." 
 
-echo "Buscando imagens Docker no diretório: $IMAGES_PATH" | log debug installer
+log debug "Buscando imagens Docker no diretório: $IMAGES_PATH"
 
 cd $IMAGES_PATH
 
 imageList=$(ls *.tar)
 for image in $imageList; do
-  docker load -i $image 2>&1 | log debug installer
+  docker load -i $image
 done

@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  dhcpd:
+    hostname: dhcpd
+    image: avapolos/dhcpd
+    container_name: dhcpd
+    restart: always
+    network_mode: host
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_PATH/dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro

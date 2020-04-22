@@ -5,21 +5,14 @@ services:
     container_name: db_controle
     image: avapolos/postgres:bdr
     environment:
-     - POSTGRES_USER=avapolos
-     - POSTGRES_PASSWORD=password
-     - POSTGRES_DB=avapolos
-     - UID=${PUID}
+     - POSTGRES_PASSWORD=${DB_CONTROLE_POSTGRES_PASSWORD}
+     - PUID=${PUID}
+     - PGID=${PGID}
     volumes:
      - ${BASIC_DATA_DIR}/db_controle:/var/lib/postgresql/data
     networks:
       avapolos:
-    stop_signal: SIGINT
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moodle"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   controle:
     container_name: controle
@@ -77,6 +70,13 @@ services:
       - "traefik.frontend.rule=Host:downloads.avapolos"
       - "traefik.port=80"
       - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
     cap_add:
       - SYS_TIME
 

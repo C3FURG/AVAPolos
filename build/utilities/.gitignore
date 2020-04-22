@@ -2,3 +2,4 @@
 template
 .lastHost
 .dependencies_installed
+.buildDependencies

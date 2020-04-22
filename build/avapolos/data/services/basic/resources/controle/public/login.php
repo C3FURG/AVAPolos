@@ -16,7 +16,7 @@
     require_once("header.php");
     $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
 
-    
+
     $queryLoginAdmin = pg_query($DB, "SELECT * FROM public.controle_login WHERE id = 1");
     if($queryLoginAdmin && pg_num_rows($queryLoginAdmin) > 0){
         $dadosLoginAdmin = pg_fetch_array($queryLoginAdmin);
@@ -30,7 +30,7 @@
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitLogin']) && $_POST['submitLogin'] != ''){
-        
+
 
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = md5(filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS));
@@ -106,7 +106,7 @@
                                                 } //end error msg
                                             ?>
                                             <div class="form-group d-flex align-items-center mt-4 mb-0">
-                                                <button type='submit' name='submitLogin' value='submitLogin' class="btn btn-success bg-dark d-block mx-auto">Entrar</button>
+                                                <button type='submit' name='submitLogin' value='submitLogin' class="bg-dark btn btn-success d-block mx-auto">Entrar</button>
                                             </div>
                                         </form>
                                     </div>

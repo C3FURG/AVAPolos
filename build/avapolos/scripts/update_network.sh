@@ -42,32 +42,60 @@ getInterface() {
 
   echo $interface
 }
+generateNetworkConfig() { # $1-> interface $2-> ip $3-> netmask $4-> gateway $5-> dns1 $6-> dns2
+echo -e "#AVAPolos config start"
+echo -e "auto $1"
+echo -e "iface $1 inet static"
+echo -e "address $2"
+echo -e "netmask $3"
+echo -e "gateway $4"
+echo -e "dns-nameservers $5 $6"
+echo -e "#AVAPolos config end"
+}
+generateHostsConfig() { # $1-> ip(without mask)
+if [ -z "$1" ]; then
+  log error "Nenhum ip foi passado para o generateHostsConfig" 
+  exit 1
+fi
+echo -e "#AVAPolos config start"
+echo -e "$1 avapolos"
+echo -e "$1 controle.avapolos"
+echo -e "$1 inicio.avapolos"
+echo -e "$1 moodle.avapolos"
+echo -e "$1 wiki.avapolos"
+echo -e "$1 educapes.avapolos"
+echo -e "$1 traefik.avapolos"
+echo -e "$1 menu.avapolos"
+echo -e "$1 downloads.avapolos"
+echo -e "$1 portainer.avapolos"
+echo -e "$1 teste.avapolos"
+echo -e "#AVAPolos config end"
+}
 
-dhcp="$1"
-ip="$2"
-interface="$(getInterface)"
-gateway="$(echo $ip | awk -F. '{ print $1"."$2"."$3".1" }')"
+interface=$(getInterface)
+ip="$1"
+gw="$2"
+mask="$3"
+dns1="$4"
+dns2="$5"
 
-#Change the address in /etc/interfaces
-for line in $(cat /etc/network/interfaces); do
-  if [[ $line =~ address ]]; then
-    lineNumber=$(cat /etc/network/interfaces | grep -n "$line" | cut -d: -f1)
-    newLine='address '$ip
-    sed -i "$lineNumber"'s/.*/'"$newLine"'/' /etc/network/interfaces
-  fi
-done
+stop
 
-#Change the gateway in /etc/interfaces
-for line in $(cat /etc/network/interfaces); do
-  if [[ $line =~ gateway ]]; then
-    lineNumber=$(cat /etc/network/interfaces | grep -n "$line" | cut -d: -f1)
-    newLine='gateway '$gateway
-    sed -i "$lineNumber"'s/.*/'"$newLine"'/' /etc/network/interfaces
-  fi
-done
+# echo "Interface: $(getInterface)"
+# echo "IP: $ip"
+# echo "Gateway: $gw"
+# echo "Netmask: $3"
+# echo "DNS 1: $dns1"
+# echo "DNS 2: $dns2"
 
+undoConfig /etc/network/interfaces
+undoConfig /etc/hosts
 
+generateNetworkConfig "$interface" "$ip" "$mask" "$gw" "$dns1" "$dns2" >> /etc/network/interfaces
+generateHostsConfig "$ip" >> /etc/hosts
 
-ifconfig "$interface" down | log debug installer
-ip addr flush dev "$interface" | log debug installer
-service networking restart | log debug installer
+ifconfig "$interface" down
+ip addr flush dev "$interface"
+service networking restart
+
+start

@@ -3,7 +3,7 @@
 source /etc/avapolos/header.sh
 
 if [ -f $SCRIPTS_PATH/startstop.lock ]; then
-  echo "Já existe um processo utilizando esse script!" | log error stop
+  log error "Já existe um processo utilizando esse script!" 
 else
 
   touch $SCRIPTS_PATH/startstop.lock
@@ -11,7 +11,7 @@ else
   cd $SERVICES_PATH
 
   if ! [ -f "enabled_services" ]; then
-    echo "Arquivo enabled_services não encontrado!" | log error stop
+    log error "Arquivo enabled_services não encontrado!" 
     exit 1
   fi
 
@@ -38,17 +38,17 @@ else
 
   for service in $services; do
     if [ -z "$(cat stopped_services | grep -o $service)" ]; then
-      echo "Parando serviço: $service" | log info stop
-      docker-compose -p avapolos -f $service down | log debug stop
+      log debug "Parando serviço: $service"
+      docker-compose -p avapolos -f $service down
       echo $service >> stopped_services
       sed -i '/'"$(sanitize $service)"'/d' started_services
     else
-      echo "Ignorando serviço $service..." | log info stop
+      log info "Ignorando serviço $service..." 
     fi
   done
 
   if ! [ -z "$(cat started_services)" ]; then
-    echo "Atualizando a página de manutenção" | log debug stop
+    log debug "Atualizando a página de manutenção" 
     unset MANUTENCAO
     for service in $(cat stopped_services); do
       rule="$(cat $service | grep traefik.frontend.rule=Host: | cut -d: -f2 | cut -d\" -f1)"
@@ -57,10 +57,10 @@ else
     MANUTENCAO=$(echo $MANUTENCAO | sed 's/\ /\,/g')
     export MANUTENCAO
     if ! [ "$specified" = "false" ]; then
-      docker-compose -p avapolos -f manutencao.yml down  | log debug stop
-      docker-compose -p avapolos -f manutencao.yml up -d  | log debug stop
+      docker-compose -p avapolos -f manutencao.yml down 
+      docker-compose -p avapolos -f manutencao.yml up -d
     fi
-    echo "Página de manutenção atualizada." | log debug stop
+    log debug "Página de manutenção atualizada." 
   fi
 
   rm $SCRIPTS_PATH/startstop.lock

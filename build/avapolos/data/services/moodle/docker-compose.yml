@@ -6,37 +6,27 @@ services:
     container_name: db_moodle_ies
     image: avapolos/postgres:bdr
     environment:
-     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-     - UID=${PUID}
+     - POSTGRES_PASSWORD=${DB_MOODLE_POSTGRES_PASSWORD}
+     - PUID=${PUID}
+     - PGID=${PGID}
     volumes:
      - ${MOODLE_DATA_DIR}/db_moodle_ies:/var/lib/postgresql/data
     networks:
       avapolos:
-    stop_signal: SIGINT
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moodle"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   db_moodle_polo:
     container_name: db_moodle_polo
     image: avapolos/postgres:bdr
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - UID=${PUID}
+      - POSTGRES_PASSWORD=${DB_MOODLE_POSTGRES_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
     volumes:
      - ${MOODLE_DATA_DIR}/db_moodle_polo:/var/lib/postgresql/data
     networks:
       avapolos:
-    stop_signal: SIGINT
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moodle"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   moodle:
     container_name: moodle
@@ -51,7 +41,6 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - APACHE_SERVER_NAME=moodle
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -60,8 +49,6 @@ services:
       - "traefik.port=80"
       - "traefik.docker.network=proxy"
       - "traefik.frontend.passHostHeader=true"
-    cap_add:
-      - SYS_TIME
     depends_on:
       db_moodle_ies:
         condition: service_healthy

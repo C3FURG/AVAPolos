@@ -22,33 +22,33 @@ else
 fi
 
 #Log what script is being run.
-echo "generate_privateKey.sh" | log debug installer
-echo "Gerando chaves privadas." | log info installer
+log debug "generate_privateKey.sh" 
+log info "Gerando chaves privadas." 
 
 #Create the directory used by the keys.
-echo "Criando diretório para as chaves." | log debug installer
+log debug "Criando diretório para as chaves." 
 sudo -u avapolos mkdir -p $SSH_PATH
 
 #Generate the keys using ssh-keygen.
-echo "Rodando ssh-keygen." | log debug installer
-sudo -u avapolos ssh-keygen -f $SSH_PATH/id_rsa -t rsa -P "" | log debug installer
+log debug "Rodando ssh-keygen." 
+sudo -u avapolos ssh-keygen -f $SSH_PATH/id_rsa -t rsa -P ""
 
 #Copy the private to the public key.
-echo "Ajustando chaves." | log debug installer
+log debug "Ajustando chaves." 
 sudo -u avapolos cat $SSH_PATH/id_rsa.pub >> $SSH_PATH/authorized_keys
 
 #Compress the keys to be saved in the solution's root path.
 cd $HOME_PATH
-echo "Compactando chaves." | log debug installer
+log debug "Compactando chaves." 
 tar cfz $ROOT_PATH/ssh.tar.gz .ssh
 
 #Set up the correct permissions.
-echo "Ajustando permissões." | log debug installer
+log debug "Ajustando permissões." 
 chmod 700 $SSH_PATH
 chmod 600 $SSH_PATH/*
 chown $AVAPOLOS_USER:$AVAPOLOS_GROUP $SSH_PATH -R
 
 #Restart both ssh services.
-echo "Reiniciando serviços ssh." | log debug installer
-systemctl restart sshd.service | log debug installer
-systemctl restart ssh.service | log debug installer
+log debug "Reiniciando serviços ssh." 
+systemctl restart sshd.service
+systemctl restart ssh.service 

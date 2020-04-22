@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Limpando diretório de dados." | log debug data_compiler
+log debug "Limpando diretório de dados." 
 rm -rf $TRAEFIK_DATA_DIR/*
 mkdir -p $TRAEFIK_DATA_DIR/traefik
-echo "Parando serviços caso já estejam rodando." | log debug data_compiler
+log debug "Parando serviços caso já estejam rodando." 
 docker-compose down
 
 cd scripts

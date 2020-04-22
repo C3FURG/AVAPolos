@@ -1,6 +1,9 @@
 pack
+packing
+installer_packing
 cache
 *.log
 avapolos_alpha*
 avapolos_beta*
-remote-ava
+active_template
+version

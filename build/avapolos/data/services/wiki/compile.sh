@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
-show_var WIKI_PASSWORD
-
-docker-compose down
-
+log debug "Assegurando permissões corretas e limpando diretório de dados." 
+sudo chown -R $USER:$USER .
 rm -rf $WIKI_DATA_DIR/*
 mkdir -p $WIKI_DATA_DIR/{db_wiki,wiki}
+
+log debug "Parando serviços caso já estejam rodando." 
+docker-compose down
 
 cd scripts
 
 run db.sh
 run wiki.sh
 
-echo "Serviço configurado com sucesso!"
+log info "Serviço configurado com sucesso!" 

@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  dnsmasq:
+    hostname: dnsmasq
+    image: avapolos/dnsmasq
+    container_name: dnsmasq
+    restart: always
+    network_mode: host
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+      - ${DATA_PATH}/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro

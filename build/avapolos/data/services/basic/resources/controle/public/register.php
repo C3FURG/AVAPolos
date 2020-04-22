@@ -5,21 +5,24 @@
         session_destroy();
     }
 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    require_once('config.php');
 
-    require_once("header.php");
-    require("config-control.php");
+    if ($CFG->debug) {
+      ini_set('display_errors', 1);
+      ini_set('display_startup_errors', 1);
+      error_reporting(E_ALL);
+    }
+
+    require_once('header.php');
 
     //caso tenha enviado o formulário com os dados do login
     if(isset($_POST) && isset($_POST['submitRegister']) && $_POST['submitRegister'] != ''){
-        $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
+        require_once('php/db.php');
 
         $FLAG_REGISTRO_EMAIL = TRUE;
         $FLAG_SENHA = TRUE;
-         
-        
+
+
         /*BEGIN email desenvolvedor*/
         //verifica se já não cadastrou o email do desenvolvedor
         $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1");
@@ -77,7 +80,7 @@
         //caso tenha ocorrido algum erro, retorna e exibe os erros
         if(/*!$FLAG_REGISTRO_EMAIL || */!$FLAG_SENHA){
             header('Location: register.php?pg=erro');
-            
+
         }else{
             header('Location: index.php');
         }
@@ -140,12 +143,12 @@
                                                     unset($_SESSION['error_msg']);
                                                 } //end error msg
                                             ?>
-                                            
+
                                             <div class="form-group mt-4 mb-0">
                                                 <div class="col-md-5 d-block mx-auto">
-                                                    <button type='submit' name='submitRegister' value='submitRegister' class="btn btn-success bg-dark btn-block">Salvar Configurações</button>
+                                                    <button type='submit' name='submitRegister' value='submitRegister' class="bg-dark btn btn-primary btn-block">Salvar Configurações</button>
                                                 </div>
-                                                
+
                                             </div>
                                         </form>
                                     </div>

@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+if [ "$EUID" -ne 0 ]; then
+    echo "Este script precisa de permissões elevadas, digite no terminal: sudo avapolos"
+    exit
+fi
+
+#If the header file is present on the system.
+if [ -f "/etc/avapolos/header.sh" ]; then
+  #Source it.
+  source /etc/avapolos/header.sh
+  source $SYNC_PATH/variables.sh
+  source $SYNC_PATH/functions.sh
+#If it's not present.
+else
+  #Tell the user and exit with an error code.
+  log error "Não foi encontrado o arquivo header.sh" 
+  exit 1
+fi
+
+export LOGFILE_PATH="$LOG_PATH/cli.log"
+
+greet
+
+while true; do
+  case "$1" in
+    --version | -v)
+      #Print version information
+      echo "AVAPolos versão: $INSTALLER_VERSION"
+	    exit 0
+	  ;;
+    --help | -h)
+      usage
+      exit 0
+	  ;;
+    --loglvl)
+      shift
+      log info "alterando nível de log para $1"
+      export $LOGGER_LVL="$1"
+      echo "$1" > "$ETC_PATH/logger.conf"
+      shift
+	  ;;
+    --start)
+      shift
+      start $@
+      exit 0
+	  ;;
+    --stop)
+      shift
+      stop $@
+      exit 0
+	  ;;
+    --restart)
+      shift
+      log info "Reiniciando avapolos" 
+      stop
+      start
+      exit 0
+    ;;
+    --install)
+      shift
+      install $@
+      exit 0
+    ;;
+    --uninstall)
+      shift
+      uninstall $@
+      exit 0
+    ;;
+    --access)
+      shift
+      run "$SCRIPTS_PATH/access_mode.sh" $@
+      exit 0
+    ;;
+    --backup | -b)
+      shift
+      run "$SCRIPTS_PATH/backup.sh" $@
+      exit 0
+	  ;;
+    --restore | -r)
+      shift
+      run "$SCRIPTS_PATH/restore.sh" $@
+      exit 0
+    ;;
+    --export-all)
+      shift
+      export_all $@
+      exit 0
+    ;;
+    --connect-db-master)
+      shift
+      connectDB $containerDBMasterName
+      exit 0
+    ;;
+    --connect-db-sync)
+      shift
+      connectDB $containerDBSyncName
+      exit 0
+    ;;
+    --reset-password)
+      shift
+      execDockerCommand controle "php /app/public/bin/reset.php"
+      exit 0
+    ;;
+    *)
+      usage
+      exit 0
+    ;;
+  esac
+done

@@ -24,14 +24,14 @@ fi
 #----------------------------------------------------------
 
 enableDnsmasq="false"
-echo "install_networking.sh" | log debug installer
-echo "Configurando rede." | log info installer
+log debug  "install_networking.sh" 
+log info  "Configurando rede." 
 
 #----------------------------------------------------------
 
 rm -rf $NETWORKING_PATH/enable
 
-#Funcions used to get the default network configuration.
+#Functions used to get the default network configuration.
 getInterface() {
 
   blacklist="lo docker br veth tun"
@@ -146,12 +146,6 @@ getNameservers(){ #$1-> interface
   fi
 
 }
-getNetwork () { #$1-> ip
-  if ! [ -z "$1" ]; then
-    network="$(echo $1 | grep -Eo '([0-9]{1,3}\.){3}')0"
-    echo $network
-  fi
-}
 getNetmask() { #$1-> interface
   if ! [ -z "$1" ]; then
     netmask=$(ifconfig $1 | grep netmask | awk '{print $4}')
@@ -162,28 +156,27 @@ getNetmask() { #$1-> interface
 #This function disables Network-Manager, Netplan and systemd-resolved.
 disableDefaultNetworkServices() {
   if [ -f "/etc/init.d/network-manager" ]; then
-    echo "Desabilitando serviço padrão de gerenciamento de redes." | log debug installer
-    sudo systemctl disable NetworkManager | log debug installer
-    sudo systemctl stop NetworkManager | log debug installer
-    sudo systemctl mask NetworkManager | log debug installer
+    log debug  "Desabilitando serviço padrão de gerenciamento de redes." 
+    sudo systemctl disable NetworkManager 
+    sudo systemctl stop NetworkManager 
+    sudo systemctl mask NetworkManager
   fi
   if ! [ -z "$(command -v netplan)" ]; then
-    echo "Desinstalando netplan" | log debug installer
-    sudo apt-get remove netplan.io -y | log debug installer
+    log debug  "Desinstalando netplan" 
+    sudo apt-get remove netplan.io -y 
   fi
-  echo "Parando serviço padrão de nomes" | log debug installer
-  sudo systemctl stop systemd-resolved | log debug installer
-  sudo systemctl disable systemd-resolved | log debug installer
-  sudo systemctl mask systemd-resolved | log debug installer
+  log debug  "Parando serviço padrão de nomes" 
+  sudo systemctl stop systemd-resolved 
+  sudo systemctl disable systemd-resolved 
+  sudo systemctl mask systemd-resolved 
 }
 
 #These functions generate the required configurations.
 generateHostsConfig() { # $1-> ip(without mask)
   if [ -z "$1" ]; then
-    echo "Nenhum ip foi passado para o generateHostsConfig" | log error installer
+    log error "Nenhum ip foi passado para o generateHostsConfig" 
     exit 1
   fi
-  echo "Gerando arquivo /etc/hosts" | log debug installer
   echo -e "#AVAPolos config start"
   echo -e "$1 avapolos"
   echo -e "$1 controle.avapolos"
@@ -198,19 +191,14 @@ generateHostsConfig() { # $1-> ip(without mask)
   echo -e "$1 teste.avapolos"
   echo -e "#AVAPolos config end"
 }
-generateNetworkConfig() { # $1-> interface $2-> ip/mask $3-> gateway $4-> dns1 $5-> dns2
-  if [ -z "$1" ]; then
-    echo "Nenhum ip foi passado para o generateNetworkConfig" | log error installer
-    exit 1
-  fi
+generateNetworkConfig() { # $1-> interface $2-> ip $3-> netmask $4-> gateway $5-> dns1 $6-> dns2
   echo -e "#AVAPolos config start"
   echo -e "auto $1"
   echo -e "iface $1 inet static"
   echo -e "address $2"
-  if ! [ -f "$INSTALL_SCRIPTS_PATH/polo" ]; then
-    echo -e "gateway $3"
-  fi
-  echo -e "dns-nameservers $4 $5"
+  echo -e "netmask $3"
+  echo -e "gateway $4"
+  echo -e "dns-nameservers $5 $6"
   echo -e "#AVAPolos config end"
 }
 generateResolvConfig() { #$1 DNS1 $2 DNS2
@@ -222,17 +210,17 @@ generateResolvConfig() { #$1 DNS1 $2 DNS2
 #Main function
 main() {
 
-  echo "getInterface" | log debug installer
+  log debug "getInterface" 
   INTERFACE=$(getInterface)
-  echo "interface selecionada: $INTERFACE" | log debug installer
+  log debug "interface selecionada: $INTERFACE" 
 
-  echo "getIP" | log debug installer
+  log debug "getIP" 
   IP=$(getIP $INTERFACE)
-  echo "IP detectado: $IP" | log debug installer
+  log info "IP detectado: $IP" 
 
   if [ -z "$IP" ]; then
 
-    enableDnsmasq="true"
+    enableDHCP="true"
     IP="10.254.0.1/16"
     NS1="10.254.0.1"
     NS2=""
@@ -240,41 +228,40 @@ main() {
     NETWORK="10.254.0.0"
     NETMASK="255.255.0.0"
 
-    echo "+-----------------------------------------------------" | log info installer
-    echo "|Nenhum ip detectado, utilizando configurações padrão." | log info installer
-    echo "|" | log info installer
-    echo "|Os seguintes parâmetros serão configurados:" | log info installer
-    echo "|Interface:$interface" | log info installer
-    echo "|IP do Host: 10.254.0.1/16" | log info installer
-    echo "|Servidor DNS: 10.254.0.1" | log info installer
-    echo "|Gateway da rede: 10.254.0.1" | log info installer
-    echo "+-----------------------------------------------------" | log info installer
-    echo "|Subrede estática: 10.254.0.0" | log info installer
-    echo "|Subrede DHCP: 10.254.1.0" | log info installer
-    echo "+-----------------------------------------------------" | log info installer
+    log info "+-----------------------------------------------------" 
+    log info "|Nenhum ip detectado, utilizando configurações padrão." 
+    log info "|Os seguintes parâmetros serão configurados:" 
+    log info "|Interface:$interface" 
+    log info "|IP do Host: 10.254.0.1/16" 
+    log info "|Servidor DNS: 10.254.0.1" 
+    log info "|Gateway da rede: 10.254.0.1" 
+    log info "+-----------------------------------------------------" 
+    log info "|Subrede estática: 10.254.0.0" 
+    log info "|Subrede DHCP: 10.254.1.0" 
+    log info "+-----------------------------------------------------" 
 
   else
 
-    echo "getGateway" | log debug installer
+    log debug "getGateway" 
     GATEWAY=$(getGateway $INTERFACE)
-    echo "Gateway detectado: $GATEWAY" | log debug installer
+    log debug "Gateway detectado: $GATEWAY" 
 
-    echo "getNameservers" | log debug installer
+    log debug "getNameservers" 
     DNS=($(getNameservers $INTERFACE))
-    echo "Servidores DNS detectados: "${DNS[@]} | log debug installer
+    log debug "Servidores DNS detectados: "${DNS[@]} 
 
-    echo "getNetwork" | log debug installer
+    log debug "getNetwork" 
     NETWORK=$(getNetwork $IP)
-    echo "Rede detectada: $NETWORK" | log debug installer
+    log debug "Rede detectada: $NETWORK" 
 
-    echo "getNetmask" | log debug installer
+    log debug "getNetmask" 
     NETMASK=$(getNetmask $INTERFACE)
-    echo "Máscara de rede detectada: $NETMASK" | log debug installer
+    log debug "Máscara de rede detectada: $NETMASK" 
 
     if [ -z "$DNS" ]; then
       NS1="1.1.1.1"
       NS2="8.8.8.8"
-      echo "Nenhum servidor DNS detectado, configurando automaticamente." | log warn installer
+    log warn "Nenhum servidor DNS detectado, configurando automaticamente." 
     else
       counter=0
       for ns in ${DNS[@]}; do
@@ -284,42 +271,37 @@ main() {
     fi
   fi
 
-  if [ "$enableDnsmasq" = "true" ]; then
-    echo "dnsmasq será iniciado." | log debug installer
-    touch $NETWORKING_PATH/enable
+  if [ "$enableDHCP" = "true" ]; then
+    log debug "dhcpd e dnsmasq será iniciado." 
+    enable_service dhcpd.yml
+    enable_service dnsmasq.yml
   else
-    echo "--------------------------------------------" | log info installer
-    echo "Os seguintes parâmetros serão configurados:" | log info installer
-    echo "Interface:$INTERFACE" | log info installer
-    echo "IP do Host: $IP" | log info installer
-    echo "Gateway da rede: $GATEWAY" | log info installer
-    echo "DNS1: $NS1" | log info installer
-    echo "DNS2: $NS2" | log info installer
-    echo "--------------------------------------------" | log info installer
+    log info "+-------------------------------------------" 
+    log info "|Os seguintes parâmetros serão configurados:" 
+    log info "|Interface:$INTERFACE" 
+    log info "|IP do Host: $IP" 
+    log info "|Gateway da rede: $GATEWAY" 
+    log info "|DNS1: $NS1" 
+    log info "|DNS2: $NS2" 
+    log info "+--------------------------------------------" 
   fi
 
   disableDefaultNetworkServices
 
-  echo "Configurando arquivo /etc/network/interfaces" | log debug installer
-  # $1-> interface $2-> ip/mask $3-> gateway $4-> network $5-> netmask $6-> dns1 $7-> dns2
-  generateNetworkConfig "$INTERFACE" "$IP" "$GATEWAY" "$NS1" "$NS2" >> /etc/network/interfaces
-  ifconfig "$INTERFACE" down | log debug installer
-  ip addr flush dev "$INTERFACE" | log debug installer
-  service networking restart | log debug installer
+  log debug "Configurando arquivo /etc/network/interfaces" 
+  # $1-> interface $2-> ip $3-> netmask $4-> gateway $5-> dns1 $6-> dns2
+  generateNetworkConfig "$INTERFACE" "$IP" "$NETMASK" "$GATEWAY" "$NS1" "$NS2" >> /etc/network/interfaces
+  ifconfig "$INTERFACE" down 
+  ip addr flush dev "$INTERFACE" 
+  service networking restart 
 
-  echo "Aplicando configurações no arquivo /etc/hosts" | log debug installer
+  log debug "Aplicando configurações no arquivo /etc/hosts" 
   generateHostsConfig $(echo "$IP" | cut -d "/" -f1) >> /etc/hosts
 
-  echo "Aplicando configurações no resolv.conf"
+  log debug "Aplicando configurações no resolv.conf"
   rm -rf /etc/resolv.conf
   generateResolvConfig "$NS1" "$NS2" > /etc/resolv.conf
   chmod 777 /etc/resolv.conf
-
-  cd $NETWORKING_PATH
-  if [ -f enable ]; then
-    echo "Inicializando dnsmasq, pode ser acessado pela porta 5380. (admin/admin)" | log debug installer
-    docker-compose up -d | log debug installer
-  fi
 
   cd $ROOT_PATH
   echo "router.yml" >> $SERVICES_PATH/enabled_services

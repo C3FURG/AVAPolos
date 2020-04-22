@@ -1,7 +1,16 @@
 <?php
+session_start();
 
 require_once("../config.php");
 require_once("functions.php");
+
+function checkLogin() {
+	if(!isset($_SESSION['login'])) { //caso não esteja logado
+		header("HTTP/1.1 401 Unauthorized");
+		die();
+	}
+}
+checkLogin();
 
 $uploadDir = '/app/public/backups';
 $quarantineDir = '/app/public/quarantine';
@@ -12,12 +21,12 @@ if ($CFG->debug) {
 	error_reporting(E_ALL);
 }
 
-if (isset($_GET['restore'])) {
-	$cmd="echo 'restore " . escapeshellcmd($_GET['restore']) . "' > ../../service/pipe";
+if (isset($_POST['restore'])) {
+	$cmd="echo 'restore " . escapeshellcmd($_POST['restore']) . "' > ../../service/pipe";
 	system($cmd, $retVal);
 	echo $retVal;
-} elseif (isset($_GET['delete'])) {
-	unlink($_GET['delete']);
+} elseif (isset($_POST['delete'])) {
+	unlink($_POST['delete']);
 }	elseif (isset($_FILES) && isset($_FILES['Filesbackup'])) {
 	$filename=$_FILES['Filesbackup']['name'];
 	if (endsWith($filename, ".tar.gz")) {
@@ -36,8 +45,8 @@ if (isset($_GET['restore'])) {
 	}
 } else {
 	$cmd="echo 'backup ";
-		if (isset($_GET['service'])) {
-			$cmd .= "--service " . escapeshellcmd($_GET['service']);
+		if (isset($_POST['service'])) {
+			$cmd .= "--service " . escapeshellcmd($_POST['service']);
 		}
 		$cmd .= "' > ../../service/pipe";
 		system($cmd, $retVal);

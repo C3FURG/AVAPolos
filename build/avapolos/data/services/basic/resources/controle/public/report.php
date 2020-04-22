@@ -1,12 +1,6 @@
 <?php
-  //$DB = pg_connect("host=db_controle port=5432 dbname=moodle user=moodle password=@bancoava.C4p35*&") or die('connection failed');
-  require("config-control.php");
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-
-
-  $DB = pg_connect("host=$CFG->dbhost port=$CFG->dbport dbname=$CFG->dbname user=$CFG->dbuser password=$CFG->dbpass") or die('connection failed');
+  require_once('config.php');
+  require_once('php/db.php');
 
   $queryRegistro = pg_query($DB, "SELECT * FROM public.controle_registro WHERE id = 1 ");
 
@@ -36,7 +30,7 @@
 
     if($zip->open($filename, ZipArchive::CREATE) === TRUE){
       foreach ($logFiles as $key => $value) {
-        
+
         $localArquivo = '/app/log/'.$value;
         if(file_exists($localArquivo) && is_file($localArquivo)){
           //echo '/app/log/'.$value;
@@ -45,9 +39,9 @@
 
           }else{
             //echo ' - erro <br>';
-          }  
+          }
         }
-        
+
       }
 
       $zip->close();
@@ -65,12 +59,12 @@
         header("Location: index.php?page=report.php");
         exit();
       }
-      
+
     }else{
       //echo "erro";
     }
 
-    //echo var_dump(scandir("./")); 
+    //echo var_dump(scandir("./"));
   }
 
   if(isset($_POST) && isset($_POST['delReporte']) && $_POST['delReporte'] != ''){
@@ -103,22 +97,22 @@
       <input type="checkbox" name='email-dev'> <?php echo $emailDev; ?>
     </label>
     <small id="passwordHelp" class="form-text text-muted">Caso deseje enviar informações aos desenvolvedores da plataforma, marque essa opção</small>
-    
-  </div> -->
-  <!-- <div class="form-group mb-5">
+
+  </div>
+  <div class="form-group mb-5">
     <label for="password"><b>Enviar reporte para instituição responsável</b></label>
     <small id="passwordHelp" class="form-text text-muted"></small>
     <label>
       <input type="checkbox" name='email-suporte-ies' checked disabled> ies@instituicao.br
     </label>
     <hr>
-  </div> -->
-  
+  </div>
+
   <div class="form-group">
     <label for="password"><b>Adicionar comentário</b></label>
     <textarea class='form-control' rows="6" placeholder="Diga-nos detalhes do problema, se possível..." name='comentario-report'></textarea>
   </div>
-  
+
   <button type="submit" name="submitBtn" id="submitBtn" value='submitBtn' class="btn btn-primary bg-dark" >Enviar</button>
   <br><br>
   <?php
@@ -149,10 +143,20 @@
           </div>
         ";
 
-        unset($_SESSION['error_msg']);
+  if($zip->open($filename, ZipArchive::CREATE) === TRUE){
+    foreach ($logFiles as $key => $value) {
 
-      } //end error msg
-  ?>
+
+      if(file_exists('/app/log/'.$value) && is_file('/app/log/'.$value)){
+        //echo '/app/log/'.$value;
+        if($zip->addFile('/app/log/'.$value, $value)){
+          //echo ' - adicionado <br>';
+        }else{
+          //echo ' - erro <br>';
+        }
+      }
+
+    }
 
 
   <?php
@@ -260,14 +264,14 @@
       <a class="nav-link " href="#">Link</a>
     </li>
   </ul> -->
-  
+
 
   <?php
-   // 
+   //
   ?>
 </form>
 <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
- 
+
 <script type="text/javascript" src="DataTables/datatables.min.js"></script>
 
 <script type="text/javascript">

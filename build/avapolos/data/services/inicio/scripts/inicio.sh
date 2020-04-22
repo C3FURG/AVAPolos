@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-echo "Compilando inicio.avapolos" | log info data_compiler
+log info "Compilando inicio.avapolos" 
 
-echo "Assegurando permissões corretas e limpando diretórios de dados." | log debug data_compiler
+log debug "Assegurando permissões corretas e limpando diretórios de dados." 
 cd $INICIO_DIR
 sudo chown -R $USER:$USER .
 sudo rm -rf $INICO_DATA_DIR/inicio/*
 mkdir -p $BASIC_DATA_DIR/inicio/public
 
-echo "Copiando recursos do serviço." | log debug data_compiler
+log debug "Copiando recursos do serviço." 
 cp -rf $INICIO_RESOURCES_DIR/public $INICIO_DATA_DIR/inicio/
 
-echo "Iniciando webserver" | log debug data_compiler
+log debug "Iniciando webserver" 
 docker-compose up -d
 
-testURL "inicio.avapolos" | log debug data_compiler
+sleep 3
+testURL "http://inicio.avapolos"

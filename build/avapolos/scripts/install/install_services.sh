@@ -17,17 +17,17 @@ else
   exit 1
 fi
 
-echo "install_services.sh" | log debug installer
-echo "Instalando serviço principal e microsserviços." | log info installer
+log debug "install_services.sh" 
+log info "Instalando serviço principal e microsserviços." 
 
 uid=$(id -u avapolos)
 ip=$(bash $INSTALL_SCRIPTS_PATH/get_ip.sh)
 
-echo "IP detectado: $ip" | log debug installer
+log debug "IP detectado: $ip"
 
 cd $ROOT_PATH
 
-echo "Extraindo pacote de dados." | log debug installer
+log debug "Extraindo pacote de dados." 
 tar xfz data.tar.gz
 
 cd $SYNC_PATH
@@ -42,7 +42,7 @@ echo "IdentityFile $SSH_PATH/id_rsa " >> /etc/ssh/ssh_config
 
 touch $SERVICES_PATH/disabled_services
 
-echo "Instalando serviço principal." | log debug installer
+log debug "Instalando serviço principal." 
 
 echo -e "
 [Unit]
@@ -56,38 +56,30 @@ ExecStart=/bin/bash $SERVICE_PATH/service_daemon.sh
 WantedBy=multi-user.target
 " > /etc/systemd/system/avapolos.service
 chmod 640 /etc/systemd/system/avapolos.service
-systemctl enable avapolos.service | log debug installer
+systemctl enable avapolos.service
 
 if  [ -f $INSTALL_SCRIPTS_PATH/polo ]; then
-	echo "Esta instalação é um polo, ajustando parâmetros." | log info installer
-  # if [ "implementado" = "n" ]; then
-    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug installer
-    sed -i 's/db_moodle_ies/'"db_moodle_polo"'/g' $DATA_PATH/moodle/public/config.php
-    sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
-    sed -i 's/instance\=\"IES\"/'instance=\"POLO\"'/g' $SYNC_PATH/variables.sh
-  # else
-  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error installer
-  # fi
-  echo "Rodando script para instalação de chaves privadas." | log debug installer
+	log info "Esta instalação é um polo, ajustando parâmetros."
+  log debug "Moodle AVAPolos detectado, ajustando parâmetros." 
+  sed -i 's/db_moodle_ies/'"db_moodle_polo"'/g' $DATA_PATH/moodle/public/config.php
+  sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
+  sed -i 's/instance\=\"IES\"/'instance=\"POLO\"'/g' $SYNC_PATH/variables.sh
+  log debug "Rodando script para instalação de chaves privadas." 
 	bash $INSTALL_SCRIPTS_PATH/install_privateKey.sh
 else
-  echo "Esta instalação é uma IES, ajustando parâmetros" | log info installer
+  log info "Esta instalação é uma IES, ajustando parâmetros" 
   sed -i 's/instance\=\"INSTANCENAME\"/'instance=\"IES\"'/g' $SYNC_PATH/variables.sh
-  # if [ "implementado" = "n" ]; then
-    echo "Moodle AVAPolos detectado, ajustando parâmetros." | log debug installer
-    sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
-  # else
-  #  echo "Moodle AVAPolos não foi detectado, ignorando." | log error installer
-  # fi
-	echo "Rodando script para geração de chave privada" | log debug installer
+  log debug "Moodle AVAPolos detectado, ajustando parâmetros." 
+  sed -i 's/SERVER/'"$ip"'/g' $DATA_PATH/moodle/public/admin/tool/avapolos/view/sincro.php
+	log debug "Rodando script para geração de chave privada"
 	bash $INSTALL_SCRIPTS_PATH/generate_privateKey.sh
 fi
 
-echo "ID da rede avapolos:" | log debug start
+log debug "ID da rede avapolos:"
 docker network create -d bridge --gateway 172.12.0.1 --subnet 172.12.0.0/16 avapolos
-echo "ID da rede proxy:" | log debug start
+log debug "ID da rede proxy:"
 docker network create --driver bridge proxy
 
 cat $SERVICES_PATH/enabled_services > $SERVICES_PATH/stopped_services
 
-echo "Serviços instalados com sucesso." | log info installer
+log info "Serviços instalados com sucesso." 

@@ -43,7 +43,7 @@ while true; do
 	  ;;
     --loglvl)
       shift
-      echo "alterando nível de log para: $1" | log info
+      log info "alterando nível de log para $1"
       export $LOGGER_LVL="$1"
       echo "$1" > "$ETC_PATH/logger.conf"
       shift

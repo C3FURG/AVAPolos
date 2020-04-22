@@ -17,8 +17,8 @@ else
   exit 1
 fi
 
-echo "uninstall.sh" | log debug installer
-echo "Desinstalando AVAPolos." | log info installer
+log debug "uninstall.sh" 
+log info "Desinstalando AVAPolos." 
 
 cd $SCRIPTS_PATH
 
@@ -26,9 +26,9 @@ if ! [ -z "$(cat $SERVICES_PATH/started_services)"  ]; then
   bash stop.sh
 fi
 
-echo "Parando e removendo serviço" | log debug installer
-systemctl stop avapolos.service | log debug installer
-systemctl disable avapolos.service | log debug installer
+log debug "Parando e removendo serviço" 
+systemctl stop avapolos.service 
+systemctl disable avapolos.service
 rm -rf /etc/systemd/system/avapolos.service
 
 cd $INSTALL_SCRIPTS_PATH
