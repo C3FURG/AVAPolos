@@ -39,10 +39,14 @@ export INSTALLER_FILENAME="avapolos_$INSTALLER_VERSION"
 export CLONE_INSTALLER_FILENAME='avapolos_'$INSTALLER_VERSION'_POLO'
 export CLONE_INSTALLER_PATH="/opt/avapolos_clone/"
 
-#Default logger variables.
+# Default logger variables.
+# Log Level, (debug, info, warn, error)
 export LOGGER_LVL=${LOGGER_LVL:="debug"}
+# Path for the log file.
 export LOGFILE_PATH="${LOGFILE_PATH:="$LOG_PATH/avapolos.log"}"
+# Timestamp scheme (from date utility)
 export TIMESTAMP_SCHEME=${TIMESTAMP_SCHEME:="%d-%m-%Y %H:%M:%S"}
+# Max line count for each log file.
 export LOGFILE_MAXLINECOUNT=${LOGFILE_MAXLINECOUNT:=3000}
 
 #Logger function.
